@@ -1,21 +1,17 @@
 import express from 'express';
-import { getAboutVisionById, updateAboutVision, deleteAboutVision, getAboutVision, createAboutVision } from './aboutVision.controller';
+import { getBagBannerById, updateBagBanner, deleteBagBanner, getBagBanners, createBagBanner } from './bagBanner.controller';
 
-const aboutVisionRoutes = express.Router();
+const bagBannerRoutes = express.Router();
 
-// Route for getting AboutVision items with optional search
-aboutVisionRoutes.get('/', getAboutVision);
 
-// Route for creating a new AboutVision item
-aboutVisionRoutes.post('/', createAboutVision);
+// Route for fetching BagBanners with optional search filter
+bagBannerRoutes.get('/', getBagBanners);
 
-// Route for getting AboutVision by ID
-aboutVisionRoutes.get('/:id', getAboutVisionById);
+// Route for creating a new BagBanner
+bagBannerRoutes.post('/', createBagBanner);
 
-// Route for updating AboutVision by ID
-aboutVisionRoutes.put('/:id', updateAboutVision);
+bagBannerRoutes.get('/:id', getBagBannerById);       // GET BagBanner by ID
+bagBannerRoutes.put('/:id', updateBagBanner);         // PUT (update) BagBanner by ID
+bagBannerRoutes.delete('/:id', deleteBagBanner);      // DELETE BagBanner by ID
 
-// Route for deleting AboutVision by ID
-aboutVisionRoutes.delete('/:id', deleteAboutVision);
-
-export default aboutVisionRoutes;
+export default bagBannerRoutes;
