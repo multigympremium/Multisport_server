@@ -3,7 +3,6 @@ import { getAboutVisionById, updateAboutVision, deleteAboutVision, getAboutVisio
 
 const aboutVisionRoutes = express.Router();
 
-
 // Route for getting AboutVision items with optional search
 aboutVisionRoutes.get('/', getAboutVision);
 
