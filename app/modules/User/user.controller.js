@@ -37,3 +37,41 @@ export default async function updatePassword (req, res) {
     res.status(500).json({ message: "Internal server error" });
   }
 }
+
+
+
+export async function loginUser(req, res) {
+    const { email, password } = req.body;
+  
+    if (!email || !password) {
+      return res.status(400).json({ message: "Email and password are required" });
+    }
+  
+    console.log(email, "email", password, "password", process.env.MONGODB_URI);
+  
+    try {
+      const userResult = await Users.findOne({ email: email });
+  
+      console.log(userResult, "UserResult");
+  
+      if (!userResult) {
+        return res.status(404).json({ message: "Invalid email or user" });
+      }
+  
+      // Compare the provided password with the hashed password
+      const isMatch = await bcrypt.compare(password, userResult.password);
+  
+      if (!isMatch) {
+        return res.status(400).json({ message: "Invalid password" });
+      }
+  
+      res.status(200).json({ message: "User verified successfully", user: userResult });
+    } catch (error) {
+      console.error("Error verifying user:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  }
+
+
+  
+
