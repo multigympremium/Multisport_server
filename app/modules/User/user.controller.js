@@ -187,3 +187,52 @@ export async function verifyOtp(req, res) {
   
     return res.status(200).json({ message: "OTP verified successfully" });
   }
+
+
+export async function signUp(req, res) {
+    try {
+      const { username, email, password } = req.body;
+  
+      console.log(username, email, password, "username, email, password");
+  
+      if (!username || !email || !password) {
+        return res.status(400).json({ error: "Please fill in all fields" });
+      }
+  
+      const salt = await bcrypt.genSalt(10);
+  
+      const existingUser = await Users.findOne({ email });
+  
+      if (existingUser) {
+        if (existingUser.isVerified) {
+          return res.status(400).json({ error: "User already exists" });
+        } else {
+          const otp = generateOTP(); // Generate OTP
+          await sendVerifyOtp(email, otp);
+          return res.status(400).json({ error: "Verification pending. OTP sent to email." });
+        }
+      }
+  
+      const hashedPassword = await bcrypt.hash(password, salt);
+  
+      const user = new Users({
+        username: username,
+        email: email,
+        password: hashedPassword,
+      });
+  
+      const userResult = await user.save();
+  
+      if (userResult) {
+        return res.status(200).json({
+          message: "User Created successfully",
+          user: userResult,
+        });
+      }
+  
+      return res.status(400).json({ error: "User not created" });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: error.message });
+    }
+  }
