@@ -22,6 +22,7 @@ routes.use("/blog-category", blogCategoryRoutes );
 routes.use("/categories", productCategoryRoutes );
 routes.use("/child-categories", childCategoryRoutes );
 routes.use("/custom-css-js", customJsCssRoutes );
+routes.use("/general-info", customJsCssRoutes );
 
 
 export default routes;
