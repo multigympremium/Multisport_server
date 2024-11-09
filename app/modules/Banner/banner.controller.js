@@ -57,7 +57,7 @@ import { deleteFile, uploadFile } from '../helpers/aws-s3';
 
 // GET Banner by ID
 export const getBannerById = async (req, res) => {
-  const { id } = req.params;
+const { id } = req.params;
   try {
     const result = await BannerModel.findById(id);
     if (!result) {
