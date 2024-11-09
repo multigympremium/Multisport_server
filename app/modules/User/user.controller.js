@@ -44,7 +44,6 @@ export default async function updatePassword (req, res) {
 }
 
 
-
 export async function loginUser(req, res) {
     const { email, password } = req.body;
   
@@ -76,9 +75,6 @@ export async function loginUser(req, res) {
       res.status(500).json({ message: "Internal server error" });
     }
   }
-
-
-
 
 export async function sendOtp(req, res) {
   try {
