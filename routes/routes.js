@@ -7,6 +7,7 @@ import blogRoutes from "../app/modules/Blog/blog.routes";
 import aboutVisionRoutes from "../app/modules/AboutVision/aboutVision.routes";
 import blogCategoryRoutes from "../app/modules/BagCategory/blogCategory.routes";
 import productCategoryRoutes from "../app/modules/ProductCategory/productCategory.routes";
+import childCategoryRoutes from "../app/modules/ChildCategory/childCategory.routes";
 
 const routes = Router();
 // routes.use("/branches", BranchRoutes);
@@ -18,6 +19,7 @@ routes.use("/banners", bannerRoutes );
 routes.use("/blog", blogRoutes );
 routes.use("/blog-category", blogCategoryRoutes );
 routes.use("/categories", productCategoryRoutes );
+routes.use("/child-categories", childCategoryRoutes );
 
 
 export default routes;

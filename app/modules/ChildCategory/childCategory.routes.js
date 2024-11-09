@@ -8,12 +8,12 @@ import {
   deleteChildCategory
 } from "./childCategory.controller";
 
-const childCategory = express.Router();
+const childCategoryRoutes = express.Router();
 
-childCategory.get("/", getChildCategories);
-childCategory.get("/:id", getChildCategoryById);
-childCategory.post("/",  createChildCategory);
-childCategory.put("/:id",  updateChildCategory);
-childCategory.delete("/:id", deleteChildCategory);
+childCategoryRoutes.get("/", getChildCategories);
+childCategoryRoutes.get("/:id", getChildCategoryById);
+childCategoryRoutes.post("/",  createChildCategory);
+childCategoryRoutes.put("/:id",  updateChildCategory);
+childCategoryRoutes.delete("/:id", deleteChildCategory);
 
-export default childCategory;
+export default childCategoryRoutes;
