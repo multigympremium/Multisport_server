@@ -11,6 +11,7 @@ import childCategoryRoutes from "../app/modules/ChildCategory/childCategory.rout
 import customJsCssRoutes from "../app/modules/CustomJsCss/customJsCss.routes";
 import measurementUnits from "../app/modules/MeasurementUnits/measurementUnits.routes";
 import orderRoutes from "../app/modules/Orders/orders.routes";
+import PrivacyPolicyRoutes from "../app/modules/PrivacyPolicy/privacyPolicy.routes";
 
 const routes = Router();
 // routes.use("/branches", BranchRoutes);
@@ -27,6 +28,7 @@ routes.use("/custom-css-js", customJsCssRoutes );
 routes.use("/general-info", customJsCssRoutes );
 routes.use("/measurement-units", measurementUnits );
 routes.use("/orders", orderRoutes );
+routes.use("/privacy_policy", PrivacyPolicyRoutes);
 
 
 export default routes;
