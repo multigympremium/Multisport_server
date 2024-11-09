@@ -1,7 +1,5 @@
 import bcrypt from "bcryptjs";
 import Users from "./user.model"; // Adjust the path to your userModel
-
-
 import bcrypt from "bcryptjs";
 import OtpModel from "./otp.model";
 import moment from "moment";
