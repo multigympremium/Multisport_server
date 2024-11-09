@@ -1,6 +1,13 @@
 import bcrypt from "bcryptjs";
 import Users from "./user.model"; // Adjust the path to your userModel
 
+
+import bcrypt from "bcryptjs";
+import OtpModel from "./otp.model";
+import moment from "moment";
+import sendVerifyOtp from "../../../config/email/sendVerifyOtp";
+import { generateOTP } from "../../helpers/generateOTP";
+
 export default async function updatePassword (req, res) {
   const { email, password } = req.body;
 
@@ -73,5 +80,110 @@ export async function loginUser(req, res) {
   }
 
 
-  
 
+
+export async function sendOtp(req, res) {
+  try {
+    const { email } = req.body;
+
+    console.log(email, "username, email");
+
+    if (!email) {
+      return res.status(400).json({ error: "Please fill in all fields" });
+    }
+
+    const otp = generateOTP();
+    const salt = await bcrypt.genSalt(10);
+    const hashedOTP = await bcrypt.hash(otp, salt);
+    const otp_expiration_time = process.env.OTP_EXPIRATION_TIME || 5;
+
+    const existingUser = await Users.findOne({ email });
+    const existingOtp = await OtpModel.findOne({ email });
+
+    if (existingUser) {
+      if (existingUser.isVerified) {
+        return res.status(400).json({ error: "User already exists" });
+      }
+    }
+
+    const otp_expiry = Date.now() + otp_expiration_time * 60000;
+
+    if (existingOtp) {
+      const updateOtpResult = await OtpModel.updateOne(
+        { email },
+        {
+          otp: hashedOTP,
+          otp_expiry,
+        },
+        { new: true }
+      );
+
+      if (updateOtpResult.acknowledged) {
+        await sendVerifyOtp(email, otp);
+
+        return res.status(200).json({
+          message: "OTP sent successfully",
+          otp_expiry: moment()
+            .add(otp_expiration_time, "minutes")
+            .format("YYYY-MM-DD HH:mm:ss"),
+          otp_limitation_time: otp_expiration_time,
+        });
+      }
+    }
+
+    const otp_document = new OtpModel({
+      email,
+      otp: hashedOTP,
+      otp_expiry,
+    });
+
+    const otpResult = await otp_document.save();
+
+    if (otpResult) {
+      await sendVerifyOtp(email, otp);
+
+      return res.status(200).json({
+        message: "OTP sent successfully",
+        otp_expiry: moment()
+          .add(otp_expiration_time, "minutes")
+          .format("YYYY-MM-DD HH:mm:ss"),
+        otp_limitation_time: otp_expiration_time,
+      });
+    }
+
+    return res.status(400).json({ error: "User not created" });
+  } catch (error) {
+    console.error("Error:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+}
+
+
+
+export async function verifyOtp(req, res) {
+    const { email, otp } = req.body;
+  
+    if (!email || !otp) {
+      return res.status(400).json({ message: "Email and OTP are required" });
+    }
+  
+    const otpResult = await OtpModel.findOne({ email });
+  
+    if (!otpResult) {
+      return res.status(400).json({ message: "Invalid email or OTP" });
+    }
+  
+    // Check if OTP has expired
+    if (Date.now() > otpResult.otp_expiry) {
+      return res.status(400).json({ message: "OTP has expired" });
+    }
+  
+    // Compare the provided OTP with the hashed OTP
+    const isMatch = await bcrypt.compare(otp, otpResult.otp);
+  
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid OTP" });
+    }
+  
+    return res.status(200).json({ message: "OTP verified successfully" });
+  }
