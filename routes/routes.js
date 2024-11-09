@@ -9,6 +9,7 @@ import blogCategoryRoutes from "../app/modules/BagCategory/blogCategory.routes";
 import productCategoryRoutes from "../app/modules/ProductCategory/productCategory.routes";
 import childCategoryRoutes from "../app/modules/ChildCategory/childCategory.routes";
 import customJsCssRoutes from "../app/modules/CustomJsCss/customJsCss.routes";
+import measurementUnits from "../app/modules/MeasurementUnits/measurementUnits.routes";
 
 const routes = Router();
 // routes.use("/branches", BranchRoutes);
@@ -23,6 +24,7 @@ routes.use("/categories", productCategoryRoutes );
 routes.use("/child-categories", childCategoryRoutes );
 routes.use("/custom-css-js", customJsCssRoutes );
 routes.use("/general-info", customJsCssRoutes );
+routes.use("/measurement-units", measurementUnits );
 
 
 export default routes;
