@@ -15,6 +15,7 @@ import PrivacyPolicyRoutes from "../app/modules/PrivacyPolicy/privacyPolicy.rout
 import brandRoutes from "../app/modules/Brand/brand.routes";
 import productColorRoutes from "../app/modules/ProductColor/ProductColor.routes";
 import productFlagRoutes from "../app/modules/ProductFlag/productFlag.routes";
+import productSizeRoutes from "../app/modules/ProductSize/productSize.routes";
 
 const routes = Router();
 // routes.use("/branches", BranchRoutes);
@@ -35,6 +36,7 @@ routes.use("/privacy_policy", PrivacyPolicyRoutes);
 routes.use("/product-brands", brandRoutes);
 routes.use("/product-color", productColorRoutes);
 routes.use("/product-flag", productFlagRoutes);
+routes.use("/product-size", productSizeRoutes);
 
 
 export default routes;
