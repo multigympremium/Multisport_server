@@ -17,6 +17,7 @@ import productColorRoutes from "../app/modules/ProductColor/ProductColor.routes"
 import productFlagRoutes from "../app/modules/ProductFlag/productFlag.routes";
 import productSizeRoutes from "../app/modules/ProductSize/productSize.routes";
 import productRoutes from "../app/modules/Product/product.routes";
+import shippingAddressRoutes from "../app/modules/ShippingAddress/shippingAddress.routes";
 
 const routes = Router();
 // routes.use("/branches", BranchRoutes);
@@ -39,6 +40,7 @@ routes.use("/product-color", productColorRoutes);
 routes.use("/product-flag", productFlagRoutes);
 routes.use("/product-size", productSizeRoutes);
 routes.use("/products", productRoutes);
+routes.use("/shipping", shippingAddressRoutes);
 
 
 export default routes;
