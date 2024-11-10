@@ -26,6 +26,7 @@ import subcategoryRoutes from "../app/modules/Subcategory/subcategory.routes";
 import termsConditionRoutes from "../app/modules/TermsCondition/termsCondition.routes";
 import testimonialsRoutes from "../app/modules/testimonials/testimonials.routes";
 import websiteSEORoutes from "../app/modules/WebsiteSEO/websiteSEO.routes";
+import websiteThemeColorRoutes from "../app/modules/WebsiteThemeColor/websiteThemeColor.routes";
 
 const routes = Router();
 // routes.use("/branches", BranchRoutes);
@@ -58,6 +59,7 @@ routes.use("/subcategories", subcategoryRoutes);
 routes.use("/terms_condition", termsConditionRoutes);
 routes.use("/testimonials", testimonialsRoutes);
 routes.use("/website-seo", websiteSEORoutes);
+routes.use("/website-theme-color", websiteThemeColorRoutes);
 
 
 export default routes;
