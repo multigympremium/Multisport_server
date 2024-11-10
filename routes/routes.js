@@ -25,6 +25,7 @@ import socialLinkRoutes from "../app/modules/SocialLink/socialLink.routes";
 import subcategoryRoutes from "../app/modules/Subcategory/subcategory.routes";
 import termsConditionRoutes from "../app/modules/TermsCondition/termsCondition.routes";
 import testimonialsRoutes from "../app/modules/testimonials/testimonials.routes";
+import websiteSEORoutes from "../app/modules/WebsiteSEO/websiteSEO.routes";
 
 const routes = Router();
 // routes.use("/branches", BranchRoutes);
@@ -56,6 +57,7 @@ routes.use("/social-link", socialLinkRoutes);
 routes.use("/subcategories", subcategoryRoutes);
 routes.use("/terms_condition", termsConditionRoutes);
 routes.use("/testimonials", testimonialsRoutes);
+routes.use("/website-seo", websiteSEORoutes);
 
 
 export default routes;
