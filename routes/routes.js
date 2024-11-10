@@ -19,6 +19,7 @@ import productSizeRoutes from "../app/modules/ProductSize/productSize.routes";
 import productRoutes from "../app/modules/Product/product.routes";
 import shippingAddressRoutes from "../app/modules/ShippingAddress/shippingAddress.routes";
 import shippingPolicy from "../app/modules/ShippingPolicy/shippingPolicy.routes";
+import returnPolicy from "../app/modules/ReturnPolicy/returnPolicy.routes";
 
 const routes = Router();
 // routes.use("/branches", BranchRoutes);
@@ -43,6 +44,7 @@ routes.use("/product-size", productSizeRoutes);
 routes.use("/products", productRoutes);
 routes.use("/shipping", shippingAddressRoutes);
 routes.use("/shipping_policy", shippingPolicy);
+routes.use("/return_policy", returnPolicy);
 
 
 export default routes;
