@@ -23,6 +23,7 @@ import returnPolicy from "../app/modules/ReturnPolicy/returnPolicy.routes";
 import shoesBannerRoutes from "../app/modules/ShoesBanner/shoesBanner.routes";
 import socialLinkRoutes from "../app/modules/SocialLink/socialLink.routes";
 import subcategoryRoutes from "../app/modules/Subcategory/subcategory.routes";
+import termsConditionRoutes from "../app/modules/TermsCondition/termsCondition.routes";
 
 const routes = Router();
 // routes.use("/branches", BranchRoutes);
@@ -52,6 +53,7 @@ routes.use("/return_policy", returnPolicy);
 routes.use("/shoes-banners", shoesBannerRoutes);
 routes.use("/social-link", socialLinkRoutes);
 routes.use("/subcategories", subcategoryRoutes);
+routes.use("/terms_condition", termsConditionRoutes);
 
 
 export default routes;
