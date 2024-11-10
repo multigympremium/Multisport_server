@@ -1,19 +1,20 @@
-// routes/customCssAndJsRoutes.js
-import express from 'express';
+// routes/productColorRoutes.js
+
+import express from "express";
 import {
-  getAllInfo,
-  getInfoById,
-  createInfo,
-  updateInfo,
-  deleteInfo
-} from './ProductColor.controller';
+  getAllProductColors,
+  createProductColor,
+  getProductColorById,
+  updateProductColorById,
+  deleteProductColorById,
+} from "./ProductColor.controller";
 
-const customJsCssRoutes = express.Router();
+const productColorRoutes = express.Router();
 
-customJsCssRoutes.get('/', getAllInfo);
-customJsCssRoutes.get('/:id', getInfoById);
-customJsCssRoutes.post('/', createInfo);
-customJsCssRoutes.put('/:id', updateInfo);
-customJsCssRoutes.delete('/:id', deleteInfo);
+productColorRoutes.get("/", getAllProductColors);
+productColorRoutes.post("/", createProductColor);
+productColorRoutes.get("/:id", getProductColorById);
+productColorRoutes.put("/:id", updateProductColorById);
+productColorRoutes.delete("/:id", deleteProductColorById);
 
-export default customJsCssRoutes;
+export default productColorRoutes;

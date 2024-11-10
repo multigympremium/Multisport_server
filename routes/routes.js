@@ -13,6 +13,7 @@ import measurementUnits from "../app/modules/MeasurementUnits/measurementUnits.r
 import orderRoutes from "../app/modules/Orders/orders.routes";
 import PrivacyPolicyRoutes from "../app/modules/PrivacyPolicy/privacyPolicy.routes";
 import brandRoutes from "../app/modules/Brand/brand.routes";
+import productColorRoutes from "../app/modules/ProductColor/ProductColor.routes";
 
 const routes = Router();
 // routes.use("/branches", BranchRoutes);
@@ -31,6 +32,7 @@ routes.use("/measurement-units", measurementUnits );
 routes.use("/orders", orderRoutes );
 routes.use("/privacy_policy", PrivacyPolicyRoutes);
 routes.use("/product-brands", brandRoutes);
+routes.use("/product-color", productColorRoutes);
 
 
 export default routes;
