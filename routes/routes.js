@@ -14,6 +14,7 @@ import orderRoutes from "../app/modules/Orders/orders.routes";
 import PrivacyPolicyRoutes from "../app/modules/PrivacyPolicy/privacyPolicy.routes";
 import brandRoutes from "../app/modules/Brand/brand.routes";
 import productColorRoutes from "../app/modules/ProductColor/ProductColor.routes";
+import productFlagRoutes from "../app/modules/ProductFlag/productFlag.routes";
 
 const routes = Router();
 // routes.use("/branches", BranchRoutes);
@@ -33,6 +34,7 @@ routes.use("/orders", orderRoutes );
 routes.use("/privacy_policy", PrivacyPolicyRoutes);
 routes.use("/product-brands", brandRoutes);
 routes.use("/product-color", productColorRoutes);
+routes.use("/product-flag", productFlagRoutes);
 
 
 export default routes;

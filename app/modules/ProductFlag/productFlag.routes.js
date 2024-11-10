@@ -1,20 +1,21 @@
-// routes/categoryRoutes.js
-
 import express from 'express';
-import {
-  getCategories,
-  createCategory,
-  getCategoryById,
-  updateCategoryById,
-  deleteCategoryById,
-} from './productCategory.controller';
+import { getAllFlags, createFlag, getFlagById, updateFlag, deleteFlag } from './productFlag.controller';
 
-const productCategoryRoutes = express.Router();
+const productFlagRoutes = express.Router();
 
-productCategoryRoutes.get('/', getCategories);
-productCategoryRoutes.post('/', createCategory);
-productCategoryRoutes.get('/:id', getCategoryById);
-productCategoryRoutes.put('/:id', updateCategoryById);
-productCategoryRoutes.delete('/:id', deleteCategoryById);
+// GET all flags
+productFlagRoutes.get('/', getAllFlags);
 
-export default productCategoryRoutes;
+// POST a new flag
+productFlagRoutes.post('/', createFlag);
+
+// GET a flag by ID
+productFlagRoutes.get('/:id', getFlagById);
+
+// PUT (update) a flag by ID
+productFlagRoutes.put('/:id', updateFlag);
+
+// DELETE a flag by ID
+productFlagRoutes.delete('/:id', deleteFlag);
+
+export default productFlagRoutes;
