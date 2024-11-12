@@ -1,5 +1,5 @@
-import { deleteFile, uploadFile } from "../../helpers/aws-s3";
-import BlogModel from "./blog.model";
+import { deleteFile, uploadFile } from "../../helpers/aws-s3.js";
+import BlogModel from "./blog.model.js";
 
 // Get all blogs with optional search
 export const getBlogs = async (req, res) => {

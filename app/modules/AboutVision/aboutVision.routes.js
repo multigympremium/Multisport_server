@@ -1,5 +1,5 @@
 import express from 'express';
-import { getAboutVisionById, updateAboutVision, deleteAboutVision, getAboutVision, createAboutVision } from './aboutVision.controller';
+import { getAboutVisionById, updateAboutVision, deleteAboutVision, getAboutVision, createAboutVision } from './aboutVision.controller.js';
 
 const aboutVisionRoutes = express.Router();
 

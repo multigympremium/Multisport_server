@@ -15,7 +15,6 @@ const productColorSchema = new mongoose.Schema(
 );
 
 const ProductColorModel =
-  mongoose.models.product_colors ||
   mongoose.model("product_colors", productColorSchema);
 
 export default ProductColorModel;

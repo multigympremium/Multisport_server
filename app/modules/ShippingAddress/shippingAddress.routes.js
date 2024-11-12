@@ -5,7 +5,7 @@ import {
   getShippingAddressById,
   updateShippingAddressById,
   deleteShippingAddressById,
-} from "./shippingAddress.controller";
+} from "./shippingAddress.controller.js";
 
 const shippingAddressRoutes = express.Router();
 

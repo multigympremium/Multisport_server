@@ -11,7 +11,7 @@ const productSizeSchema = new mongoose.Schema(
 );
 
 const ProductSizeModel =
-  mongoose.models.product_sizes ||
+
   mongoose.model("product_sizes", productSizeSchema);
 
 export default ProductSizeModel;

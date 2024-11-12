@@ -6,7 +6,7 @@ import {
   createOrUpdateShippingPolicy,
   updateShippingPolicy,
   deleteShippingPolicy
-} from './shippingPolicy.controller';
+} from './shippingPolicy.controller.js';
 
 const shippingPolicy = express.Router();
 

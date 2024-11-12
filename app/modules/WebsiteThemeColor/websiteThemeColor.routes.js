@@ -5,23 +5,23 @@ import {
   getThemeById,
   updateTheme,
   deleteTheme
-} from './websiteThemeColor.controller';
+} from './websiteThemeColor.controller.js';
 
 const websiteThemeColorRoutes = express.Router();
 
 // Route to get all themes
-websiteThemeColorRoutes.get('/themes', getAllThemes);
+websiteThemeColorRoutes.get('/', getAllThemes);
 
 // Route to create a new theme
-websiteThemeColorRoutes.post('/themes', createTheme);
+websiteThemeColorRoutes.post('/', createTheme);
 
 // Route to get a theme by ID
-websiteThemeColorRoutes.get('/themes/:id', getThemeById);
+websiteThemeColorRoutes.get('/:id', getThemeById);
 
 // Route to update a theme by ID
-websiteThemeColorRoutes.put('/themes/:id', updateTheme);
+websiteThemeColorRoutes.put('/:id', updateTheme);
 
 // Route to delete a theme by ID
-websiteThemeColorRoutes.delete('/themes/:id', deleteTheme);
+websiteThemeColorRoutes.delete('/:id', deleteTheme);
 
 export default websiteThemeColorRoutes;

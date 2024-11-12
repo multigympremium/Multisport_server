@@ -1,5 +1,5 @@
-import { deleteFile, uploadFile } from "../../helpers/aws-s3";
-import CategoryModel from "./productCategory.model";
+import { deleteFile, uploadFile } from "../../helpers/aws-s3.js";
+import CategoryModel from "./productCategory.model.js";
 
 
 // Get all categories or filter by query parameters

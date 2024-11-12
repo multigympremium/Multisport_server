@@ -13,7 +13,7 @@ const schema = new mongoose.Schema(
 );
 
 const TermsConditionModel =
-  mongoose.models.terms_conditions ||
+
   mongoose.model("terms_conditions", schema);
 
 export default TermsConditionModel;

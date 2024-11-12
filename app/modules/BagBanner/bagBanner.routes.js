@@ -1,5 +1,5 @@
 import express from 'express';
-import { getBagBannerById, updateBagBanner, deleteBagBanner, getBagBanners, createBagBanner } from './bagBanner.controller';
+import { getBagBannerById, updateBagBanner, deleteBagBanner, getBagBanners, createBagBanner } from './bagBanner.controller.js';
 
 const bagBannerRoutes = express.Router();
 

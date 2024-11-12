@@ -1,4 +1,4 @@
-import TermsConditionModel from "./termsCondition.model";
+import TermsConditionModel from "./termsCondition.model.js";
 
 // GET request - Get all Terms and Conditions
 export async function getTermsConditions(req, res) {

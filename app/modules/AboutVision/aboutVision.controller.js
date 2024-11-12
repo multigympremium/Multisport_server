@@ -1,5 +1,5 @@
-import { deleteFile, uploadFile } from "../../helpers/aws-s3";
-import AboutVisionModel from "./aboutVision.model";
+import { deleteFile, uploadFile } from "../../helpers/aws-s3.js";
+import AboutVisionModel from "./aboutVision.model.js";
 
 
 // Function to handle GET request (with search functionality)

@@ -1,5 +1,5 @@
-import { deleteFile, uploadFile } from "../../helpers/aws-s3";
-import BannerModel from "./banner.model";
+import { deleteFile, uploadFile } from "../../helpers/aws-s3.js";
+import BannerModel from "./banner.model.js";
 
 // Get Banners (GET Request)
 export const getBanners = async (req, res) => {
@@ -51,9 +51,6 @@ export const createBanner = async (req, res) => {
   }
 };
 
-
-import BannerModel from '../models/BannerModel';
-import { deleteFile, uploadFile } from '../helpers/aws-s3';
 
 // GET Banner by ID
 export const getBannerById = async (req, res) => {

@@ -1,10 +1,10 @@
 import bcrypt from "bcryptjs";
-import Users from "./user.model"; // Adjust the path to your userModel
-import bcrypt from "bcryptjs";
-import OtpModel from "./otp.model";
+import Users from "./user.model.js"; // Adjust the path to your userModel
+
+import OtpModel from "./otp.model.js";
 import moment from "moment";
-import sendVerifyOtp from "../../../config/email/sendVerifyOtp";
-import { generateOTP } from "../../helpers/generateOTP";
+import sendVerifyOtp from "../../../config/email/sendVerifyOtp.js";
+import { generateOTP } from "../../helpers/generateOTP.js";
 
 export default async function updatePassword (req, res) {
   const { email, password } = req.body;

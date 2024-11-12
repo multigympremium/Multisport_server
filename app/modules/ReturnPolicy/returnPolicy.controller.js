@@ -1,6 +1,6 @@
 // controllers/returnPolicyController.js
 
-import ReturnPolicyModel from "./returnPolicy.model";
+import ReturnPolicyModel from "./returnPolicy.model.js";
 
 
 // Handle GET request: Get all return policies

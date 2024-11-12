@@ -6,7 +6,7 @@ import {
   getReturnPolicyById,
   updateReturnPolicy,
   deleteReturnPolicy,
-} from './returnPolicy.controller';
+} from './returnPolicy.controller.js';
 
 const returnPolicy = express.Router();
 

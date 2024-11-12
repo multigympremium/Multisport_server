@@ -25,7 +25,6 @@ const customSchema = new mongoose.Schema(
 );
 
 const AboutUsModel =
-  mongoose.models.about_us ||
   mongoose.model("about_us", customSchema);
 
 export default AboutUsModel;

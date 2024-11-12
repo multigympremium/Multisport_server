@@ -1,4 +1,4 @@
-import CustomCssAndJsModel from "./customJsCss.model";
+import CustomCssAndJsModel from "./customJsCss.model.js";
 
 
 // Get all records

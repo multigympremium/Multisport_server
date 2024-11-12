@@ -1,5 +1,5 @@
-import { deleteFile, uploadFile } from "../../helpers/aws-s3";
-import WebsiteSEO_Model from "./websiteSEO.model";
+import { deleteFile, uploadFile } from "../../helpers/aws-s3.js";
+import WebsiteSEO_Model from "./websiteSEO.model.js";
 
 
 // GET all Website SEO data with search functionality

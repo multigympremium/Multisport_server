@@ -14,7 +14,7 @@ const productFlagSchema = new mongoose.Schema(
 );
 
 const ProductFlagModel =
-  mongoose.models.product_flags ||
+
   mongoose.model("product_flags", productFlagSchema);
 
 export default ProductFlagModel;

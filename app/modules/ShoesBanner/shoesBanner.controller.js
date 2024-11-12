@@ -1,5 +1,5 @@
-import { deleteFile, uploadFile } from "../../helpers/aws-s3";
-import ShoesBannerModel from "./shoesBanner.model";
+import { deleteFile, uploadFile } from "../../helpers/aws-s3.js";
+import ShoesBannerModel from "./shoesBanner.model.js";
 
 // Handle GET request to fetch banners with optional search
 export async function getBanners(req, res) {

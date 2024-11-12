@@ -1,5 +1,5 @@
-import { deleteFile, uploadFile } from "../../helpers/aws-s3";
-import AboutMissionModel from "./aboutMission.model";
+import { deleteFile, uploadFile } from "../../helpers/aws-s3.js";
+import AboutMissionModel from "./aboutMission.model.js";
 
 
 

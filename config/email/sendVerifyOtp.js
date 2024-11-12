@@ -1,5 +1,5 @@
 
-import { sendEmailWithResend } from "./sendEmailWithResend";
+import { sendEmailWithResend } from "./sendEmailWithResend.js";
 
 const sendVerifyOtp = async (email, otp) => {
   const html = `

@@ -26,6 +26,6 @@ const seoSchema = new mongoose.Schema({
   },
 }, { timestamps: true });
 
-const WebsiteSEO_Model = mongoose.models.Seo || mongoose.model('Seo', seoSchema);
+const WebsiteSEO_Model =  mongoose.model('Seo', seoSchema);
 
 export default WebsiteSEO_Model

@@ -26,7 +26,7 @@ const childCategorySchema = Schema(
 );
 
 const ChildCategoryModel =
-  mongoose.models.child_categories ||
+
   mongoose.model("child_categories", childCategorySchema);
 
 export default ChildCategoryModel;

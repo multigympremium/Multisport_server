@@ -1,4 +1,4 @@
-import WishlistModel from "./wishlist.model";
+import WishlistModel from "./wishlist.model.js";
 
 // Handle GET request to get all wishlists
 export async function getAllWishlists(req, res) {

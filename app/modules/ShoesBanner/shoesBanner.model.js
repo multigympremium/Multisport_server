@@ -29,6 +29,6 @@ const BannerSchema = new mongoose.Schema(
 );
 
 const ShoesBannerModel =
-  mongoose.models.shoes_banners || mongoose.model("shoes_banners", BannerSchema);
+  mongoose.model.shoes_banners || mongoose.model("shoes_banners", BannerSchema);
 
 export default ShoesBannerModel;

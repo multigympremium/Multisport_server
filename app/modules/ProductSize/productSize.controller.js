@@ -1,4 +1,4 @@
-import ProductSizeModel from "./productSize.model";
+import ProductSizeModel from "./productSize.model.js";
 
 
 // GET all sizes

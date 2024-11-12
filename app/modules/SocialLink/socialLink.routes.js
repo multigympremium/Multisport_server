@@ -5,7 +5,7 @@ import {
   getSocialLinkById,
   updateSocialLink,
   deleteSocialLink
-} from './socialLink.controller';
+} from './socialLink.controller.js';
 
 const socialLinkRoutes = express.Router();
 

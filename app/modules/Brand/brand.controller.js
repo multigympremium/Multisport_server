@@ -1,5 +1,5 @@
-import { deleteFile, uploadFile } from "../../helpers/aws-s3";
-import BrandModel from "./brand.model";
+import { deleteFile, uploadFile } from "../../helpers/aws-s3.js";
+import BrandModel from "./brand.model.js";
 
 // GET all brands
 export const getBrands = async (req, res) => {

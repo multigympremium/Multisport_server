@@ -5,7 +5,7 @@ import {
   getTestimonialById,
   updateTestimonial,
   deleteTestimonial,
-} from './testimonials.controller';
+} from './testimonials.controller.js';
 
 const testimonialsRoutes = express.Router();
 

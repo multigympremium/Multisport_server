@@ -1,5 +1,5 @@
-import { deleteFile, uploadFile } from "../../helpers/aws-s3";
-import ProductFlagModel from "./productFlag.model";
+import { deleteFile, uploadFile } from "../../helpers/aws-s3.js";
+import ProductFlagModel from "./productFlag.model.js";
 
 // GET all flags
 export const getAllFlags = async (req, res) => {

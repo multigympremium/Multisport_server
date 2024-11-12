@@ -1,4 +1,4 @@
-import ShippingPolicyModel from "./shippingPolicy.model";
+import ShippingPolicyModel from "./shippingPolicy.model.js";
 
 
 // Function to get all shipping policies

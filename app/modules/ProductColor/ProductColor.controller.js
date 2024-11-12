@@ -1,6 +1,6 @@
 // controllers/productColorController.js
 
-import ProductColorModel from "./ProductColor.model";
+import ProductColorModel from "./ProductColor.model.js";
 
 
 // Get all product colors

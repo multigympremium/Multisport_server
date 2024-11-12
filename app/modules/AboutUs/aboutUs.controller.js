@@ -1,5 +1,6 @@
-import { deleteFile, uploadFile } from "../../helpers/aws-s3";
-import AboutUsModel from "./aboutUs.modle";
+import { deleteFile, uploadFile } from "../../helpers/aws-s3.js";
+import AboutUsModel from "./aboutUs.model.js";
+
 
 
 // Handle GET request

@@ -62,7 +62,7 @@ const ProductSchema = new mongoose.Schema(
     },
     gallery: {
       type: [mongoose.Schema.Types.ObjectId],
-      ref: "product_galleries",
+      ref: "product_gallery",
     },
     category: {
       type: String,
@@ -106,6 +106,6 @@ const ProductSchema = new mongoose.Schema(
 );
 
 const ProductModel =
-  mongoose.models.products || mongoose.model("products", ProductSchema);
+mongoose.model("products", ProductSchema);
 
 export default ProductModel;

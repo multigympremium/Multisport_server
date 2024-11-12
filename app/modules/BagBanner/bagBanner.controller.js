@@ -1,5 +1,5 @@
-import { deleteFile, uploadFile } from "../../helpers/aws-s3";
-import BagBannerModel from "./bagBanner.model";
+import { deleteFile, uploadFile } from "../../helpers/aws-s3.js";
+import BagBannerModel from "./bagBanner.model.js";
 
 // Function to handle GET request (get BagBanner with optional search)
 export const getBagBanners = async (req, res) => {

@@ -6,7 +6,7 @@ import {
   createInfo,
   updateInfo,
   deleteInfo
-} from './customJsCss.controller';
+} from './customJsCss.controller.js';
 
 const customJsCssRoutes = express.Router();
 

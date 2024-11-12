@@ -1,5 +1,5 @@
-import { deleteFile, uploadFile } from "../../helpers/aws-s3";
-import SubcategoryModel from "./subcategory.model";
+import { deleteFile, uploadFile } from "../../helpers/aws-s3.js";
+import SubcategoryModel from "./subcategory.model.js";
 
 
 // GET Request: Get categories and child categories

@@ -13,6 +13,6 @@ const schema = new mongoose.Schema(
 );
 
 const ReturnPolicyModel =
-  mongoose.models.return_policies || mongoose.model("return_policies", schema);
+ mongoose.model("return_policies", schema);
 
 export default ReturnPolicyModel;

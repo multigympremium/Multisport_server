@@ -5,7 +5,7 @@ import {
   createBrand,
   updateBrandById,
   deleteBrandById,
-} from './generalInfo.controller';
+} from './generalInfo.controller.js';
 
 const generalInfoRoutes = express.Router();
 

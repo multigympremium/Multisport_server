@@ -5,7 +5,7 @@ import {
   createCategory,
   updateCategoryById,
   deleteCategoryById
-} from './blogCategory.controller';
+} from './blogCategory.controller.js';
 
 const blogCategoryRoutes = express.Router();
 

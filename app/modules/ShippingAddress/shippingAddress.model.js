@@ -40,7 +40,7 @@ const ShippingAddressSchema = new mongoose.Schema({
   timestamps: true
 });
 
-const ShippingAddress =  mongoose.models.shipping_addresses || mongoose.model('shipping_addresses', ShippingAddressSchema);
+const ShippingAddress =   mongoose.model('shipping_addresses', ShippingAddressSchema);
 
 
 export default ShippingAddress

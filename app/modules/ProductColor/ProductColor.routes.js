@@ -7,7 +7,7 @@ import {
   getProductColorById,
   updateProductColorById,
   deleteProductColorById,
-} from "./ProductColor.controller";
+} from "./ProductColor.controller.js";
 
 const productColorRoutes = express.Router();
 

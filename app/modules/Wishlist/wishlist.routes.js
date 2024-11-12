@@ -5,7 +5,7 @@ import {
   getWishlistById, 
   updateWishlistById, 
   deleteWishlistById 
-} from './wishlist.controller';
+} from './wishlist.controller.js';
 
 const wishlistRoutes = express.Router();
 

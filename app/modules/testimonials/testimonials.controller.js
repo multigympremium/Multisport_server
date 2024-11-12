@@ -1,7 +1,7 @@
-import { deleteFile, uploadFile } from "../../helpers/aws-s3";
-import TestimonialsModel from "./testimonials.model";
+import { deleteFile, uploadFile } from "../../helpers/aws-s3.js";
+import TestimonialsModel from "./testimonials.model.js";
 
-connectDB();
+
 
 // GET all testimonials with optional search filter
 export async function getTestimonials(req, res) {

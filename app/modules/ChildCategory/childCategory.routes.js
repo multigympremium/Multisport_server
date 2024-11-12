@@ -6,7 +6,7 @@ import {
   createChildCategory,
   updateChildCategory,
   deleteChildCategory
-} from "./childCategory.controller";
+} from "./childCategory.controller.js";
 
 const childCategoryRoutes = express.Router();
 

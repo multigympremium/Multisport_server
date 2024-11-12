@@ -48,7 +48,6 @@ const SchemaModel = new mongoose.Schema(
 );
 
 const GeneralInfoModel =
-  mongoose.models.general_info ||
   mongoose.model("general_info", SchemaModel);
 
 export default GeneralInfoModel;

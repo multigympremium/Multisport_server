@@ -5,23 +5,23 @@ import {
   getCategoryById,
   updateCategory,
   deleteCategory,
-} from './subcategory.controller';
+} from './subcategory.controller.js';
 
 const subcategoryRoutes = express.Router();
 
 // Get all categories
-subcategoryRoutes.get('/categories', getCategories);
+subcategoryRoutes.get('/', getCategories);
 
 // Create a new category
-subcategoryRoutes.post('/categories', createCategory);
+subcategoryRoutes.post('/', createCategory);
 
 // Get category by ID
-subcategoryRoutes.get('/categories/:id', getCategoryById);
+subcategoryRoutes.get('/:id', getCategoryById);
 
 // Update category by ID
-subcategoryRoutes.put('/categories/:id', updateCategory);
+subcategoryRoutes.put('/:id', updateCategory);
 
 // Delete category by ID
-subcategoryRoutes.delete('/categories/:id', deleteCategory);
+subcategoryRoutes.delete('/:id', deleteCategory);
 
 export default subcategoryRoutes;

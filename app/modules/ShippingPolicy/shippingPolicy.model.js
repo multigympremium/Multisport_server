@@ -13,7 +13,7 @@ const schema = new mongoose.Schema(
 );
 
 const ShippingPolicyModel =
-  mongoose.models.shipping_policies ||
+
   mongoose.model("shipping_policies", schema);
 
 export default ShippingPolicyModel;

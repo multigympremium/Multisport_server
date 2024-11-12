@@ -1,7 +1,6 @@
-import SocialLinkModel from "./socialLink.model";
+import SocialLinkModel from "./socialLink.model.js";
 
-// Connect to DB
-connectDB();
+
 
 // GET: Fetch all social links
 export async function getSocialLinks(req, res) {

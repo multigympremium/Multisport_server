@@ -4,6 +4,9 @@ import colors from "colors"; // Import colors
 const connectDB = async () => {
   try {
     const conn = await mongoose.connect(process.env.MONGO_URI, {
+      dbName: "multiSports" ,
+      serverSelectionTimeoutMS: 5000, // Timeout after 5s if server is not available
+      socketTimeoutMS: 120000,  
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });

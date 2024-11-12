@@ -5,7 +5,7 @@ import {
   getOrderById,
   updateOrderById,
   deleteOrderById
-} from './orders.controller';
+} from './orders.controller.js';
 
 const orderRoutes = express.Router();
 

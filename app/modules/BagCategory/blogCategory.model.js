@@ -11,7 +11,7 @@ const productSizeSchema = new mongoose.Schema(
 );
 
 const BlogCategoryModel =
-  mongoose.models.blog_categories ||
+  mongoose.model.blog_categories ||
   mongoose.model("blog_categories", productSizeSchema);
 
 export default BlogCategoryModel;

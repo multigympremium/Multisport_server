@@ -7,7 +7,7 @@ import {
   getCategoryById,
   updateCategoryById,
   deleteCategoryById,
-} from './productCategory.controller';
+} from './productCategory.controller.js';
 
 const productCategoryRoutes = express.Router();
 

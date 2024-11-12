@@ -29,6 +29,6 @@ const BannerSchema = new mongoose.Schema(
 );
 
 const BannerModel =
-  mongoose.models.banners || mongoose.model("banners", BannerSchema);
+ mongoose.model("banners", BannerSchema);
 
 export default BannerModel;

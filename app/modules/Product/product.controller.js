@@ -1,6 +1,5 @@
-import { deleteFile, uploadFile } from "../../helpers/aws-s3";
-import ProductModel from '../models/ProductModel';
-import { uploadFile, deleteFile } from '../helpers/aws-s3';
+import { deleteFile, uploadFile } from "../../helpers/aws-s3.js";
+import ProductModel from "./product.model.js";
 
 // GET Products
 export const getProducts = async (req, res) => {

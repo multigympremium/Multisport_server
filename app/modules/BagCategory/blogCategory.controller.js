@@ -1,5 +1,5 @@
 
-import BlogCategoryModel from "./blogCategory.model";
+import BlogCategoryModel from "./blogCategory.model.js";
 
 // GET all categories
 export const getAllCategories = async (req, res) => {

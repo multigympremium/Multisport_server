@@ -5,7 +5,7 @@ import {
   createOrUpdatePrivacyPolicy,
   updatePrivacyPolicyById,
   deletePrivacyPolicyById,
-} from "./privacyPolicy.controller";
+} from "./privacyPolicy.controller.js";
 
 const PrivacyPolicyRoutes = express.Router();
 

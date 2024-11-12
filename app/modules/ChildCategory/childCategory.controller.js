@@ -1,5 +1,4 @@
-import { deleteFile, uploadFile } from "../../helpers/aws-s3";
-import { uploadFile, deleteFile } from "../helpers/aws-s3.js";
+import { deleteFile, uploadFile } from "../../helpers/aws-s3.js";
 import ChildCategoryModel from "./childCategory.model.js";
 
 // GET all child categories with optional filters

@@ -26,6 +26,6 @@ const colorSettingsSchema = new mongoose.Schema({
     required: true,
   }
 });
-const WebsiteThemeColorModel = mongoose.models.color_settings || mongoose.model('color_settings', colorSettingsSchema);
+const WebsiteThemeColorModel = mongoose.model('color_settings', colorSettingsSchema);
 
 export default WebsiteThemeColorModel

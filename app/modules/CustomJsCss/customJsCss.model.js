@@ -18,7 +18,6 @@ const TestimonialSchema = new mongoose.Schema(
 );
 
 const CustomCssAndJsModel =
-  mongoose.models.custom_css_and_js ||
   mongoose.model("custom_css_and_js", TestimonialSchema);
 
 export default CustomCssAndJsModel;

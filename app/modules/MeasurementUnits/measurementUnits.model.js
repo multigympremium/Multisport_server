@@ -10,7 +10,7 @@ const productSizeSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const MeasurementUnitsModel = mongoose.models.measurement_units ||
+const MeasurementUnitsModel = 
   mongoose.model("measurement_units", productSizeSchema);
 
 export default MeasurementUnitsModel;

@@ -36,6 +36,6 @@ const socialMediaLinksSchema = new mongoose.Schema({
   }
 });
 
-const SocialLinkModel = mongoose.models.social_media_links || mongoose.model('social_media_links', socialMediaLinksSchema);
+const SocialLinkModel =  mongoose.model('social_media_links', socialMediaLinksSchema);
 
 export default SocialLinkModel

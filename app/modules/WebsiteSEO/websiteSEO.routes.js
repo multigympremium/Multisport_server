@@ -1,5 +1,5 @@
 import express from 'express';
-import { getWebsiteSEO, createWebsiteSEO, getWebsiteSEOById, updateWebsiteSEO, deleteWebsiteSEO } from './websiteSEO.controller';
+import { getWebsiteSEO, createWebsiteSEO, getWebsiteSEOById, updateWebsiteSEO, deleteWebsiteSEO } from './websiteSEO.controller.js';
 
 const websiteSEORoutes = express.Router();
 

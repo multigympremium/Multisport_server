@@ -1,4 +1,4 @@
-import WebsiteThemeColorModel from "./websiteThemeColor.model";
+import WebsiteThemeColorModel from "./websiteThemeColor.model.js";
 
 // Handle GET request for all themes
 export async function getAllThemes(req, res) {

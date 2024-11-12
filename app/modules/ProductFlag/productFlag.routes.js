@@ -1,5 +1,5 @@
 import express from 'express';
-import { getAllFlags, createFlag, getFlagById, updateFlag, deleteFlag } from './productFlag.controller';
+import { getAllFlags, createFlag, getFlagById, updateFlag, deleteFlag } from './productFlag.controller.js';
 
 const productFlagRoutes = express.Router();
 

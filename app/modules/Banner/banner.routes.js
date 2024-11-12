@@ -1,7 +1,7 @@
 import express from 'express';
 
 const bannerRoutes = express.Router();
-import { getBanners, createBanner, getBannerById, updateBanner, deleteBanner } from './banner.controller';
+import { getBanners, createBanner, getBannerById, updateBanner, deleteBanner } from './banner.controller.js';
 
 
 // Route for fetching Banners with optional search filter

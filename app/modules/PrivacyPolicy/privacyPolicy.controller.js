@@ -1,4 +1,4 @@
-import PrivacyPolicyModel from "./privacyPolicy.model";
+import PrivacyPolicyModel from "./privacyPolicy.model.js";
 
 // GET all privacy policies
 export const getAllPrivacyPolicies = async (req, res) => {

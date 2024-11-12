@@ -21,7 +21,6 @@ const TestimonialSchema = new mongoose.Schema(
 );
 
 const AboutMissionModel =
-  mongoose.models.about_mission ||
   mongoose.model("about_mission", TestimonialSchema);
 
 export default AboutMissionModel;

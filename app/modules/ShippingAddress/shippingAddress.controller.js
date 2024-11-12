@@ -1,4 +1,4 @@
-import ShippingAddress from "./shippingAddress.model";
+import ShippingAddress from "./shippingAddress.model.js";
 
 // GET Request: Get all shipping addresses
 export const getAllShippingAddresses = async (req, res) => {

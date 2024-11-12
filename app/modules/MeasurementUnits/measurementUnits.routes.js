@@ -5,7 +5,7 @@ import {
   createUnit,
   updateUnitById,
   deleteUnitById,
-} from './measurementUnits.controller';
+} from './measurementUnits.controller.js';
 
 const measurementUnits = express.Router();
 

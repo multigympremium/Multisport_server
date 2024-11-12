@@ -13,7 +13,6 @@ const schema = new mongoose.Schema(
 );
 
 const PrivacyPolicyModel =
-  mongoose.models.privacy_policies ||
   mongoose.model("privacy_policies", schema);
 
 export default PrivacyPolicyModel;

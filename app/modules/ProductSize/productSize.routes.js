@@ -5,7 +5,7 @@ import {
   getSizeById,
   updateSizeById,
   deleteSizeById,
-} from './productSize.controller';
+} from './productSize.controller.js';
 
 const productSizeRoutes = express.Router();
 

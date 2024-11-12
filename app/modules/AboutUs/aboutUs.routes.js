@@ -1,6 +1,6 @@
 import express from 'express';
-import { deleteAboutMission, getAboutMissionById, updateAboutMission } from '../AboutMission/aboutMission.controller';
-import { createAboutUs, getAboutUs } from './aboutUs.controller';
+import { deleteAboutMission, getAboutMissionById, updateAboutMission } from '../AboutMission/aboutMission.controller.js';
+import { createAboutUs, getAboutUs } from './aboutUs.controller.js';
 
 const aboutUsRoutes = express.Router();
 

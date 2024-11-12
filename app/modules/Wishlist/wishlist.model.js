@@ -21,6 +21,6 @@ const WishlistSchema = Schema(
   { timestamps: true }
 );
 
-const WishlistModel = mongoose.models.wishlists || mongoose.model("wishlists", WishlistSchema);
+const WishlistModel =  mongoose.model("wishlists", WishlistSchema);
 
 export default WishlistModel;

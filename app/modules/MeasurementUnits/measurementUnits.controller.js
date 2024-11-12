@@ -1,4 +1,4 @@
-import MeasurementUnitsModel from "./measurementUnits.model";
+import MeasurementUnitsModel from "./measurementUnits.model.js";
 
 // GET all measurement units
 export const getAllUnits = async (req, res) => {
