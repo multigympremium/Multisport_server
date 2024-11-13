@@ -2,9 +2,6 @@ import { deleteFile, uploadFile } from "../../helpers/aws-s3.js";
 import AboutMissionModel from "./aboutMission.model.js";
 
 
-
-
-
 export async function getAboutMission(req, res) {
     const { searchParams } = req.query
     const search = searchParams.get("search");

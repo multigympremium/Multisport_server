@@ -1,5 +1,6 @@
 import { deleteFile, uploadFile } from "../../helpers/aws-s3.js";
 import ProductModel from "./product.model.js";
+import ProductGalleryModel from "./productGallery.model.js";
 
 // GET Products
 export const getProducts = async (req, res) => {
@@ -13,7 +14,6 @@ export const getProducts = async (req, res) => {
       { category: { $regex: new RegExp(search, 'i') } },
       { subcategory: { $regex: new RegExp(search, 'i') } },
       { childCategory: { $regex: new RegExp(search, 'i') } },
-      { modelOfBrandValue: { $regex: new RegExp(search, 'i') } },
       { brandValue: { $regex: new RegExp(search, 'i') } },
       { productColorValue: { $regex: new RegExp(search, 'i') } },
       { productSizeValue: { $regex: new RegExp(search, 'i') } },
@@ -42,38 +42,116 @@ export const createProduct = async (req, res) => {
     productTitle, shortDescription, fullDescription, specifications, returnPolicy, price,
     discountPrice, rewardPoints, stock, productCode, metaTitle, metaKeywords, metaDescription,
     specialOffer, hasVariants, category, brandValue, productColorValue, productSizeValue,
-    productFlagValue, modelOfBrandValue, subcategory, childCategory, isNew, isRecommended
+    productFlagValue, subcategory, childCategory, isNew, isRecommended, 
   } = req.body;
 
   try {
     // Handle file uploads
-    let thumbnailUrl = '';
-    if (req.files['thumbnail']) {
-      const thumbnailFile = req.files['thumbnail'][0];
-      const uploadedThumbnail = await uploadFile(thumbnailFile);
-      thumbnailUrl = uploadedThumbnail.Location;
+    // let thumbnailUrl = '';
+    // if (req.files['thumbnail']) {
+    //   const thumbnailFile = req.files['thumbnail'][0];
+    //   const uploadedThumbnail = await uploadFile(thumbnailFile);
+    //   thumbnailUrl = uploadedThumbnail.Location;
+    // }
+
+    // const galleryUrls = [];
+    // if (req.files['gallery']) {
+    //   const galleryFiles = req.files['gallery'];
+    //   for (const file of galleryFiles) {
+    //     const uploadedGalleryImage = await uploadFile(file);
+    //     galleryUrls.push(uploadedGalleryImage.Location);
+    //   }
+    // }
+
+
+    // Checking required fields
+    if (
+      !productTitle ||
+      !shortDescription ||
+      !fullDescription ||
+      !price ||
+      !productCode ||
+      !category ||
+      !brandValue ||
+      !subcategory,
+      !returnPolicy,
+      !specifications
+    ) {
+      return NextResponse.json(
+        { success: false, message: "Required fields missing" },
+        { status: 400 }
+      );
     }
 
-    const galleryUrls = [];
-    if (req.files['gallery']) {
-      const galleryFiles = req.files['gallery'];
-      for (const file of galleryFiles) {
-        const uploadedGalleryImage = await uploadFile(file);
-        galleryUrls.push(uploadedGalleryImage.Location);
-      }
+    // Uploading the thumbnail file
+    const thumbnailFile = req.files.thumbnail;
+    let thumbnailUrl = "";
+    if (thumbnailFile && thumbnailFile.size > 0) {
+      thumbnailUrl = `${Date.now()}-${thumbnailFile.name.replace(/\s/g, "-")}`;
+      const thumbnailResult = await uploadFile(
+        thumbnailFile,
+        thumbnailUrl,
+        thumbnailFile.type
+      );
+      console.log(thumbnailResult, "thumbnailResult");
     }
 
-    const newProduct = new ProductModel({
-      productTitle, shortDescription, fullDescription, specifications, returnPolicy, price,
-      discountPrice, rewardPoints, stock, productCode, metaTitle, metaKeywords, metaDescription,
-      specialOffer, hasVariants, category, brandValue, productColorValue, productSizeValue,
-      productFlagValue, modelOfBrandValue, subcategory, childCategory, isNew, isRecommended,
-      thumbnailUrl, gallery: galleryUrls
-    });
+    // Uploading gallery files
+    const galleryFiles = req.files['gallery'];// Handle multiple files
+    let galleryEntries = [];
+    console.log(galleryFiles, "galleryFiles");
+    for (const file of galleryFiles) {
+      console.log(file, "file", typeof file, file instanceof File);
+      const galleryUrl = `${Date.now()}-${file?.name.replace(/\s/g, "-")}`;
+      const galleryUploadResult = await uploadFile(file, galleryUrl, file.type);
+
+      console.log(galleryUploadResult, "galleryUploadResult");
+
+      const galleryEntry = await ProductGalleryModel.create({
+        image: galleryUrl,
+      });
+      console.log(galleryEntry, "galleryEntry");
+      galleryEntries.push(galleryEntry._id); // Save the gallery entry IDs
+    }
+
+    const submitData = {
+      productTitle,
+      shortDescription,
+      fullDescription,
+      returnPolicy,
+      specification : specifications,
+      price: parseFloat(price),
+      discountPrice: discountPrice ? parseFloat(discountPrice) : undefined,
+      rewardPoints: rewardPoints ? parseInt(rewardPoints) : undefined,
+      stock: parseInt(stock),
+      productCode,
+      metaTitle,
+      metaKeywords,
+      metaDescription,
+      specialOffer,
+      hasVariants,
+      thumbnail: thumbnailUrl, // URL for thumbnail
+      gallery: galleryEntries, // Array of gallery object IDs
+      category,
+      brandValue,
+      productColorValue: productColorValue.split(","),
+      productSizeValue: productSizeValue.split(","),
+      productFlagValue,
+      subcategory,
+      childCategory,
+      isNew: isNew === "true",
+      isRecommended: isRecommended === "true",
+    };
+
+    console.log(submitData, "submitData");
+
+
+    const newProduct = new ProductModel(submitData);
 
     await newProduct.save();
     res.status(201).json({ success: true, data: newProduct });
   } catch (error) {
+    console.log(error, "create Product error");
     res.status(400).json({ success: false, error: error.message });
   }
 };

@@ -81,10 +81,7 @@ const ProductSchema = new mongoose.Schema(
     productFlagValue: {
       type: String,
     },
-    modelOfBrandValue: {
-      type: String,
-      require: true,
-    },
+    
     subcategory: {
       type: String,
       require: true,
