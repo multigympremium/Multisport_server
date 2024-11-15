@@ -34,7 +34,7 @@ export const createWebsiteSEO = async (req, res) => {
     let thumbnailUrl = "";
     if (image) {
       thumbnailUrl = `${Date.now()}-${image.name.replace(/\s/g, "-")}`;
-      await uploadFile(image, thumbnailUrl, image.mimetype);
+      await uploadFile(image, thumbnailUrl, image.type);
     }
 
     const insertData = {
@@ -87,7 +87,7 @@ export const updateWebsiteSEO = async (req, res) => {
     let thumbnailUrl = "";
     if (image && image.name !== existingData.image) {
       thumbnailUrl = `${Date.now()}-${image.name.replace(/\s/g, "-")}`;
-      await uploadFile(image, thumbnailUrl, image.mimetype);
+      await uploadFile(image, thumbnailUrl, image.type);
     }
 
     const updateData = {};

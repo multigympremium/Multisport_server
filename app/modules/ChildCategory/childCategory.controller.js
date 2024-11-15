@@ -34,7 +34,7 @@ export const getChildCategoryById = async (req, res) => {
 export const createChildCategory = async (req, res) => {
   try {
     const { category, subcategory, childCategoryName, slug } = req.body;
-    const childCategoryIcon = req.file;  // Assuming file is passed as `childCategoryIcon`
+    const childCategoryIcon = req.files?.image  // Assuming file is passed as `childCategoryIcon`
 
     if (!category || !childCategoryName || !slug || !subcategory) {
       return res.status(400).json({ success: false, message: "All fields are required" });
@@ -59,7 +59,7 @@ export const createChildCategory = async (req, res) => {
 export const updateChildCategory = async (req, res) => {
   const { id } = req.params;
   const { category, subcategory, childCategoryName, slug } = req.body;
-  const childCategoryIcon = req.file;
+  const childCategoryIcon = req.files?.image
 
   try {
     const categoryData = await ChildCategoryModel.findById(id);

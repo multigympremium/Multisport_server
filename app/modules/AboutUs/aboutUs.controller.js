@@ -40,13 +40,13 @@ export async function getAboutUs(req, res) {
       let sideImageUrl = "";
       if (sideImage && sideImage.size > 0) {
         sideImageUrl = `${Date.now()}-${sideImage.name.replace(/\s/g, "-")}`;
-        await uploadFile(sideImage, sideImageUrl, sideImage.mimetype);
+        await uploadFile(sideImage, sideImageUrl, sideimage.type);
       }
   
       let bannerImageUrl = "";
       if (bannerImage && bannerImage.size > 0) {
         bannerImageUrl = `${Date.now()}-${bannerImage.name.replace(/\s/g, "-")}`;
-        await uploadFile(bannerImage, bannerImageUrl, bannerImage.mimetype);
+        await uploadFile(bannerImage, bannerImageUrl, bannerimage.type);
       }
   
       const insertData = {

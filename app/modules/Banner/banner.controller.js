@@ -25,7 +25,7 @@ export const getBanners = async (req, res) => {
 export const createBanner = async (req, res) => {
   try {
     const { title, subtitle, shortDescription } = req.body;
-    const image = req.file; // Assuming `multer` is used for file upload
+    const image = req.files.image;
 
     if (!title || !subtitle || !shortDescription) {
       return res.status(400).json({ success: false, message: 'Required fields missing' });
@@ -33,8 +33,8 @@ export const createBanner = async (req, res) => {
 
     let thumbnailUrl = '';
     if (image && image.size > 0) {
-      thumbnailUrl = `${Date.now()}-${image.originalname.replace(/\s/g, '-')}`;
-      await uploadFile(image, thumbnailUrl, image.mimetype);
+      thumbnailUrl = `${Date.now()}-${image.name.replace(/\s/g, '-')}`;
+      await uploadFile(image, thumbnailUrl, image.type);
     }
 
     const bannerData = {
@@ -76,16 +76,16 @@ export const updateBanner = async (req, res) => {
     }
 
     const { title, subtitle, shortDescription } = req.body;
-    const image = req.file; // Assuming `multer` is used for file handling
+    const image = req.files.image; // Assuming `multer` is used for file handling
     const bannerData = {};
 
     if (title) bannerData.title = title;
     if (subtitle) bannerData.subtitle = subtitle;
     if (shortDescription) bannerData.shortDescription = shortDescription;
 
-    if (image && image.size > 0 && image.originalname !== existingBanner.image) {
-      const thumbnailUrl = `${Date.now()}-${image.originalname.replace(/\s/g, "-")}`;
-      await uploadFile(image, thumbnailUrl, image.mimetype);
+    if (image && image.size > 0 && image.name !== existingBanner.image) {
+      const thumbnailUrl = `${Date.now()}-${image.name.replace(/\s/g, "-")}`;
+      await uploadFile(image, thumbnailUrl, image.type);
       bannerData.image = thumbnailUrl;
     }
 

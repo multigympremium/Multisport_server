@@ -25,7 +25,7 @@ export const getBagBanners = async (req, res) => {
 export const createBagBanner = async (req, res) => {
   try {
     const { title, subtitle, shortDescription } = req.body;
-    const image = req.file; // assuming `multer` is used for file uploads
+    const image = req.files?.image // assuming `multer` is used for file uploads
 
     if (!title || !subtitle || !shortDescription) {
       return res.status(400).json({ success: false, message: "Required fields missing" });
@@ -33,8 +33,8 @@ export const createBagBanner = async (req, res) => {
 
     let thumbnailUrl = "";
     if (image && image.size > 0) {
-      thumbnailUrl = `${Date.now()}-${image.originalname.replace(/\s/g, "-")}`;
-      await uploadFile(image, thumbnailUrl, image.mimetype);
+      thumbnailUrl = `${Date.now()}-${image.name.replace(/\s/g, "-")}`;
+      await uploadFile(image, thumbnailUrl, image.type);
     }
 
     const bannerData = {
@@ -79,7 +79,7 @@ export const updateBagBanner = async (req, res) => {
     }
 
     const { title, subtitle, shortDescription } = req.body;
-    const image = req.file; // Assuming `multer` is used for file upload
+    const image = req.files?.image // Assuming `multer` is used for file upload
 
     const bannerData = {};
     if (title) bannerData.title = title;
@@ -87,8 +87,8 @@ export const updateBagBanner = async (req, res) => {
     if (shortDescription) bannerData.shortDescription = shortDescription;
 
     if (image && image.size > 0 && image.filename !== existingBanner.image) {
-      const thumbnailUrl = `${Date.now()}-${image.originalname.replace(/\s/g, "-")}`;
-      await uploadFile(image, thumbnailUrl, image.mimetype);
+      const thumbnailUrl = `${Date.now()}-${image.name.replace(/\s/g, "-")}`;
+      await uploadFile(image, thumbnailUrl, image.type);
       bannerData.image = thumbnailUrl;
     }
 

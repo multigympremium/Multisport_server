@@ -25,11 +25,13 @@ export async function getBanners(req, res) {
 export async function createBanner(req, res) {
   try {
     const formData = req.body;
-    const { title, subtitle, shortDescription, image } = formData;
+    const { title, subtitle, shortDescription } = formData;
 
     if (!title || !subtitle || !shortDescription) {
       return res.status(400).json({ success: false, message: "Required fields missing" });
     }
+
+    const image = req.files.image;
 
     let thumbnailUrl = "";
     if (image && image.size > 0) {
@@ -72,12 +74,14 @@ export async function updateBanner(req, res) {
     }
 
     const formData = req.body;
-    const { title, subtitle, shortDescription, image } = formData;
+    const { title, subtitle, shortDescription } = formData;
     const bannerData = {};
 
     if (title) bannerData.title = title;
     if (subtitle) bannerData.subtitle = subtitle;
     if (shortDescription) bannerData.shortDescription = shortDescription;
+
+    const image = req.files.image
 
     let thumbnailUrl = "";
     if (image && image.size > 0 && image !== existingBanner.image) {

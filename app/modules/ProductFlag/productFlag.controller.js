@@ -17,7 +17,7 @@ export const createFlag = async (req, res) => {
     const formData = req.body; // Use req.body with multer for file upload if needed
 
     const { flagName } = formData;
-    const flagIcon = req.file; // assuming `req.file` for file upload
+    const flagIcon = req.files?.image // assuming `req.file` for file upload
 
     if (!flagName) {
       return res.status(400).json({ success: false, message: "Required fields missing" });
@@ -56,7 +56,7 @@ export const getFlagById = async (req, res) => {
 export const updateFlag = async (req, res) => {
   const { id } = req.params;
   const formData = req.body;
-  const flagIcon = req.file;
+  const flagIcon = req.files?.image
 
   try {
     const existingFlag = await ProductFlagModel.findById(id);

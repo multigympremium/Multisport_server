@@ -54,7 +54,7 @@ export const createBlog = async (req, res) => {
       metaDescription,
       slug,
     } = req.body;
-    const image = req.file;
+    const image = req.files?.image
 
     if (
       !title ||
@@ -72,8 +72,8 @@ export const createBlog = async (req, res) => {
 
     let thumbnailUrl = '';
     if (image) {
-      thumbnailUrl = `${Date.now()}-${image.originalname.replace(/\s/g, '-')}`;
-      await uploadFile(image, thumbnailUrl, image.mimetype);
+      thumbnailUrl = `${Date.now()}-${image.name.replace(/\s/g, '-')}`;
+      await uploadFile(image, thumbnailUrl, image.type);
     }
 
     const blogData = {
@@ -118,12 +118,12 @@ export const updateBlogById = async (req, res) => {
       metaDescription,
       slug,
     } = req.body;
-    const image = req.file;
+    const image = req.files?.image
 
     let thumbnailUrl = existingBlog.image;
     if (image) {
-      thumbnailUrl = `${Date.now()}-${image.originalname.replace(/\s/g, '-')}`;
-      await uploadFile(image, thumbnailUrl, image.mimetype);
+      thumbnailUrl = `${Date.now()}-${image.name.replace(/\s/g, '-')}`;
+      await uploadFile(image, thumbnailUrl, image.type);
     }
 
     const updatedBlogData = {
