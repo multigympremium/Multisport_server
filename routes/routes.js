@@ -29,6 +29,7 @@ import websiteSEORoutes from "../app/modules/WebsiteSEO/websiteSEO.routes.js";
 import websiteThemeColorRoutes from "../app/modules/WebsiteThemeColor/websiteThemeColor.routes.js";
 import wishlistRoutes from "../app/modules/Wishlist/wishlist.routes.js";
 import userRoutes from "../app/modules/User/user.routes.js";
+import districtRoutes from "../app/modules/District/district.routes.js";
 
 const routes = Router();
 // routes.use("/branches", BranchRoutes);
@@ -42,6 +43,7 @@ routes.use("/blog-category", blogCategoryRoutes );
 routes.use("/categories", productCategoryRoutes );
 routes.use("/child-categories", childCategoryRoutes );
 routes.use("/custom-css-js", customJsCssRoutes );
+routes.use("/district", districtRoutes );
 routes.use("/general-info", customJsCssRoutes );
 routes.use("/measurement-units", measurementUnits );
 routes.use("/orders", orderRoutes );
