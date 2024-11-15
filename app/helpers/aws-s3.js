@@ -118,3 +118,4 @@
     const command = new DeleteObjectCommand(params);
     return await client.send(command);
   };
+  
