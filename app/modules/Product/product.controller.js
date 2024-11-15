@@ -359,3 +359,21 @@ export const deleteProductById = async (req, res) => {
     return res.status(400).json({ success: false, error: error.message });
   }
 };
+
+export const updateProductWishCount = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const existsProduct = await ProductModel.findById(id);
+    if (!existsProduct) {
+      return res.status(404).json({ success: false, error: "Product not found" });
+    }
+
+    // Update product
+    await ProductModel.findByIdAndUpdate(id, { wishCount: existsProduct.wishCount + 1 });
+
+    return res.status(200).json({ success: true, message: "Product wish count updated successfully" });
+  } catch (error) {
+    return res.status(400).json({ success: false, error: error.message });
+  }
+};

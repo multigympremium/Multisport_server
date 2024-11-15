@@ -98,6 +98,10 @@ const ProductSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    wishCount: {
+      type: Number,
+      default: 0,
+    },
   },
   { timestamps: true }
 );
