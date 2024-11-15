@@ -136,7 +136,7 @@ export const createProduct = async (req, res) => {
       brandValue,
       productColorValue: productColorValue.split(","),
       productSizeValue: productSizeValue.split(","),
-      productFlagValue,
+      productFlagValue,   
       subcategory,
       childCategory,
       isNew: isNew === "true",
@@ -174,7 +174,7 @@ export const getProductById = async (req, res) => {
 // PUT Request: Update product by ID
 export const updateProductById = async (req, res) => {
   const { id } = req.params;
-  try {
+  
     const formData = req.body; // Assuming you use middleware to parse form data
 
     const productData = await ProductModel.findById(id).populate("gallery");
@@ -182,58 +182,149 @@ export const updateProductById = async (req, res) => {
       return res.status(404).json({ success: false, message: "Product not found" });
     }
 
-    const { productTitle, shortDescription, fullDescription, price, galleryItemIds } = formData;
+    const { productTitle, shortDescription, fullDescription, specifications, returnPolicy, price,
+      discountPrice, rewardPoints, stock, productCode, metaTitle, metaKeywords, metaDescription,
+      specialOffer, hasVariants, category, brandValue, productColorValue, productSizeValue,
+      productFlagValue, subcategory, childCategory, isNew, isRecommended, galleryItemIds } = formData;
+// Uploading the thumbnail file
 
-    // Process the file uploads (e.g., thumbnail and gallery)
-    const thumbnailFile = formData.thumbnail;
-    let thumbnailUrl = "";
-    if (thumbnailFile) {
-      thumbnailUrl = `${Date.now()}-${thumbnailFile.name.replace(/\s/g, "-")}`;
-      const thumbnailResult = await uploadFile(thumbnailFile, thumbnailUrl, thumbnailFile.type);
+try {
+const thumbnailFile = req?.files?.thumbnail;
+let thumbnailUrl = "";
+if (thumbnailFile && thumbnailFile.size > 0) {
+  thumbnailUrl = `${Date.now()}-${thumbnailFile.name.replace(/\s/g, "-")}`;
+  const thumbnailResult = await uploadFile(
+    thumbnailFile,
+    thumbnailUrl,
+    thumbnailFile.type
+  );
+  
+
+  console.log(thumbnailResult, "thumbnailResult");
+}
+
+// Uploading gallery files
+const galleryFiles = req.files['gallery'];
+let galleryEntries = [];
+for (const id of galleryItemIds.split(",")) {
+  const galleryItem = await ProductGalleryModel.findById(id);
+  console.log(galleryItem, "galleryItem");
+  galleryEntries.push(`${galleryItem._id}`);
+}
+
+console.log(galleryFiles, "galleryFiles");
+
+if (galleryFiles && galleryFiles.length > 1 ) {
+for (const file of galleryFiles) {
+  const galleryUrl = `${Date.now()}-${file?.name.replace(/\s/g, "-")}`;
+  const galleryUploadResult = await uploadFile(file, galleryUrl, file.type);
+
+  
+
+  const galleryEntry = await ProductGalleryModel.create({
+    image: galleryUrl,
+  });
+  console.log(galleryEntry, "galleryEntry");
+  const copy_galleryEntry = {
+    _id: galleryEntry._id,
+  }
+
+  console.log(copy_galleryEntry, "copy_galleryEntry");
+  galleryEntries.push(copy_galleryEntry._id); // Save the gallery entry IDs
+  // galleryEntries.push(galleryEntry._id); // Save the gallery entry IDs
+}
+
+} else if(galleryFiles) {
+  console.log(galleryFiles, "galleryFiles single");
+  const galleryUrl = `${Date.now()}-${galleryFiles?.name.replace(/\s/g, "-")}`;
+  const galleryUploadResult = await uploadFile(galleryFiles, galleryUrl, galleryFiles.type);
+
+  
+
+  const galleryEntry = await ProductGalleryModel.create({
+    image: galleryUrl,
+  });
+  console.log(galleryEntry, "galleryEntry");
+  const copy_galleryEntry = {
+    _id: `${galleryEntry._id}`,
+  }
+
+  console.log(copy_galleryEntry, "copy_galleryEntry");
+  galleryEntries.push(copy_galleryEntry._id); // Save the gallery entry IDs
+  // galleryEntries.push(galleryEntry._id); // Save the gallery entry IDs
+}
+
+console.log(galleryEntries, "galleryEntries");
+
+const submitData = {
+  productTitle,
+  shortDescription,
+  fullDescription,
+  price: parseFloat(price),
+  discountPrice: discountPrice ? parseFloat(discountPrice) : undefined,
+  rewardPoints: rewardPoints ? parseInt(rewardPoints) : undefined,
+  stock: parseInt(stock),
+  productCode,
+  metaTitle,
+  metaKeywords,
+  metaDescription,
+  specialOffer,
+  hasVariants,
+  thumbnail: thumbnailUrl, // URL for thumbnail
+  gallery: galleryEntries, // Array of gallery object IDs
+  category,
+  brandValue,
+  productColorValue,
+  productSizeValue,
+  productFlagValue,
+  subcategory,
+  childCategory,
+
+  returnPolicy,
+  specifications,
+
+  isNew: isNew === "true",
+  isRecommended: isRecommended === "true",
+};
+
+
+console.log(submitData, "submitData");
+
+const updatedProduct = await ProductModel.findByIdAndUpdate(
+  id,
+  submitData,
+  {
+    new: true,
+  }
+) 
+
+if (!updatedProduct) {
+  return NextResponse.json(
+    { success: false, message: "Product not found" },
+    { status: 404 }
+  );
+}
+
+// Delete thumbnail from S3 if it exists
+if (productData.thumbnail !== updatedProduct.thumbnail) {
+  await deleteFile(productData.thumbnail);
+}
+
+// Delete gallery images from S3
+if (productData.gallery && productData.gallery.length > 0) {
+  for (const galleryImage of productData.gallery) {
+    const isSameImage = updatedProduct.gallery.map(gallery => gallery.image).includes(galleryImage.image);
+    if (isSameImage) {
+      
+      await deleteFile(galleryImage.image);
     }
 
-    const galleryEntries = [];
-    for (const id of galleryItemIds) {
-      const galleryItem = await ProductGalleryModel.findById(id);
-      galleryEntries.push(galleryItem._id);
-    }
-
-    for (const file of formData.gallery) {
-      const galleryUrl = `${Date.now()}-${file.name.replace(/\s/g, "-")}`;
-      const galleryUploadResult = await uploadFile(file, galleryUrl, file.type);
-      const galleryEntry = await ProductGalleryModel.create({ image: galleryUrl });
-      galleryEntries.push(galleryEntry._id);
-    }
-
-    const updatedProduct = await ProductModel.findByIdAndUpdate(
-      id,
-      {
-        productTitle,
-        shortDescription,
-        fullDescription,
-        price,
-        thumbnail: thumbnailUrl,
-        gallery: galleryEntries,
-      },
-      { new: true, runValidators: true }
-    ).populate("gallery");
-
-    // Handle deletion of old files from S3
-    if (productData.thumbnail !== updatedProduct.thumbnail) {
-      await deleteFile(productData.thumbnail);
-    }
-
-    if (productData.gallery && productData.gallery.length > 0) {
-      for (const galleryImage of productData.gallery) {
-        const isSameImage = updatedProduct.gallery.map(gallery => gallery.image).includes(galleryImage.image);
-        if (!isSameImage) {
-          await deleteFile(galleryImage.image);
-        }
-      }
-    }
+  }
+}
 
     return res.status(200).json({ success: true, data: updatedProduct });
   } catch (error) {
+    console.log(error, "error");
     return res.status(400).json({ success: false, error: error.message });
   }
 };

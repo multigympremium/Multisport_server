@@ -60,10 +60,10 @@ const ProductSchema = new mongoose.Schema(
     thumbnail: {
       type: String, // File URL or path for the thumbnail
     },
-    gallery: {
-      type: [mongoose.Schema.Types.ObjectId],
-      ref: "product_gallery",
-    },
+    gallery: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "product_galleries",
+    }],
     category: {
       type: String,
       require: true,

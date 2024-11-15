@@ -11,6 +11,6 @@ const ProductGallerySchema = new mongoose.Schema(
 );
 
 const ProductGalleryModel =
-  mongoose.model("product_gallery", ProductGallerySchema);
+  mongoose.model("product_galleries", ProductGallerySchema);
 
 export default ProductGalleryModel;

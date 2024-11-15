@@ -55,22 +55,22 @@
     const client = new S3Client({
       // endpoint: "https://sgp1.digitaloceanspaces.com", // Find your endpoint in the control panel, under Settings. Prepend "https://".
       forcePathStyle: false,
-      region: "eu-north-1", // Must be "us-east-1" when creating new Spaces. Otherwise, use the region in your endpoint (e.g. nyc3).
+      region: process.env.AWS_REGION, // Must be "us-east-1" when creating new Spaces. Otherwise, use the region in your endpoint (e.g. nyc3).
       credentials: {
-        accessKeyId: process.env.ACCESS_KEY_ID, // Access key pair. You can create access key pairs using the control panel or API.
-        secretAccessKey: process.env.SPACES_SECRET, // Secret access key defined through an environment variable.
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
       },
     });
   
     const uploadParams = {
       Bucket: process.env.AWS_S3_BUCKET_NAME, // The path to the directory you want to upload the object to, starting with your Space name.
       Key: `multi-sports/${fileName}`, // Object key, referenced whenever you want to access this file later.
-      Body: file, // The object's contents. This variable is an object, not a string.
+      Body: file.data, // The object's contents. This variable is an object, not a string.
       // ACL: "public-read", // Defines ACL permissions, such as private or public.
-      Metadata: {
-        // Defines metadata tags.
-        // "x-amz-meta-my-key": "your-value"
-      },
+      // Metadata: {
+      //   // Defines metadata tags.
+      //   // "x-amz-meta-my-key": "your-value"
+      // },
       ContentType: mimeType ? mimeType : "image",
     };
   
@@ -100,11 +100,21 @@
   };
 
   export const deleteFile = async (key) => {
+
+    const client = new S3Client({
+      // endpoint: "https://sgp1.digitaloceanspaces.com", // Find your endpoint in the control panel, under Settings. Prepend "https://".
+      forcePathStyle: false,
+      region: process.env.AWS_REGION, // Must be "us-east-1" when creating new Spaces. Otherwise, use the region in your endpoint (e.g. nyc3).
+      credentials: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+      },
+    });
     const params = {
       Bucket: process.env.AWS_S3_BUCKET_NAME,
       Key: `multi-sports/${key}`,
     };
 
     const command = new DeleteObjectCommand(params);
-    return await s3Client.send(command);
+    return await client.send(command);
   };
