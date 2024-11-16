@@ -4,32 +4,45 @@ import ProductGalleryModel from "./productGallery.model.js";
 
 // GET Products
 export const getProducts = async (req, res) => {
-  const { search, size, color, brand, 'new-arrival': newArrival } = req.query;
+  const { search, size, color, brand, 'new-arrival': newArrival, product , category, subcategory } = req.query;
+  const id = req.params.id;
 
-  const filter = {};
-  if (search) {
+  try {
+    const filter = {};
+    
+    if (product) {
+    console.log(id, "id", search, "search", product, "product");
+    const productResult = await ProductModel.findById(product).populate('gallery');
+    if (!productResult) {
+      return res.status(404).json({ success: false, message: "Product not found" });
+    }
+    return res.status(200).json({ success: true, data: [productResult] });
+  }
+  if (search && search !== 'all') {
     filter.$or = [
-      { slug: { $regex: new RegExp(search, 'i') } },
+      // { slug: { $regex: new RegExp(search, 'i') } },
       { productTitle: { $regex: new RegExp(search, 'i') } },
       { category: { $regex: new RegExp(search, 'i') } },
       { subcategory: { $regex: new RegExp(search, 'i') } },
       { childCategory: { $regex: new RegExp(search, 'i') } },
-      { brandValue: { $regex: new RegExp(search, 'i') } },
-      { productColorValue: { $regex: new RegExp(search, 'i') } },
-      { productSizeValue: { $regex: new RegExp(search, 'i') } },
       { productFlagValue: { $regex: new RegExp(search, 'i') } },
     ];
   }
 
-  if (size) filter.productSizeValue = size;
-  if (color) filter.productColorValue = color;
-  if (brand) filter.brandValue = brand;
+  if (size) filter.productSizeValue = {$in: size.split(",")};
+  if (color) filter.productColorValue = {$in: color.split(",")};
+  if (brand) filter.brandValue = {$in: brand.split(",")};
+  if(category) filter.category = category;
+  if(subcategory) filter.subcategory = subcategory;
+  
   if (newArrival === 'true') {
     filter.createdAt = { $gte: new Date(Date.now() - 1000 * 60 * 60 * 24 * 30) }; // Last 30 days
   }
 
-  try {
-    const products = await ProductModel.find(filter).populate('gallery');
+  console.log(filter, "filter");
+
+  
+    const products = await ProductModel.find(filter).populate('gallery').sort({wishCount: -1});
     res.status(200).json({ success: true, data: products });
   } catch (error) {
     res.status(400).json({ success: false, error: error.message });

@@ -51,19 +51,23 @@ export const getOrderById = async (req, res) => {
 // PUT update order by ID
 export const updateOrderById = async (req, res) => {
   const { id } = req.params;
-  const { shipping_address_id, products, payment_method } = req.body;
+  // const { shipping_address_id, products, payment_method } = req.body;
 
-  if (!shipping_address_id || !products || !payment_method) {
-    return res.status(400).json({ success: false, message: "Required fields missing" });
-  }
+  // if (!shipping_address_id || !products || !payment_method) {
+  //   return res.status(400).json({ success: false, message: "Required fields missing" });
+  // }
 
-  const updateData = { shipping_address_id, products, payment_method };
+  // const updateData = { shipping_address_id, products, payment_method };
+
+
 
   try {
-    const updatedOrder = await OrderModel.findByIdAndUpdate(id, updateData, {
+    const updatedOrder = await OrderModel.findByIdAndUpdate(id, req.body, {
       new: true,
       runValidators: true,
     }).populate("shipping_address_id");
+
+    console.log(updatedOrder, "updatedOrder");
 
     if (!updatedOrder) return res.status(404).json({ success: false, message: "Order not found" });
 
