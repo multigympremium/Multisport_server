@@ -15,7 +15,6 @@ const childCategorySchema = Schema(
     },
     childCategoryIcon: {
       type: String,
-      required: true,
     },
     slug: {
       type: String,

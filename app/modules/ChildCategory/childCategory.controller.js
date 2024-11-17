@@ -41,13 +41,17 @@ export const createChildCategory = async (req, res) => {
     }
 
     const submitData = { category, subcategory, childCategoryName, slug };
-
+    
     if (childCategoryIcon) {
-      const iconName = `${Date.now()}-${childCategoryIcon.originalname.replace(/\s/g, "-")}`;
-      await uploadFile(childCategoryIcon, iconName, childCategoryIcon.mimetype);
+      const iconName = `${Date.now()}-${childCategoryIcon.name.replace(/\s/g, "-")}`;
+      await uploadFile(childCategoryIcon, iconName, childCategoryIcon.type);
       submitData.childCategoryIcon = iconName;
     }
 
+
+
+
+    
     const result = await ChildCategoryModel.create(submitData);
     res.status(200).json({ success: true, data: result });
   } catch (error) {
@@ -68,8 +72,8 @@ export const updateChildCategory = async (req, res) => {
     const updatedData = { category, subcategory, childCategoryName, slug };
 
     if (childCategoryIcon) {
-      const iconName = `${Date.now()}-${childCategoryIcon.originalname.replace(/\s/g, "-")}`;
-      await uploadFile(childCategoryIcon, iconName, childCategoryIcon.mimetype);
+      const iconName = `${Date.now()}-${childCategoryIcon.name.replace(/\s/g, "-")}`;
+      await uploadFile(childCategoryIcon, iconName, childCategoryIcon.type);
       updatedData.childCategoryIcon = iconName;
     }
 
@@ -88,8 +92,11 @@ export const deleteChildCategory = async (req, res) => {
     const categoryData = await ChildCategoryModel.findById(id);
     if (!categoryData) return res.status(404).json({ success: false, message: "Category not found" });
 
-    await deleteFile(categoryData.childCategoryIcon);
-    await ChildCategoryModel.findByIdAndDelete(id);
+   const deleteIconResult = await deleteFile(categoryData.childCategoryIcon);
+   const deleteCategoryResult = await ChildCategoryModel.findByIdAndDelete(id);
+
+   console.log(deleteIconResult, "deleteIconResult");
+   console.log(deleteCategoryResult, "deleteCategoryResult");
     res.status(200).json({ success: true, message: "Category deleted successfully" });
   } catch (error) {
     res.status(400).json({ success: false, error: error.message });

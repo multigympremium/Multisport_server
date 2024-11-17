@@ -106,12 +106,17 @@ export const deleteCategoryById = async (req, res) => {
     const category = await CategoryModel.findById(req.params.id);
     if (!category) return res.status(404).json({ success: false, message: "Category not found" });
 
-    await deleteFile(category.categoryIcon);
-    await deleteFile(category.categoryBanner);
-    await CategoryModel.deleteOne({ _id: req.params.id });
+   const deleteIconResult = await deleteFile(category.categoryIcon);
+   const deleteBannerResult =  await deleteFile(category.categoryBanner);
+   const deleteCategoryResult = await CategoryModel.deleteOne({ _id: req.params.id });
+
+   console.log(deleteIconResult, "deleteIconResult");
+   console.log(deleteBannerResult, "deleteBannerResult"); 
+   console.log(deleteCategoryResult, "deleteCategoryResult");
 
     res.status(200).json({ success: true, message: "Category deleted successfully" });
   } catch (error) {
+    console.log(error, "error");
     res.status(400).json({ success: false, error: error.message });
   }
 };
