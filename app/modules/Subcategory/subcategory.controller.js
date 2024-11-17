@@ -22,11 +22,16 @@ export async function createCategory(req, res) {
   try {
     const formData = req.body; // Assuming you're using middleware to handle form-data
 
-    const { category, subcategoryName, subcategoryIcon, subcategoryImage, slug } = formData;
+    const { category, subcategoryName, slug } = formData;
 
     if (!category || !subcategoryName || !slug) {
       return res.status(400).json({ success: false, message: "Category or name missing" });
     }
+
+    const subcategoryIcon = req.files?.subcategoryIcon;
+    const subcategoryImage = req.files?.subcategoryImage;
+
+    
 
     const submitData = { category, subcategoryName, slug };
 
@@ -77,10 +82,13 @@ export async function updateCategory(req, res) {
     return res.status(404).json({ success: false, message: "Category not found" });
   }
 
-  const { category, subcategoryName, subcategoryIcon, subcategoryImage, slug } = formData;
+  const { category, subcategoryName, slug } = formData;
   if (!category || !subcategoryName || !slug) {
     return res.status(400).json({ success: false, message: "Category or name missing" });
   }
+
+  const subcategoryIcon = req.files?.subcategoryIcon;
+    const subcategoryImage = req.files?.subcategoryImage;
 
   const updatedData = { category, subcategoryName, slug };
 
