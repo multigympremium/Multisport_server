@@ -17,11 +17,11 @@ const categorySchema = Schema(
     },
     categoryIcon: {
       type: String,
-      required: true,
+      // required: true,
     },
     categoryBanner: {
       type: String,
-      required: true,
+      // required: true,
     },
     slug: {
       type: String,
