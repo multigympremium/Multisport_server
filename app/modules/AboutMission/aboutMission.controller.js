@@ -3,8 +3,8 @@ import AboutMissionModel from "./aboutMission.model.js";
 
 
 export async function getAboutMission(req, res) {
-    const { searchParams } = req.query
-    const search = searchParams.get("search");
+    const { search } = req.query
+    console.log(search)
   
     const filter = {};
     if (search) {

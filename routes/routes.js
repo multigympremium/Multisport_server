@@ -31,6 +31,7 @@ import wishlistRoutes from "../app/modules/Wishlist/wishlist.routes.js";
 import userRoutes from "../app/modules/User/user.routes.js";
 import districtRoutes from "../app/modules/District/district.routes.js";
 import deliveryChargeRoutes from "../app/modules/DeliveryCharge/deliveryCharge.routes.js";
+import FaqRoutes from "../app/modules/faq/faq.routes.js";
 
 const routes = Router();
 // routes.use("/branches", BranchRoutes);
@@ -46,6 +47,7 @@ routes.use("/child-categories", childCategoryRoutes );
 routes.use("/custom-css-js", customJsCssRoutes );
 routes.use("/district", districtRoutes );
 routes.use("/delivery-charge", deliveryChargeRoutes );
+routes.use("/faq", FaqRoutes );
 routes.use("/general-info", customJsCssRoutes );
 routes.use("/measurement-units", measurementUnits );
 routes.use("/orders", orderRoutes );
