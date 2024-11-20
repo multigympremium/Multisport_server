@@ -4,18 +4,18 @@ import { getWebsiteSEO, createWebsiteSEO, getWebsiteSEOById, updateWebsiteSEO, d
 const websiteSEORoutes = express.Router();
 
 // GET all Website SEO data
-websiteSEORoutes.get('/website-seo', getWebsiteSEO);
+websiteSEORoutes.get('/', getWebsiteSEO);
 
 // POST Website SEO data
-websiteSEORoutes.post('/website-seo', createWebsiteSEO);
+websiteSEORoutes.post('/', createWebsiteSEO);
 
 // GET Website SEO data by ID
-websiteSEORoutes.get('/website-seo/:id', getWebsiteSEOById);
+websiteSEORoutes.get('/:id', getWebsiteSEOById);
 
 // PUT Website SEO data by ID
-websiteSEORoutes.put('/website-seo/:id', updateWebsiteSEO);
+websiteSEORoutes.put('/:id', updateWebsiteSEO);
 
 // DELETE Website SEO data by ID
-websiteSEORoutes.delete('/website-seo/:id', deleteWebsiteSEO);
+websiteSEORoutes.delete('/:id', deleteWebsiteSEO);
 
 export default websiteSEORoutes;
