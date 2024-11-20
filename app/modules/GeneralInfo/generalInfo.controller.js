@@ -29,6 +29,8 @@ export const createBrand = async (req, res) => {
   try {
     const { company_name, phone, email, description, address, google_map_link, play_store_link, app_store_link, trade_license, tin_no, bin_no, footer_copyright } = req.body;
 
+    console.log(req.body, "general info")
+
     if (!company_name || !phone || !email || !description || !address || !trade_license || !tin_no || !bin_no || !footer_copyright) {
       return res.status(400).json({ success: false, message: 'Required fields missing' });
     }

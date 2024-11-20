@@ -32,6 +32,7 @@ import userRoutes from "../app/modules/User/user.routes.js";
 import districtRoutes from "../app/modules/District/district.routes.js";
 import deliveryChargeRoutes from "../app/modules/DeliveryCharge/deliveryCharge.routes.js";
 import FaqRoutes from "../app/modules/faq/faq.routes.js";
+import generalInfoRoutes from "../app/modules/GeneralInfo/generalInfo.routes.js";
 
 const routes = Router();
 // routes.use("/branches", BranchRoutes);
@@ -48,7 +49,7 @@ routes.use("/custom-css-js", customJsCssRoutes );
 routes.use("/district", districtRoutes );
 routes.use("/delivery-charge", deliveryChargeRoutes );
 routes.use("/faq", FaqRoutes );
-routes.use("/general-info", customJsCssRoutes );
+routes.use("/general-info", generalInfoRoutes );
 routes.use("/measurement-units", measurementUnits );
 routes.use("/orders", orderRoutes );
 routes.use("/privacy_policy", PrivacyPolicyRoutes);
