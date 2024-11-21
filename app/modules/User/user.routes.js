@@ -1,5 +1,5 @@
 import express from 'express';
-import updatePassword, { createSystemUser, getSystemUser, loginUser, sendOtp, signUp, verifyOtp } from './user.controller.js';
+import updatePassword, { createSystemUser, deleteSystemUser, getSystemUser, getSystemUserById, loginUser, sendOtp, signUp, updateSystemUserById, verifyOtp } from './user.controller.js';
 
 const userRoutes = express.Router();
 
@@ -19,5 +19,8 @@ userRoutes.put('/verify-otp', verifyOtp);
 userRoutes.post('/signup', signUp);
 userRoutes.post('/system-user', createSystemUser);
 userRoutes.get('/system-user', getSystemUser);
+userRoutes.get('/system-user/:id', getSystemUserById);
+userRoutes.put('/system-user/:id', updateSystemUserById);
+userRoutes.delete('/system-user/:id', deleteSystemUser);
 
 export default userRoutes;
