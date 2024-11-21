@@ -33,6 +33,8 @@ import districtRoutes from "../app/modules/District/district.routes.js";
 import deliveryChargeRoutes from "../app/modules/DeliveryCharge/deliveryCharge.routes.js";
 import FaqRoutes from "../app/modules/faq/faq.routes.js";
 import generalInfoRoutes from "../app/modules/GeneralInfo/generalInfo.routes.js";
+import permissionRoutes from "../app/modules/Permission/permission.routes.js";
+import DepartmentsRoutes from "../app/modules/Departments/Departments.routes.js";
 
 const routes = Router();
 // routes.use("/branches", BranchRoutes);
@@ -46,12 +48,15 @@ routes.use("/blog-category", blogCategoryRoutes );
 routes.use("/categories", productCategoryRoutes );
 routes.use("/child-categories", childCategoryRoutes );
 routes.use("/custom-css-js", customJsCssRoutes );
+
+routes.use("/departments", DepartmentsRoutes);
 routes.use("/district", districtRoutes );
 routes.use("/delivery-charge", deliveryChargeRoutes );
 routes.use("/faq", FaqRoutes );
 routes.use("/general-info", generalInfoRoutes );
 routes.use("/measurement-units", measurementUnits );
 routes.use("/orders", orderRoutes );
+routes.use("/permissions", permissionRoutes);
 routes.use("/privacy_policy", PrivacyPolicyRoutes);
 routes.use("/product-brands", brandRoutes);
 routes.use("/product-color", productColorRoutes);
