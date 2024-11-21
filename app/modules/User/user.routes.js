@@ -1,5 +1,5 @@
 import express from 'express';
-import updatePassword, { loginUser, sendOtp, signUp, verifyOtp } from './user.controller.js';
+import updatePassword, { createSystemUser, getSystemUser, loginUser, sendOtp, signUp, verifyOtp } from './user.controller.js';
 
 const userRoutes = express.Router();
 
@@ -16,6 +16,8 @@ userRoutes.get('/send-otp', sendOtp);
 userRoutes.put('/verify-otp', verifyOtp);
 
 // DELETE Website SEO data by ID
-userRoutes.delete('signup', signUp);
+userRoutes.post('/signup', signUp);
+userRoutes.post('/system-user', createSystemUser);
+userRoutes.get('/system-user', getSystemUser);
 
 export default userRoutes;

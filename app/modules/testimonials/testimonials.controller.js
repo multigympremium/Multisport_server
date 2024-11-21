@@ -28,11 +28,13 @@ export async function getTestimonials(req, res) {
 export async function postTestimonial(req, res) {
   try {
     const formData = req.body;
-    const { customerName, designation, rating, description, image } = formData;
+    const { customerName, designation, rating, description } = formData;
 
     if (!customerName || !designation || !rating || !description || !image) {
       return res.status(400).json({ success: false, message: "Required fields missing" });
     }
+
+    const image = req.files.image;
 
     let thumbnailUrl = "";
     if (image && image.size > 0) {

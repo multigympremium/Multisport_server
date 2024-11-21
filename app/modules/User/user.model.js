@@ -20,13 +20,9 @@ const UsersSchema = Schema(
       type: String,
       // required: [true, "Please Add Contact member id"],
     },
-    list_name: {
+    last_name: {
       type: String,
       // required: [true, "Please Add Nickname"],
-    },
-    date_of_birth: {
-      type: String,
-      // required: [true, "Please Add Date of Birth"],
     },
     address: {
       type: String,
@@ -39,28 +35,6 @@ const UsersSchema = Schema(
       // required: [true, "Please Select Gender"],
 
       enum: ["Male", "Female", "Other"],
-    },
-    religion: {
-      type: String,
-      // required: [true, "Please Add Religion"],
-    },
-    blood_group: {
-      type: String,
-      // required: [true, "Please Add Blood Group"],
-
-      enum: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-", ""],
-    },
-    height: {
-      type: String,
-      // required: [true, "Please Add height"],
-    },
-    weight: {
-      type: String,
-      // required: [true, "Please Add Weight"],
-    },
-    profession: {
-      type: String,
-      // required: [true, "Please Add profession"],
     },
     photourl: {
       type: String,
@@ -89,6 +63,10 @@ const UsersSchema = Schema(
     },
     forgotPasswordExpires: {
       type: Date,
+    },
+    role: {
+      type: String,
+      default: "user",
     },
   },
   { timestamps: true }

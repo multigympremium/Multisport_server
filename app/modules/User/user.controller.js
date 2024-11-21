@@ -5,6 +5,7 @@ import OtpModel from "./otp.model.js";
 import moment from "moment";
 import sendVerifyOtp from "../../../config/email/sendVerifyOtp.js";
 import { generateOTP } from "../../helpers/generateOTP.js";
+import { uploadFile } from "../../helpers/aws-s3.js";
 
 export default async function updatePassword (req, res) {
   const { email, password } = req.body;
@@ -154,6 +155,7 @@ export async function sendOtp(req, res) {
 
 
 
+
 export async function verifyOtp(req, res) {
     const { email, otp } = req.body;
   
@@ -183,6 +185,84 @@ export async function verifyOtp(req, res) {
   }
 
 
+export async function createSystemUser(req, res) {
+    try {
+      const { first_name, last_name, email, password, contact_no, address, gender , role} = req.body;
+  
+      console.log( email, password, "username, email, password");
+  
+      if ( !email || !password || !contact_no || !address || !gender || !role) {
+        return res.status(400).json({ error: "Please fill in all fields" });
+      }
+
+      const image = req.files.photourl;
+
+    let thumbnailUrl = "";
+    if (image && image.size > 0) {
+      thumbnailUrl = `${Date.now()}-${image.name.replace(/\s/g, "-")}`;
+      await uploadFile(image, thumbnailUrl, image.type);
+    }
+  
+      const salt = await bcrypt.genSalt(10);
+  
+      const existingUser = await Users.findOne({ email });
+  
+      if (existingUser) {
+        if (existingUser.isVerified) {
+          return res.status(400).json({ error: "User already exists" });
+        } else {
+          const otp = generateOTP(); // Generate OTP
+          await sendVerifyOtp(email, otp);
+          return res.status(400).json({ error: "Verification pending. OTP sent to email." });
+        }
+      }
+  
+      const hashedPassword = await bcrypt.hash(password, salt);
+  
+      const user = new Users({
+        username: first_name + " " + last_name,
+        first_name: first_name,
+        last_name: last_name,
+        email: email,
+        password: hashedPassword,
+        contact_no: contact_no,
+        address: address,
+        gender: gender,
+        photourl: thumbnailUrl,
+        role: role
+      });
+  
+      const userResult = await user.save();
+  
+      if (userResult) {
+        return res.status(200).json({
+          message: "User Created successfully",
+          user: userResult,
+        });
+      }
+  
+      return res.status(400).json({ error: "User not created" });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: error.message });
+    }
+}
+
+export async function getSystemUser(req, res) {
+    try {
+  
+      const existingUser = await Users.find({ role: {$ne: "user"} });
+  
+      if (!existingUser) {
+        return res.status(400).json({ error: "User not found" });
+      }
+  
+      return res.status(200).json({ data: existingUser });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: error.message });
+    }
+}
 export async function signUp(req, res) {
     try {
       const { username, email, password } = req.body;
