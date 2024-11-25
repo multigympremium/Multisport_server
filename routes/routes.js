@@ -35,6 +35,7 @@ import FaqRoutes from "../app/modules/faq/faq.routes.js";
 import generalInfoRoutes from "../app/modules/GeneralInfo/generalInfo.routes.js";
 import permissionRoutes from "../app/modules/Permission/permission.routes.js";
 import DepartmentsRoutes from "../app/modules/Departments/Departments.routes.js";
+import productRecaptchaRoutes from "../app/modules/GoogleRecaptcha/Recaptcha.routes.js";
 
 const routes = Router();
 // routes.use("/branches", BranchRoutes);
@@ -54,6 +55,7 @@ routes.use("/district", districtRoutes );
 routes.use("/delivery-charge", deliveryChargeRoutes );
 routes.use("/faq", FaqRoutes );
 routes.use("/general-info", generalInfoRoutes );
+routes.use("/google-recaptcha", productRecaptchaRoutes );
 routes.use("/measurement-units", measurementUnits );
 routes.use("/orders", orderRoutes );
 routes.use("/permissions", permissionRoutes);
