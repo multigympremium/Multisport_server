@@ -1,5 +1,5 @@
 import express from 'express';
-import updatePassword, { createSystemUser, deleteSystemUser, getSystemUser, getSystemUserById, loginUser, sendOtp, signUp, updateSystemUserById, verifyOtp } from './user.controller.js';
+import updatePassword, { createSystemUser, deleteSystemUser, getSystemUser, getSystemUserById, loginUser, sendOtp, signUp, updateSystemUserById, verifyOtp, verifyRecaptcha } from './user.controller.js';
 
 const userRoutes = express.Router();
 
@@ -10,10 +10,11 @@ userRoutes.get('/login', loginUser);
 userRoutes.post('/forgot-password', updatePassword);
 
 // GET Website SEO data by ID
-userRoutes.get('/send-otp', sendOtp);
+userRoutes.post('/send-otp', sendOtp);
 
 // PUT Website SEO data by ID
-userRoutes.put('/verify-otp', verifyOtp);
+userRoutes.post('/verify-otp', verifyOtp);
+userRoutes.post('/verify-recaptcha', verifyRecaptcha);
 
 // DELETE Website SEO data by ID
 userRoutes.post('/signup', signUp);

@@ -1,4 +1,5 @@
 
+import { sendEmail } from "./emailFormats/SendEmail/sendEmail.js";
 import { sendEmailWithResend } from "./sendEmailWithResend.js";
 
 const sendVerifyOtp = async (email, otp) => {
@@ -19,7 +20,7 @@ const sendVerifyOtp = async (email, otp) => {
     Dot.cards Team
   `;
 
-  const mailResult = await sendEmailWithResend(email, "Dot.cards Verify OTP", text, html);
+  const mailResult = await sendEmail({to: email,subject: "Dot.cards Verify OTP",  message: html});
 
   return mailResult;
 };

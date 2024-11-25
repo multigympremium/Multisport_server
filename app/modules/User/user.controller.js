@@ -2,11 +2,14 @@ import bcrypt from "bcryptjs";
 import Users from "./user.model.js"; // Adjust the path to your userModel
 
 import OtpModel from "./otp.model.js";
-import moment from "moment";
+// import moment from "moment";
 import sendVerifyOtp from "../../../config/email/sendVerifyOtp.js";
 import { generateOTP } from "../../helpers/generateOTP.js";
 import { uploadFile } from "../../helpers/aws-s3.js";
 import e from "express";
+
+import moment from "moment-timezone";
+import axios from "axios";
 
 export default async function updatePassword (req, res) {
   const { email, password } = req.body;
@@ -79,6 +82,7 @@ export async function loginUser(req, res) {
   }
 
 export async function sendOtp(req, res) {
+  moment.tz.setDefault("Asia/Dhaka");
   try {
     const { email } = req.body;
 
@@ -109,7 +113,9 @@ export async function sendOtp(req, res) {
         { email },
         {
           otp: hashedOTP,
-          otp_expiry,
+          otp_expiry:  moment()
+          .add(otp_expiration_time, "minutes")
+          .format("YYYY-MM-DD HH:mm:ss"),
         },
         { new: true }
       );
@@ -355,5 +361,34 @@ export const deleteSystemUser = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
+
+export async function verifyRecaptcha(req, res) {
+
+  const { token } = req.body;
+
+  console.log(token, "token")
+  console.log(process.env.RECAPTCHA_SECRET_KEY, "process.env.RECAPTCHA_SECRET_KEY")
+
+  try {
+    const response = await axios.post("https://www.google.com/recaptcha/api/siteverify", null, // No body data for URL-encoded request
+      {
+        params: {
+          secret: process.env.RECAPTCHA_SECRET_KEY,
+          response: token,
+        },
+      })
+
+    console.log(response.data, "response.data")
+
+    if (response.data.success) {
+      return res.status(200).json({ success: true });
+    } else {
+      return res.status(400).json({ success: false });
+    }
+  } catch (error) {
+    console.log(error, "error")
+  }
+
+}
 
 
