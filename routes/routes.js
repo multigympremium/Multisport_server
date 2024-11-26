@@ -36,6 +36,7 @@ import generalInfoRoutes from "../app/modules/GeneralInfo/generalInfo.routes.js"
 import permissionRoutes from "../app/modules/Permission/permission.routes.js";
 import DepartmentsRoutes from "../app/modules/Departments/Departments.routes.js";
 import productRecaptchaRoutes from "../app/modules/GoogleRecaptcha/Recaptcha.routes.js";
+import socialLoginRoutes from "../app/modules/SocialLogin/socialLink.routes.js";
 
 const routes = Router();
 // routes.use("/branches", BranchRoutes);
@@ -71,6 +72,7 @@ routes.use("/return_policy", returnPolicy);
 routes.use("/return_policy", returnPolicy);
 routes.use("/shoes-banners", shoesBannerRoutes);
 routes.use("/social-link", socialLinkRoutes);
+routes.use("/social-login-config", socialLoginRoutes);
 routes.use("/subcategories", subcategoryRoutes);
 routes.use("/terms_condition", termsConditionRoutes);
 routes.use("/testimonials", testimonialsRoutes);
