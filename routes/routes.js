@@ -37,6 +37,8 @@ import permissionRoutes from "../app/modules/Permission/permission.routes.js";
 import DepartmentsRoutes from "../app/modules/Departments/Departments.routes.js";
 import productRecaptchaRoutes from "../app/modules/GoogleRecaptcha/Recaptcha.routes.js";
 import socialLoginRoutes from "../app/modules/SocialLogin/socialLink.routes.js";
+import productTawkRoutes from "../app/modules/TawkLiveChat/TawkLiveChat.routes.js";
+import TawkRoutes from "../app/modules/TawkLiveChat/TawkLiveChat.routes.js";
 
 const routes = Router();
 // routes.use("/branches", BranchRoutes);
@@ -76,6 +78,7 @@ routes.use("/social-login-config", socialLoginRoutes);
 routes.use("/subcategories", subcategoryRoutes);
 routes.use("/terms_condition", termsConditionRoutes);
 routes.use("/testimonials", testimonialsRoutes);
+routes.use("/tawk-live-chat", TawkRoutes);
 routes.use("/website-seo", websiteSEORoutes);
 routes.use("/website-theme-color", websiteThemeColorRoutes);
 routes.use("/wishlist", wishlistRoutes);
