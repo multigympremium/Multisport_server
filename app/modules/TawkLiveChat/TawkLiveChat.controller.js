@@ -14,9 +14,9 @@ export const getAllTawk = async (req, res) => {
 // POST new Tawk
 export const createTawk = async (req, res) => {
   try {
-    const { isEnabled } = req.body;
+    const { isEnabled, code } = req.body;
 
-    if (!isEnabled ) {
+    if (!isEnabled || !code ) {
       return res.status(400).json({ success: false, message: "Required fields missing" });
     }
 
