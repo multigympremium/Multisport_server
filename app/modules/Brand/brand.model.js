@@ -4,11 +4,11 @@ const BrandSchema = new mongoose.Schema(
   {
     category: {
       type: String,
-      required: true,
+      // required: true,
     },
     subcategory: {
       type: String,
-      required: true,
+      // required: true,
     },
     slug: {
       type: String,
@@ -25,11 +25,11 @@ const BrandSchema = new mongoose.Schema(
     },
     logo: {
       type: String,
-      required: true,
+      // required: true,
     },
     banner: {
       type: String,
-      required: true,
+      // required: true,
     },
     brandName: {
       type: String,
