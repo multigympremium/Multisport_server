@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const FacebookPixelSchema = new mongoose.Schema(
   {
     isEnabled: {
-      type: boolean,
+      type: Boolean,
       required: true,
     },
     pixelId: {

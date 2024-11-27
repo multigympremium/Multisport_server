@@ -42,6 +42,7 @@ import TawkRoutes from "../app/modules/TawkLiveChat/TawkLiveChat.routes.js";
 import CrispRoutes from "../app/modules/CrispLiveChat/CrispLiveChat.routes.js";
 import GoogleAnalyticRoutes from "../app/modules/GoogleAnalytic/GoogleAnalytic.routes.js";
 import FacebookPixelRoutes from "../app/modules/FacebookPixel/FacebookPixel.routes.js";
+import MessengerRoutes from "../app/modules/Messenger/Messenger.routes.js";
 
 const routes = Router();
 // routes.use("/branches", BranchRoutes);
@@ -66,6 +67,7 @@ routes.use("/general-info", generalInfoRoutes );
 routes.use("/google-recaptcha", productRecaptchaRoutes );
 routes.use("/google-analytic", GoogleAnalyticRoutes);
 routes.use("/measurement-units", measurementUnits );
+routes.use("/messenger", MessengerRoutes);
 routes.use("/orders", orderRoutes );
 routes.use("/permissions", permissionRoutes);
 routes.use("/privacy_policy", PrivacyPolicyRoutes);
