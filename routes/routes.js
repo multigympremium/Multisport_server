@@ -39,6 +39,7 @@ import productRecaptchaRoutes from "../app/modules/GoogleRecaptcha/Recaptcha.rou
 import socialLoginRoutes from "../app/modules/SocialLogin/socialLink.routes.js";
 import productTawkRoutes from "../app/modules/TawkLiveChat/TawkLiveChat.routes.js";
 import TawkRoutes from "../app/modules/TawkLiveChat/TawkLiveChat.routes.js";
+import CrispRoutes from "../app/modules/CrispLiveChat/CrispLiveChat.routes.js";
 
 const routes = Router();
 // routes.use("/branches", BranchRoutes);
@@ -52,6 +53,7 @@ routes.use("/blog-category", blogCategoryRoutes );
 routes.use("/categories", productCategoryRoutes );
 routes.use("/child-categories", childCategoryRoutes );
 routes.use("/custom-css-js", customJsCssRoutes );
+routes.use("/crisp-live-chat", CrispRoutes);
 
 routes.use("/departments", DepartmentsRoutes);
 routes.use("/district", districtRoutes );
