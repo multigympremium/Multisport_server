@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const GoogleAnalyticSchema = new mongoose.Schema(
   {
     isEnabled: {
-      type: String,
+      type: Boolean,
       required: true,
     },
     trackingID: {

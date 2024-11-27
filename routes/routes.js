@@ -41,6 +41,7 @@ import productTawkRoutes from "../app/modules/TawkLiveChat/TawkLiveChat.routes.j
 import TawkRoutes from "../app/modules/TawkLiveChat/TawkLiveChat.routes.js";
 import CrispRoutes from "../app/modules/CrispLiveChat/CrispLiveChat.routes.js";
 import GoogleAnalyticRoutes from "../app/modules/GoogleAnalytic/GoogleAnalytic.routes.js";
+import FacebookPixelRoutes from "../app/modules/FacebookPixel/FacebookPixel.routes.js";
 
 const routes = Router();
 // routes.use("/branches", BranchRoutes);
@@ -60,6 +61,7 @@ routes.use("/departments", DepartmentsRoutes);
 routes.use("/district", districtRoutes );
 routes.use("/delivery-charge", deliveryChargeRoutes );
 routes.use("/faq", FaqRoutes );
+routes.use("/facebook-pixel", FacebookPixelRoutes);
 routes.use("/general-info", generalInfoRoutes );
 routes.use("/google-recaptcha", productRecaptchaRoutes );
 routes.use("/google-analytic", GoogleAnalyticRoutes);
