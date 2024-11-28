@@ -43,6 +43,7 @@ import CrispRoutes from "../app/modules/CrispLiveChat/CrispLiveChat.routes.js";
 import GoogleAnalyticRoutes from "../app/modules/GoogleAnalytic/GoogleAnalytic.routes.js";
 import FacebookPixelRoutes from "../app/modules/FacebookPixel/FacebookPixel.routes.js";
 import MessengerRoutes from "../app/modules/Messenger/Messenger.routes.js";
+import courierRoutes from "../app/modules/Courier/Courier.routes.js";
 
 const routes = Router();
 // routes.use("/branches", BranchRoutes);
@@ -57,6 +58,7 @@ routes.use("/categories", productCategoryRoutes );
 routes.use("/child-categories", childCategoryRoutes );
 routes.use("/custom-css-js", customJsCssRoutes );
 routes.use("/crisp-live-chat", CrispRoutes);
+routes.use("/courier", courierRoutes);
 
 routes.use("/departments", DepartmentsRoutes);
 routes.use("/district", districtRoutes );

@@ -1,3 +1,7 @@
+
+import courierAccessToken from "../../../config/courier/courierAccessToken.js";
+import { courierOrderCreate } from "../../../config/courier/courierOrderCreate.js";
+import { courierStoreCreate } from "../../../config/courier/courierStoreCreate.js";
 import OrderModel from "./orders.model.js";
 
 // GET all orders with optional filters
@@ -27,9 +31,18 @@ export const createOrder = async (req, res) => {
   }
 
   const submitData = { shipping_address_id, products, payment_method, total };
+
+  const accessToken = await courierAccessToken();
+
+  // const storeReport = await courierStoreCreate({...submitData, accessToken: accessToken.access_token});
+
+  const returnOrderData = await courierOrderCreate({...submitData, accessToken: accessToken.access_token});
+
+  console.log(returnOrderData, "returnOrderData");
   try {
-    const orderResult = await OrderModel.create(submitData);
-    res.status(200).json({ success: true, data: orderResult });
+    // const orderResult = await OrderModel.create(submitData);
+    res.status(200).json({ success: true, error: returnOrderData });
+    // res.status(200).json({ success: true, data: orderResult });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
