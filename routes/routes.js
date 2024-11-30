@@ -45,6 +45,7 @@ import FacebookPixelRoutes from "../app/modules/FacebookPixel/FacebookPixel.rout
 import MessengerRoutes from "../app/modules/Messenger/Messenger.routes.js";
 import courierRoutes from "../app/modules/Courier/Courier.routes.js";
 import SetupConfigRoutes from "../app/modules/SetupConfig/SetupConfig.routes.js";
+import ModelOfBrandRoutes from "../app/modules/ModelOfBrand/ModelOfBrand.routes.js";
 
 const routes = Router();
 // routes.use("/branches", BranchRoutes);
@@ -71,6 +72,7 @@ routes.use("/google-recaptcha", productRecaptchaRoutes);
 routes.use("/google-analytic", GoogleAnalyticRoutes);
 routes.use("/measurement-units", measurementUnits);
 routes.use("/messenger", MessengerRoutes);
+routes.use("/model-brands", ModelOfBrandRoutes);
 routes.use("/orders", orderRoutes);
 routes.use("/permissions", permissionRoutes);
 routes.use("/privacy_policy", PrivacyPolicyRoutes);

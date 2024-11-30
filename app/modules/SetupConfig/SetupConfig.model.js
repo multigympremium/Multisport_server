@@ -31,7 +31,6 @@ const setupConfigSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-
     productFlags: {
       type: Boolean,
       default: false,

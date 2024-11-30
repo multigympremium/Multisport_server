@@ -4,27 +4,27 @@ const ProductSchema = new mongoose.Schema(
   {
     productTitle: {
       type: String,
-      required: true,
+      // required: true,
     },
     shortDescription: {
       type: String,
-      required: true,
+      // required: true,
     },
     fullDescription: {
       type: String,
-      required: true,
+      // required: true,
     },
     specification: {
       type: String,
-      required: true,
+      // required: true,
     },
     returnPolicy: {
       type: String,
-      required: true,
+      // required: true,
     },
     price: {
       type: Number,
-      required: true,
+      // required: true,
     },
     discountPrice: {
       type: Number,
@@ -34,11 +34,11 @@ const ProductSchema = new mongoose.Schema(
     },
     stock: {
       type: Number,
-      required: true,
+      // required: true,
     },
     productCode: {
       type: String,
-      required: true,
+      // required: true,
     },
     metaTitle: {
       type: String,
@@ -60,17 +60,19 @@ const ProductSchema = new mongoose.Schema(
     thumbnail: {
       type: String, // File URL or path for the thumbnail
     },
-    gallery: [{
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "product_galleries",
-    }],
+    gallery: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "product_galleries",
+      },
+    ],
     category: {
       type: String,
-      require: true,
+      // require: true,
     },
     brandValue: {
       type: String,
-      require: true,
+      // require: true,
     },
     productColorValue: {
       type: Array,
@@ -81,10 +83,10 @@ const ProductSchema = new mongoose.Schema(
     productFlagValue: {
       type: String,
     },
-    
+
     subcategory: {
       type: String,
-      require: true,
+      // require: true,
     },
     childCategory: {
       type: String,
@@ -102,11 +104,13 @@ const ProductSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    modelOfBrandValue: {
+      type: String,
+    },
   },
   { timestamps: true }
 );
 
-const ProductModel =
-mongoose.model("products", ProductSchema);
+const ProductModel = mongoose.model("products", ProductSchema);
 
 export default ProductModel;
