@@ -19,6 +19,9 @@ export async function createSetupConfig(req, res) {
       productColor,
       measurementUnit,
       seoInformation,
+      rewardPoints,
+      productFlags,
+      productCode,
     } = req.body;
 
     if (
@@ -26,7 +29,10 @@ export async function createSetupConfig(req, res) {
       !modelOfBrand ||
       !productColor ||
       !measurementUnit ||
-      !seoInformation
+      !seoInformation ||
+      !productFlags ||
+      !productCode ||
+      !rewardPoints
     ) {
       return res
         .status(400)
@@ -39,6 +45,9 @@ export async function createSetupConfig(req, res) {
       productColor,
       measurementUnit,
       seoInformation,
+      rewardPoints,
+      productFlag,
+      productCode,
     };
     const insertResult = await SetupConfigModel.create(requestData);
 

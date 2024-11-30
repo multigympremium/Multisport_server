@@ -27,6 +27,19 @@ const setupConfigSchema = new mongoose.Schema(
       default: false,
       required: true,
     },
+    rewardPoints: {
+      type: Boolean,
+      default: false,
+    },
+
+    productFlags: {
+      type: Boolean,
+      default: false,
+    },
+    productCode: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );
