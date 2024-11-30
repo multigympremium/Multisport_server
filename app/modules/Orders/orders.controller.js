@@ -1,7 +1,5 @@
-
 import courierAccessToken from "../../../config/courier/courierAccessToken.js";
 import { courierOrderCreate } from "../../../config/courier/courierOrderCreate.js";
-import { courierStoreCreate } from "../../../config/courier/courierStoreCreate.js";
 import OrderModel from "./orders.model.js";
 
 // GET all orders with optional filters
@@ -15,7 +13,9 @@ export const getOrders = async (req, res) => {
   }
 
   try {
-    const orders = await OrderModel.find(filter).populate("shipping_address_id");
+    const orders = await OrderModel.find(filter).populate(
+      "shipping_address_id"
+    );
     res.status(200).json({ success: true, data: orders });
   } catch (error) {
     res.status(400).json({ success: false, error: error.message });
@@ -27,7 +27,9 @@ export const createOrder = async (req, res) => {
   const { shipping_address_id, products, payment_method, total } = req.body;
 
   if (!shipping_address_id || !products || !payment_method || !total) {
-    return res.status(400).json({ success: false, message: "Required fields missing" });
+    return res
+      .status(400)
+      .json({ success: false, message: "Required fields missing" });
   }
 
   const submitData = { shipping_address_id, products, payment_method, total };
@@ -36,7 +38,10 @@ export const createOrder = async (req, res) => {
 
   // const storeReport = await courierStoreCreate({...submitData, accessToken: accessToken.access_token});
 
-  const returnOrderData = await courierOrderCreate({...submitData, accessToken: accessToken.access_token});
+  const returnOrderData = await courierOrderCreate({
+    ...submitData,
+    accessToken: accessToken.access_token,
+  });
 
   console.log(returnOrderData, "returnOrderData");
   try {
@@ -53,7 +58,10 @@ export const getOrderById = async (req, res) => {
   const { id } = req.params;
   try {
     const order = await OrderModel.findById(id).populate("shipping_address_id");
-    if (!order) return res.status(404).json({ success: false, message: "Order not found" });
+    if (!order)
+      return res
+        .status(404)
+        .json({ success: false, message: "Order not found" });
 
     res.status(200).json({ success: true, data: order });
   } catch (error) {
@@ -72,8 +80,6 @@ export const updateOrderById = async (req, res) => {
 
   // const updateData = { shipping_address_id, products, payment_method };
 
-
-
   try {
     const updatedOrder = await OrderModel.findByIdAndUpdate(id, req.body, {
       new: true,
@@ -82,7 +88,10 @@ export const updateOrderById = async (req, res) => {
 
     console.log(updatedOrder, "updatedOrder");
 
-    if (!updatedOrder) return res.status(404).json({ success: false, message: "Order not found" });
+    if (!updatedOrder)
+      return res
+        .status(404)
+        .json({ success: false, message: "Order not found" });
 
     res.status(200).json({ success: true, data: updatedOrder });
   } catch (error) {
@@ -96,10 +105,15 @@ export const deleteOrderById = async (req, res) => {
   try {
     const order = await OrderModel.findById(id).populate("shipping_address_id");
 
-    if (!order) return res.status(404).json({ success: false, message: "Order not found" });
+    if (!order)
+      return res
+        .status(404)
+        .json({ success: false, message: "Order not found" });
 
     await OrderModel.findByIdAndDelete(id);
-    res.status(200).json({ success: true, message: "Order deleted successfully" });
+    res
+      .status(200)
+      .json({ success: true, message: "Order deleted successfully" });
   } catch (error) {
     res.status(400).json({ success: false, error: error.message });
   }

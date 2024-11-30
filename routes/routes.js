@@ -1,6 +1,6 @@
 import { Router } from "express";
 import AboutMissionRoutes from "../app/modules/AboutMission/aboutMission.routes.js";
-import aboutUsRoutes from "../app/modules/AboutUs/aboutUs.routes.js"
+import aboutUsRoutes from "../app/modules/AboutUs/aboutUs.routes.js";
 import bagBannerRoutes from "../app/modules/BagBanner/bagBanner.routes.js";
 import bannerRoutes from "../app/modules/Banner/banner.routes.js";
 import blogRoutes from "../app/modules/Blog/blog.routes.js";
@@ -44,33 +44,34 @@ import GoogleAnalyticRoutes from "../app/modules/GoogleAnalytic/GoogleAnalytic.r
 import FacebookPixelRoutes from "../app/modules/FacebookPixel/FacebookPixel.routes.js";
 import MessengerRoutes from "../app/modules/Messenger/Messenger.routes.js";
 import courierRoutes from "../app/modules/Courier/Courier.routes.js";
+import SetupConfigRoutes from "../app/modules/SetupConfig/SetupConfig.routes.js";
 
 const routes = Router();
 // routes.use("/branches", BranchRoutes);
 routes.use("/about-mission", AboutMissionRoutes);
 routes.use("/about-us", aboutUsRoutes);
 routes.use("/about-vision", aboutVisionRoutes);
-routes.use("/bag-banners", bagBannerRoutes );
-routes.use("/banners", bannerRoutes );
-routes.use("/blog", blogRoutes );
-routes.use("/blog-category", blogCategoryRoutes );
-routes.use("/categories", productCategoryRoutes );
-routes.use("/child-categories", childCategoryRoutes );
-routes.use("/custom-css-js", customJsCssRoutes );
+routes.use("/bag-banners", bagBannerRoutes);
+routes.use("/banners", bannerRoutes);
+routes.use("/blog", blogRoutes);
+routes.use("/blog-category", blogCategoryRoutes);
+routes.use("/categories", productCategoryRoutes);
+routes.use("/child-categories", childCategoryRoutes);
+routes.use("/custom-css-js", customJsCssRoutes);
 routes.use("/crisp-live-chat", CrispRoutes);
 routes.use("/courier", courierRoutes);
 
 routes.use("/departments", DepartmentsRoutes);
-routes.use("/district", districtRoutes );
-routes.use("/delivery-charge", deliveryChargeRoutes );
-routes.use("/faq", FaqRoutes );
+routes.use("/district", districtRoutes);
+routes.use("/delivery-charge", deliveryChargeRoutes);
+routes.use("/faq", FaqRoutes);
 routes.use("/facebook-pixel", FacebookPixelRoutes);
-routes.use("/general-info", generalInfoRoutes );
-routes.use("/google-recaptcha", productRecaptchaRoutes );
+routes.use("/general-info", generalInfoRoutes);
+routes.use("/google-recaptcha", productRecaptchaRoutes);
 routes.use("/google-analytic", GoogleAnalyticRoutes);
-routes.use("/measurement-units", measurementUnits );
+routes.use("/measurement-units", measurementUnits);
 routes.use("/messenger", MessengerRoutes);
-routes.use("/orders", orderRoutes );
+routes.use("/orders", orderRoutes);
 routes.use("/permissions", permissionRoutes);
 routes.use("/privacy_policy", PrivacyPolicyRoutes);
 routes.use("/product-brands", brandRoutes);
@@ -79,6 +80,7 @@ routes.use("/product-flag", productFlagRoutes);
 routes.use("/product-size", productSizeRoutes);
 routes.use("/products", productRoutes);
 routes.use("/shipping", shippingAddressRoutes);
+routes.use("/setup-config", SetupConfigRoutes);
 routes.use("/shipping_policy", shippingPolicy);
 routes.use("/return_policy", returnPolicy);
 routes.use("/return_policy", returnPolicy);
@@ -94,6 +96,5 @@ routes.use("/website-theme-color", websiteThemeColorRoutes);
 routes.use("/wishlist", wishlistRoutes);
 routes.use("/users", userRoutes);
 routes.use("/subcategories", subcategoryRoutes);
-
 
 export default routes;
