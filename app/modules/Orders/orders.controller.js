@@ -1,5 +1,3 @@
-import courierAccessToken from "../../../config/courier/courierAccessToken.js";
-import { courierOrderCreate } from "../../../config/courier/courierOrderCreate.js";
 import OrderModel from "./orders.model.js";
 
 // GET all orders with optional filters
@@ -24,15 +22,41 @@ export const getOrders = async (req, res) => {
 
 // POST create a new order
 export const createOrder = async (req, res) => {
+  const data = req.body;
   const courierResponse = req?.courierResponse;
 
   console.log(courierResponse, "courierResponse");
 
-  const submitData = { shipping_address_id, products, payment_method, total };
+  if (!courierResponse.success) {
+    return res.status(422).json({ success: false, error: courierResponse });
+  }
+
+  const submitData = {
+    name: data.name,
+    phone: data.phone,
+    secondary_phone: data.secondary_phone,
+    address: data.address,
+    city_id: data.city_id,
+    city_name: data.city_name,
+    zone_id: data.zone_id,
+    area_id: data.area_id,
+    area_name: data.area_name,
+    special_instruction: data.special_instruction,
+    courierMethod: data.courierMethod,
+    items: data.items,
+    payment_method: data.payment_method,
+    total: data.total,
+    color: data?.color,
+    size: data?.size,
+    invoice: courierResponse?.consignment?.invoice,
+    tracking_code: courierResponse?.consignment?.tracking_code,
+    status: courierResponse?.consignment?.status,
+    note: courierResponse?.consignment?.note,
+  };
 
   try {
-    // const orderResult = await OrderModel.create(submitData);
-    res.status(200).json({ success: true, error: returnOrderData });
+    const orderResult = await OrderModel.create(submitData);
+    res.status(200).json({ success: true, data: orderResult });
     // res.status(200).json({ success: true, data: orderResult });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
