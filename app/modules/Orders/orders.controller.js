@@ -24,26 +24,12 @@ export const getOrders = async (req, res) => {
 
 // POST create a new order
 export const createOrder = async (req, res) => {
-  const { shipping_address_id, products, payment_method, total } = req.body;
+  const courierResponse = req?.courierResponse;
 
-  if (!shipping_address_id || !products || !payment_method || !total) {
-    return res
-      .status(400)
-      .json({ success: false, message: "Required fields missing" });
-  }
+  console.log(courierResponse, "courierResponse");
 
   const submitData = { shipping_address_id, products, payment_method, total };
 
-  const accessToken = await courierAccessToken();
-
-  // const storeReport = await courierStoreCreate({...submitData, accessToken: accessToken.access_token});
-
-  const returnOrderData = await courierOrderCreate({
-    ...submitData,
-    accessToken: accessToken.access_token,
-  });
-
-  console.log(returnOrderData, "returnOrderData");
   try {
     // const orderResult = await OrderModel.create(submitData);
     res.status(200).json({ success: true, error: returnOrderData });
