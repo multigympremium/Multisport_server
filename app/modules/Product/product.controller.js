@@ -93,6 +93,7 @@ export const createProduct = async (req, res) => {
     isNew,
     isRecommended,
     modelOfBrandValue,
+    galleryItemCount,
   } = req.body;
 
   try {
@@ -114,7 +115,7 @@ export const createProduct = async (req, res) => {
     // }
 
     // Checking required fields
-    if (!productTitle || !price || !category || !brandValue || !subcategory) {
+    if (!productTitle || !price) {
       return res
         .status(400)
         .json({ success: false, message: "Required fields missing" });
@@ -137,10 +138,37 @@ export const createProduct = async (req, res) => {
     const galleryFiles = req.files["gallery"]; // Handle multiple files
     let galleryEntries = [];
     console.log(galleryFiles, "galleryFiles");
-    for (const file of galleryFiles) {
-      console.log(file, "file", typeof file, file instanceof File);
-      const galleryUrl = `${Date.now()}-${file?.name.replace(/\s/g, "-")}`;
-      const galleryUploadResult = await uploadFile(file, galleryUrl, file.type);
+
+    if (Number(galleryItemCount) > 1) {
+      console.log(Number(galleryItemCount), "Number(galleryItemCount)");
+      for (const file of galleryFiles) {
+        console.log(file, "file", typeof file, file instanceof File);
+        const galleryUrl = `${Date.now()}-${file?.name.replace(/\s/g, "-")}`;
+        const galleryUploadResult = await uploadFile(
+          file,
+          galleryUrl,
+          file.type
+        );
+
+        console.log(galleryUploadResult, "galleryUploadResult");
+
+        const galleryEntry = await ProductGalleryModel.create({
+          image: galleryUrl,
+        });
+        console.log(galleryEntry, "galleryEntry");
+        galleryEntries.push(galleryEntry._id); // Save the gallery entry IDs
+      }
+    } else {
+      console.log(Number(galleryItemCount), "single");
+      const galleryUrl = `${Date.now()}-${galleryFiles?.name.replace(
+        /\s/g,
+        "-"
+      )}`;
+      const galleryUploadResult = await uploadFile(
+        galleryFiles,
+        galleryUrl,
+        galleryFiles.type
+      );
 
       console.log(galleryUploadResult, "galleryUploadResult");
 
@@ -148,7 +176,7 @@ export const createProduct = async (req, res) => {
         image: galleryUrl,
       });
       console.log(galleryEntry, "galleryEntry");
-      galleryEntries.push(galleryEntry._id); // Save the gallery entry IDs
+      galleryEntries.push(galleryEntry._id);
     }
 
     const submitData = {
