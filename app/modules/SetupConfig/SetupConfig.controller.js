@@ -13,43 +13,7 @@ export async function getSetupConfigs(req, res) {
 // POST: Create a new social link
 export async function createSetupConfig(req, res) {
   try {
-    const {
-      productSize,
-      modelOfBrand,
-      productColor,
-      measurementUnit,
-      seoInformation,
-      rewardPoints,
-      productFlags,
-      productCode,
-    } = req.body;
-
-    if (
-      !productSize ||
-      !modelOfBrand ||
-      !productColor ||
-      !measurementUnit ||
-      !seoInformation ||
-      !productFlags ||
-      !productCode ||
-      !rewardPoints
-    ) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Required fields missing" });
-    }
-
-    const requestData = {
-      productSize,
-      modelOfBrand,
-      productColor,
-      measurementUnit,
-      seoInformation,
-      rewardPoints,
-      productFlag,
-      productCode,
-    };
-    const insertResult = await SetupConfigModel.create(requestData);
+    const insertResult = await SetupConfigModel.create(req.body);
 
     if (insertResult) {
       return res.status(200).json({ success: true });
