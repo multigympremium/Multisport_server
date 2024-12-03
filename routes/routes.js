@@ -48,11 +48,7 @@ import SetupConfigRoutes from "../app/modules/SetupConfig/SetupConfig.routes.js"
 import ModelOfBrandRoutes from "../app/modules/ModelOfBrand/ModelOfBrand.routes.js";
 
 const routes = Router();
-// routes.use("/branches", BranchRoutes);
-routes.use("/about-mission", AboutMissionRoutes);
-routes.use("/about-us", aboutUsRoutes);
-routes.use("/about-vision", aboutVisionRoutes);
-routes.use("/bag-banners", bagBannerRoutes);
+// routes.use("/branches", BranchRoutes);gggrRoutes);
 routes.use("/banners", bannerRoutes);
 routes.use("/blog", blogRoutes);
 routes.use("/blog-category", blogCategoryRoutes);

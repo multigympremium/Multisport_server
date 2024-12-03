@@ -1,21 +1,27 @@
-import express from 'express';
-import { getTermsConditions, postTermsCondition, getTermsConditionById, putTermsCondition, deleteTermsCondition } from './termsCondition.controller.js';
+import express from "express";
+import {
+  getTermsConditions,
+  postTermsCondition,
+  getTermsConditionById,
+  putTermsCondition,
+  deleteTermsCondition,
+} from "./termsCondition.controller.js";
 
 const termsConditionRoutes = express.Router();
 
 // Route for fetching all terms and conditions
-termsConditionRoutes.get('/terms-conditions', getTermsConditions);
+termsConditionRoutes.get("/", getTermsConditions);
 
 // Route for creating or updating terms and conditions
-termsConditionRoutes.post('/terms-conditions', postTermsCondition);
+termsConditionRoutes.post("/", postTermsCondition);
 
 // Route for fetching a single terms and conditions by ID
-termsConditionRoutes.get('/terms-conditions/:id', getTermsConditionById);
+termsConditionRoutes.get("/:id", getTermsConditionById);
 
 // Route for updating terms and conditions by ID
-termsConditionRoutes.put('/terms-conditions/:id', putTermsCondition);
+termsConditionRoutes.put("/:id", putTermsCondition);
 
 // Route for deleting terms and conditions by ID
-termsConditionRoutes.delete('/terms-conditions/:id', deleteTermsCondition);
+termsConditionRoutes.delete("/:id", deleteTermsCondition);
 
 export default termsConditionRoutes;

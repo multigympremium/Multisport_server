@@ -15,21 +15,9 @@ export async function postTermsCondition(req, res) {
   try {
     const { content, id } = req.body;
     if (!content) {
-      return res.status(400).json({ success: false, message: "Required fields missing" });
-    }
-
-    const existingTermsCondition = await TermsConditionModel.findById(id);
-
-    if (existingTermsCondition) {
-      const updatedTermsCondition = await TermsConditionModel.findByIdAndUpdate(
-        id,
-        { content },
-        { new: true }
-      );
-      if (!updatedTermsCondition) {
-        return res.status(404).json({ success: false, message: "Terms and Conditions not found" });
-      }
-      return res.status(200).json({ success: true, data: updatedTermsCondition });
+      return res
+        .status(400)
+        .json({ success: false, message: "Required fields missing" });
     }
 
     const newTermsCondition = await TermsConditionModel.create({ content });
@@ -45,7 +33,9 @@ export async function getTermsConditionById(req, res) {
   try {
     const termsCondition = await TermsConditionModel.findById(id);
     if (!termsCondition) {
-      return res.status(404).json({ success: false, message: "Terms and Conditions not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Terms and Conditions not found" });
     }
     return res.status(200).json({ success: true, data: termsCondition });
   } catch (error) {
@@ -59,7 +49,9 @@ export async function putTermsCondition(req, res) {
   const { content } = req.body;
 
   if (!content) {
-    return res.status(400).json({ success: false, message: "Required fields missing" });
+    return res
+      .status(400)
+      .json({ success: false, message: "Required fields missing" });
   }
 
   try {
@@ -69,7 +61,9 @@ export async function putTermsCondition(req, res) {
       { new: true }
     );
     if (!updatedTermsCondition) {
-      return res.status(404).json({ success: false, message: "Terms and Conditions not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Terms and Conditions not found" });
     }
     return res.status(200).json({ success: true, data: updatedTermsCondition });
   } catch (error) {
@@ -82,11 +76,17 @@ export async function deleteTermsCondition(req, res) {
   const { id } = req.params;
 
   try {
-    const deletedTermsCondition = await TermsConditionModel.findByIdAndDelete(id);
+    const deletedTermsCondition = await TermsConditionModel.findByIdAndDelete(
+      id
+    );
     if (!deletedTermsCondition) {
-      return res.status(404).json({ success: false, message: "Terms and Conditions not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Terms and Conditions not found" });
     }
-    return res.status(200).json({ success: true, message: "Terms and Conditions deleted" });
+    return res
+      .status(200)
+      .json({ success: true, message: "Terms and Conditions deleted" });
   } catch (error) {
     return res.status(500).json({ success: false, error: error.message });
   }

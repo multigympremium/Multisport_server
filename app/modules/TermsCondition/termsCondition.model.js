@@ -12,8 +12,6 @@ const schema = new mongoose.Schema(
   }
 );
 
-const TermsConditionModel =
-
-  mongoose.model("terms_conditions", schema);
+const TermsConditionModel = mongoose.model("terms_conditions", schema);
 
 export default TermsConditionModel;
