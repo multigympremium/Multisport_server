@@ -1,6 +1,11 @@
 import mongoose from "mongoose";
 
 const schema = new mongoose.Schema({
+  baseUrl: {
+    type: String,
+    required: [true, "baseUrl is required"],
+    trim: true, // Removes extra spaces at the start and end
+  },
   clientId: {
     type: String,
     required: [true, "Client Id is required"],

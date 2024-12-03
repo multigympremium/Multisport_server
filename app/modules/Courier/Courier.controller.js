@@ -351,13 +351,16 @@ export const courierStoreCreate = async (req, res) => {
 
 export const courierSteadFastOrderCreate = async (requestData) => {
   // const requestData = req.body;
+  const SteadFastData = await SteadFastModel.find({});
+
   const url = `${process.env.STEAD_FAST_COURIER_URL}/create_order`; // Replace with actual base URL
   // const accessToken = '<access_token>'; // Replace with your access token
 
   const headers = {
     "Content-Type": "application/json",
-    "Api-Key": process.env.STEAD_FAST_COURIER_API_KEY,
-    "Secret-Key": process.env.STEAD_FAST_COURIER_SECRET_KEY,
+    "Api-Key": SteadFastData.apiKey || process.env.STEAD_FAST_COURIER_API_KEY,
+    "Secret-Key":
+      SteadFastData.secretKey || process.env.STEAD_FAST_COURIER_SECRET_KEY,
   };
 
   //   const requestData = {
@@ -463,10 +466,17 @@ export const getAllPathaoCourier = async (req, res) => {
 // POST new PathaoCourier
 export const createPathaoCourier = async (req, res) => {
   try {
-    const { clientId, storeId, clientSecret, clientEmail, clientPassword } =
-      req.body;
+    const {
+      baseUrl,
+      clientId,
+      storeId,
+      clientSecret,
+      clientEmail,
+      clientPassword,
+    } = req.body;
 
     if (
+      !baseUrl ||
       !clientId ||
       !storeId ||
       !clientSecret ||
@@ -555,9 +565,9 @@ export const getAllSteadFast = async (req, res) => {
 // POST new SteadFast
 export const createSteadFast = async (req, res) => {
   try {
-    const { apiKey, secretKey } = req.body;
+    const { baseUrl, apiKey, secretKey } = req.body;
 
-    if (!apiKey || !secretKey) {
+    if (!baseUrl || !apiKey || !secretKey) {
       return res
         .status(400)
         .json({ success: false, message: "Required fields missing" });

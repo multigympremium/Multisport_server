@@ -1,13 +1,16 @@
 import axios from "axios";
 
 export default async function courierAccessToken() {
+  const PathaoCourierData = await PathaoModel.find({});
+
   const url = `${process.env.PATHAO_COURIER_URL}/aladdin/api/v1/issue-token`;
 
   const requestData = {
-    client_id: process.env.COURIER_CLIENT_ID,
-    client_secret: process.env.COURIER_CLIENT_SECRET,
-    username: process.env.COURIER_EMAIL,
-    password: process.env.COURIER_PASSWORD,
+    client_id: PathaoCourierData.clientId || process.env.COURIER_CLIENT_ID,
+    client_secret:
+      PathaoCourierData.clientSecret || process.env.COURIER_CLIENT_SECRET,
+    username: PathaoCourierData.clientEmail || process.env.COURIER_EMAIL,
+    password: PathaoCourierData.clientPassword || process.env.COURIER_PASSWORD,
     grant_type: "password",
   };
 
