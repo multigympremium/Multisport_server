@@ -1,6 +1,7 @@
 import axios from "axios";
 import courierAccessToken from "../../../config/courier/courierAccessToken.js";
 import generateInvoiceId from "../../helpers/generateInvoiceId.js";
+import PathaoModel from "./models/Pathao.model.js";
 
 export const pathaoCourierOrderCreate = async (data) => {
   const url = `${process.env.PATHAO_COURIER_URL}/aladdin/api/v1/orders`; // Replace with actual base URL
@@ -445,5 +446,97 @@ export const createCourierOrder = async (req, res, next) => {
     next();
   } catch (error) {
     next(error);
+  }
+};
+
+// GET all PathaoCourier
+export const getAllPathaoCourier = async (req, res) => {
+  try {
+    const PathaoCourierData = await PathaoModel.find({});
+    res.status(200).json({ success: true, data: PathaoCourierData });
+  } catch (error) {
+    res.status(400).json({ success: false, error: error.message });
+  }
+};
+
+// POST new PathaoCourier
+export const createPathaoCourier = async (req, res) => {
+  try {
+    const { clientId, storeId, clientSecret, clientEmail, clientPassword } =
+      req.body;
+
+    if (
+      !clientId ||
+      !storeId ||
+      !clientSecret ||
+      !clientEmail ||
+      !clientPassword
+    ) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Required fields missing" });
+    }
+
+    const newPathaoCourier = await PathaoModel.create(req.body);
+    res.status(200).json({ success: true, data: newPathaoCourier });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+// GET PathaoCourier by ID
+export const getPathaoCourierById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const PathaoCourierReport = await PathaoModel.findById(id);
+    if (!PathaoCourierReport) {
+      return res
+        .status(404)
+        .json({ success: false, message: "PathaoCourier not found" });
+    }
+    res.status(200).json({ success: true, data: PathaoCourier });
+  } catch (error) {
+    res.status(400).json({ success: false, error: error.message });
+  }
+};
+
+// PUT update PathaoCourier by ID
+export const updatePathaoCourierById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const updatedPathaoCourier = await PathaoModel.findByIdAndUpdate(
+      id,
+      req.body,
+      { new: true }
+    );
+    if (!updatedPathaoCourier) {
+      return res
+        .status(404)
+        .json({ success: false, message: "PathaoCourier not found" });
+    }
+    res.status(200).json({ success: true, data: updatedPathaoCourier });
+  } catch (error) {
+    res.status(400).json({ success: false, error: error.message });
+  }
+};
+
+// DELETE PathaoCourier by ID
+export const deletePathaoCourierById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const PathaoCourier = await PathaoModel.findById(id);
+    if (!PathaoCourier) {
+      return res
+        .status(404)
+        .json({ success: false, message: "PathaoCourier not found" });
+    }
+
+    await PathaoModel.findByIdAndDelete(id);
+    res
+      .status(200)
+      .json({ success: true, message: "PathaoCourier deleted successfully" });
+  } catch (error) {
+    res.status(400).json({ success: false, error: error.message });
   }
 };
