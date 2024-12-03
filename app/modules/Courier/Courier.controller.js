@@ -2,6 +2,7 @@ import axios from "axios";
 import courierAccessToken from "../../../config/courier/courierAccessToken.js";
 import generateInvoiceId from "../../helpers/generateInvoiceId.js";
 import PathaoModel from "./models/Pathao.model.js";
+import SteadFastModel from "./models/SteadFast.model.js";
 
 export const pathaoCourierOrderCreate = async (data) => {
   const url = `${process.env.PATHAO_COURIER_URL}/aladdin/api/v1/orders`; // Replace with actual base URL
@@ -536,6 +537,93 @@ export const deletePathaoCourierById = async (req, res) => {
     res
       .status(200)
       .json({ success: true, message: "PathaoCourier deleted successfully" });
+  } catch (error) {
+    res.status(400).json({ success: false, error: error.message });
+  }
+};
+
+// GET all SteadFast
+export const getAllSteadFast = async (req, res) => {
+  try {
+    const SteadFastData = await SteadFastModel.find({});
+    res.status(200).json({ success: true, data: SteadFastData });
+  } catch (error) {
+    res.status(400).json({ success: false, error: error.message });
+  }
+};
+
+// POST new SteadFast
+export const createSteadFast = async (req, res) => {
+  try {
+    const { apiKey, secretKey } = req.body;
+
+    if (!apiKey || !secretKey) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Required fields missing" });
+    }
+
+    const newSteadFast = await SteadFastModel.create(req.body);
+    res.status(200).json({ success: true, data: newSteadFast });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+// GET SteadFast by ID
+export const getSteadFastById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const SteadFastReport = await SteadFastModel.findById(id);
+    if (!SteadFastReport) {
+      return res
+        .status(404)
+        .json({ success: false, message: "SteadFast not found" });
+    }
+    res.status(200).json({ success: true, data: SteadFast });
+  } catch (error) {
+    res.status(400).json({ success: false, error: error.message });
+  }
+};
+
+// PUT update SteadFast by ID
+export const updateSteadFastById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const updatedSteadFast = await SteadFastModel.findByIdAndUpdate(
+      id,
+      req.body,
+      {
+        new: true,
+      }
+    );
+    if (!updatedSteadFast) {
+      return res
+        .status(404)
+        .json({ success: false, message: "SteadFast not found" });
+    }
+    res.status(200).json({ success: true, data: updatedSteadFast });
+  } catch (error) {
+    res.status(400).json({ success: false, error: error.message });
+  }
+};
+
+// DELETE SteadFast by ID
+export const deleteSteadFastById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const SteadFast = await SteadFastModel.findById(id);
+    if (!SteadFast) {
+      return res
+        .status(404)
+        .json({ success: false, message: "SteadFast not found" });
+    }
+
+    await SteadFastModel.findByIdAndDelete(id);
+    res
+      .status(200)
+      .json({ success: true, message: "SteadFast deleted successfully" });
   } catch (error) {
     res.status(400).json({ success: false, error: error.message });
   }
