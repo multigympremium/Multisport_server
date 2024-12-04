@@ -135,7 +135,7 @@ export const createProduct = async (req, res) => {
     }
 
     // Uploading gallery files
-    const galleryFiles = req.files["gallery"]; // Handle multiple files
+    const galleryFiles = req.files?.gallery; // Handle multiple files
     let galleryEntries = [];
     console.log(galleryFiles, "galleryFiles");
 
@@ -295,7 +295,7 @@ export const updateProductById = async (req, res) => {
     }
 
     // Uploading gallery files
-    const galleryFiles = req.files["gallery"];
+    const galleryFiles = req.files?.gallery;
     let galleryEntries = [];
     for (const id of galleryItemIds.split(",")) {
       const galleryItem = await ProductGalleryModel.findById(id);
