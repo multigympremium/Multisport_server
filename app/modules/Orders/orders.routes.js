@@ -11,7 +11,7 @@ import { createCourierOrder } from "../Courier/Courier.controller.js";
 const orderRoutes = express.Router();
 
 orderRoutes.get("/", getOrders);
-orderRoutes.post("/", createCourierOrder, createOrder);
+orderRoutes.post("/", createOrder);
 orderRoutes.get("/:id", getOrderById);
 orderRoutes.put("/:id", updateOrderById);
 orderRoutes.delete("/:id", deleteOrderById);

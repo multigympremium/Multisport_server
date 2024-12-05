@@ -1,16 +1,20 @@
 import axios from "axios";
+import PathaoModel from "../../app/modules/Courier/models/Pathao.model.js";
 
 export default async function courierAccessToken() {
   const PathaoCourierData = await PathaoModel.find({});
 
-  const url = `${process.env.PATHAO_COURIER_URL}/aladdin/api/v1/issue-token`;
+  const url = `${
+    PathaoCourierData[0].baseUrl || process.env.PATHAO_COURIER_URL
+  }/aladdin/api/v1/issue-token`;
 
   const requestData = {
-    client_id: PathaoCourierData.clientId || process.env.COURIER_CLIENT_ID,
+    client_id: PathaoCourierData[0].clientId || process.env.COURIER_CLIENT_ID,
     client_secret:
-      PathaoCourierData.clientSecret || process.env.COURIER_CLIENT_SECRET,
-    username: PathaoCourierData.clientEmail || process.env.COURIER_EMAIL,
-    password: PathaoCourierData.clientPassword || process.env.COURIER_PASSWORD,
+      PathaoCourierData[0].clientSecret || process.env.COURIER_CLIENT_SECRET,
+    username: PathaoCourierData[0].clientEmail || process.env.COURIER_EMAIL,
+    password:
+      PathaoCourierData[0].clientPassword || process.env.COURIER_PASSWORD,
     grant_type: "password",
   };
 

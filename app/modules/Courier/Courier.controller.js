@@ -5,7 +5,10 @@ import PathaoModel from "./models/Pathao.model.js";
 import SteadFastModel from "./models/SteadFast.model.js";
 
 export const pathaoCourierOrderCreate = async (data) => {
-  const url = `${process.env.PATHAO_COURIER_URL}/aladdin/api/v1/orders`; // Replace with actual base URL
+  const PathaoCourierData = await PathaoModel.find({});
+  const url = `${
+    PathaoCourierData[0].baseUrl || process.env.PATHAO_COURIER_URL
+  }/aladdin/api/v1/orders`; // Replace with actual base URL
   // const accessToken = '<access_token>'; // Replace with your access token
 
   const accessToken = await courierAccessToken();
@@ -353,14 +356,20 @@ export const courierSteadFastOrderCreate = async (requestData) => {
   // const requestData = req.body;
   const SteadFastData = await SteadFastModel.find({});
 
-  const url = `${process.env.STEAD_FAST_COURIER_URL}/create_order`; // Replace with actual base URL
+  console.log(SteadFastData, "steadfast data");
+  console.log(requestData, "request data");
+
+  const url = `${
+    SteadFastData[0].baseUrl || process.env.STEAD_FAST_COURIER_URL
+  }/create_order`; // Replace with actual base URL
   // const accessToken = '<access_token>'; // Replace with your access token
 
   const headers = {
     "Content-Type": "application/json",
-    "Api-Key": SteadFastData.apiKey || process.env.STEAD_FAST_COURIER_API_KEY,
+    "Api-Key":
+      SteadFastData[0].apiKey || process.env.STEAD_FAST_COURIER_API_KEY,
     "Secret-Key":
-      SteadFastData.secretKey || process.env.STEAD_FAST_COURIER_SECRET_KEY,
+      SteadFastData[0].secretKey || process.env.STEAD_FAST_COURIER_SECRET_KEY,
   };
 
   //   const requestData = {
@@ -376,13 +385,13 @@ export const courierSteadFastOrderCreate = async (requestData) => {
 
   let submitData;
 
-  if (requestData.itemCount > 1) {
+  if (requestData.items?.length > 1) {
     submitData = {
       data: requestData.items.map((item) => ({
         invoice: generateInvoiceId(),
         recipient_name: requestData.name,
         recipient_phone: requestData.phone,
-        secondary_contact: requestData.secondary_contact,
+        secondary_contact: requestData.secondary_phone,
         recipient_address: requestData.address,
         cod_amount: requestData.total,
         note: requestData.special_instruction,
@@ -393,7 +402,7 @@ export const courierSteadFastOrderCreate = async (requestData) => {
       invoice: generateInvoiceId(),
       recipient_name: requestData.name,
       recipient_phone: requestData.phone,
-      secondary_contact: "01961394375",
+      secondary_contact: requestData.secondary_phone,
       recipient_address: requestData.address,
       cod_amount: requestData.total,
       note: requestData.special_instruction,
@@ -420,7 +429,8 @@ export const courierSteadFastOrderCreate = async (requestData) => {
       "Error creating SteadFast Order:",
       error.response?.data || error.message
     );
-    return null;
+
+    throw new Error(error);
     // res.status(500).json({
     //   message: "Error creating SteadFast Order",
     //   error: error.response?.data || error.message,
@@ -428,28 +438,23 @@ export const courierSteadFastOrderCreate = async (requestData) => {
   }
 };
 
-export const createCourierOrder = async (req, res, next) => {
-  const data = req.body;
-
+export const createCourierOrder = async (data) => {
   try {
     let response;
+    console.log(data, "data courier");
 
     if (data?.courierMethod === "Pathao") {
+      console.log(data, "data pathao");
       response = await pathaoCourierOrderCreate(data);
     } else if (data?.courierMethod === "SteadFast") {
+      console.log(data, "data steadfast");
       response = await courierSteadFastOrderCreate(data);
     }
 
-    console.log(response, "response");
-
-    if (!response) {
-      next(new Error("Courier not Successful"));
-    }
-
-    req.courierResponse = response;
-    next();
+    return response;
   } catch (error) {
-    next(error);
+    console.error("Error creating order:", error);
+    return new Error(error);
   }
 };
 
