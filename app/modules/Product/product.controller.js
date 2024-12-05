@@ -158,7 +158,7 @@ export const createProduct = async (req, res) => {
         console.log(galleryEntry, "galleryEntry");
         galleryEntries.push(galleryEntry._id); // Save the gallery entry IDs
       }
-    } else {
+    } else if (galleryItemCount === 1) {
       console.log(Number(galleryItemCount), "single");
       const galleryUrl = `${Date.now()}-${galleryFiles?.name.replace(
         /\s/g,
@@ -238,121 +238,297 @@ export const getProductById = async (req, res) => {
 };
 
 // PUT Request: Update product by ID
+// export const updateProductById = async (req, res) => {
+//   const { id } = req.params;
+
+//   const formData = req.body; // Assuming you use middleware to parse form data
+
+//   const productData = await ProductModel.findById(id).populate("gallery");
+//   if (!productData) {
+//     return res
+//       .status(404)
+//       .json({ success: false, message: "Product not found" });
+//   }
+
+//   const {
+//     productTitle,
+//     shortDescription,
+//     fullDescription,
+//     specifications,
+//     returnPolicy,
+//     price,
+//     discountPrice,
+//     rewardPoints,
+//     stock,
+//     productCode,
+//     metaTitle,
+//     metaKeywords,
+//     metaDescription,
+//     specialOffer,
+//     hasVariants,
+//     category,
+//     brandValue,
+//     productColorValue,
+//     productSizeValue,
+//     productFlagValue,
+//     subcategory,
+//     childCategory,
+//     isNew,
+//     isRecommended,
+//     galleryItemIds,
+//     modelOfBrandValue,
+//     deletedGalleryItemIds,
+//   } = formData;
+//   // Uploading the thumbnail file
+
+//   try {
+//     const thumbnailFile = req?.files?.thumbnail;
+//     let thumbnailUrl = "";
+//     if (thumbnailFile && thumbnailFile.size > 0) {
+//       thumbnailUrl = `${Date.now()}-${thumbnailFile.name.replace(/\s/g, "-")}`;
+//       const thumbnailResult = await uploadFile(
+//         thumbnailFile,
+//         thumbnailUrl,
+//         thumbnailFile.type
+//       );
+
+//       console.log(thumbnailResult, "thumbnailResult");
+//     }
+
+//     // Uploading gallery files
+//     const galleryFiles = req.files?.gallery;
+//     let galleryEntries = [];
+//     for (const id of galleryItemIds.split(",")) {
+//       const galleryItem = await ProductGalleryModel.findById(id);
+//       console.log(galleryItem, "galleryItem");
+//       galleryEntries.push(`${galleryItem._id}`);
+//     }
+
+//     console.log(galleryFiles, "galleryFiles");
+
+//     if (galleryFiles && galleryFiles.length > 1) {
+//       for (const file of galleryFiles) {
+//         const galleryUrl = `${Date.now()}-${file?.name.replace(/\s/g, "-")}`;
+//         const galleryUploadResult = await uploadFile(
+//           file,
+//           galleryUrl,
+//           file.type
+//         );
+
+//         const galleryEntry = await ProductGalleryModel.create({
+//           image: galleryUrl,
+//         });
+//         console.log(galleryEntry, "galleryEntry");
+//         const copy_galleryEntry = {
+//           _id: galleryEntry._id,
+//         };
+
+//         console.log(copy_galleryEntry, "copy_galleryEntry");
+//         galleryEntries.push(copy_galleryEntry._id); // Save the gallery entry IDs
+//         // galleryEntries.push(galleryEntry._id); // Save the gallery entry IDs
+//       }
+//     } else if (galleryFiles) {
+//       console.log(galleryFiles, "galleryFiles single");
+//       const galleryUrl = `${Date.now()}-${galleryFiles?.name.replace(
+//         /\s/g,
+//         "-"
+//       )}`;
+//       const galleryUploadResult = await uploadFile(
+//         galleryFiles,
+//         galleryUrl,
+//         galleryFiles.type
+//       );
+
+//       const galleryEntry = await ProductGalleryModel.create({
+//         image: galleryUrl,
+//       });
+//       console.log(galleryEntry, "galleryEntry");
+//       const copy_galleryEntry = {
+//         _id: `${galleryEntry._id}`,
+//       };
+
+//       console.log(copy_galleryEntry, "copy_galleryEntry");
+//       galleryEntries.push(copy_galleryEntry._id); // Save the gallery entry IDs
+//       // galleryEntries.push(galleryEntry._id); // Save the gallery entry IDs
+//     }
+
+//     console.log(galleryEntries, "galleryEntries");
+
+//     const submitData = {
+//       productTitle,
+//       shortDescription,
+//       fullDescription,
+//       price: parseFloat(price),
+//       discountPrice: discountPrice ? parseFloat(discountPrice) : undefined,
+//       rewardPoints: rewardPoints ? parseInt(rewardPoints) : undefined,
+//       stock: parseInt(stock),
+//       productCode,
+//       metaTitle,
+//       metaKeywords,
+//       metaDescription,
+//       specialOffer,
+//       hasVariants,
+//       thumbnail: thumbnailUrl, // URL for thumbnail
+//       gallery: galleryEntries, // Array of gallery object IDs
+//       category,
+//       brandValue,
+//       productColorValue,
+//       productSizeValue,
+//       productFlagValue,
+//       subcategory,
+//       childCategory,
+
+//       returnPolicy,
+//       specifications,
+
+//       isNew: isNew === "true",
+//       isRecommended: isRecommended === "true",
+//     };
+
+//     if (modelOfBrandValue) {
+//       submitData.modelOfBrandValue = modelOfBrandValue;
+//     }
+
+//     console.log(submitData, "submitData");
+
+//     const updatedProduct = await ProductModel.findByIdAndUpdate(
+//       id,
+//       submitData,
+//       {
+//         new: true,
+//       }
+//     );
+
+//     if (!updatedProduct) {
+//       return NextResponse.json(
+//         { success: false, message: "Product not found" },
+//         { status: 404 }
+//       );
+//     }
+
+//     if (deletedGalleryItemIds.split(",")?.length > 0) {
+//       const deletedResponse = await ProductGalleryModel.deleteMany({
+//         _id: { $in: deletedGalleryItemIds.split(",") },
+//       });
+//       console.log("Deleted gallery items:", deletedResponse);
+//     } else if (deletedGalleryItemIds?.length > 0) {
+//       const deletedResponse = await ProductGalleryModel.deleteOne({
+//         _id: deletedGalleryItemIds,
+//       });
+
+//       console.log("Deleted gallery item one:", deletedResponse);
+//     }
+
+//     // Delete thumbnail from S3 if it exists
+//     if (productData.thumbnail !== updatedProduct.thumbnail) {
+//       await deleteFile(productData.thumbnail);
+//     }
+
+//     // Delete gallery images from S3
+//     if (productData.gallery && productData.gallery.length > 0) {
+//       for (const galleryImage of productData.gallery) {
+//         const isSameImage = updatedProduct.gallery
+//           .map((gallery) => gallery.image)
+//           .includes(galleryImage.image);
+//         if (isSameImage) {
+//           await deleteFile(galleryImage.image);
+//         }
+//       }
+//     }
+
+//     return res.status(200).json({ success: true, data: updatedProduct });
+//   } catch (error) {
+//     console.log(error, "error");
+//     return res.status(400).json({ success: false, error: error.message });
+//   }
+// };
+
 export const updateProductById = async (req, res) => {
   const { id } = req.params;
-
-  const formData = req.body; // Assuming you use middleware to parse form data
-
-  const productData = await ProductModel.findById(id).populate("gallery");
-  if (!productData) {
-    return res
-      .status(404)
-      .json({ success: false, message: "Product not found" });
-  }
-
-  const {
-    productTitle,
-    shortDescription,
-    fullDescription,
-    specifications,
-    returnPolicy,
-    price,
-    discountPrice,
-    rewardPoints,
-    stock,
-    productCode,
-    metaTitle,
-    metaKeywords,
-    metaDescription,
-    specialOffer,
-    hasVariants,
-    category,
-    brandValue,
-    productColorValue,
-    productSizeValue,
-    productFlagValue,
-    subcategory,
-    childCategory,
-    isNew,
-    isRecommended,
-    galleryItemIds,
-    modelOfBrandValue,
-  } = formData;
-  // Uploading the thumbnail file
+  const formData = req.body;
 
   try {
+    // Check if the product exists
+    const productData = await ProductModel.findById(id).populate("gallery");
+    if (!productData) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Product not found" });
+    }
+
+    const {
+      productTitle,
+      shortDescription,
+      fullDescription,
+      specifications,
+      returnPolicy,
+      price,
+      discountPrice,
+      rewardPoints,
+      stock,
+      productCode,
+      metaTitle,
+      metaKeywords,
+      metaDescription,
+      specialOffer,
+      hasVariants,
+      category,
+      brandValue,
+      productColorValue,
+      productSizeValue,
+      productFlagValue,
+      subcategory,
+      childCategory,
+      isNew,
+      isRecommended,
+      galleryItemIds = "",
+      modelOfBrandValue,
+      deletedGalleryItemIds = "",
+    } = formData;
+
     const thumbnailFile = req?.files?.thumbnail;
     let thumbnailUrl = "";
+
+    // Uploading the thumbnail file
     if (thumbnailFile && thumbnailFile.size > 0) {
       thumbnailUrl = `${Date.now()}-${thumbnailFile.name.replace(/\s/g, "-")}`;
-      const thumbnailResult = await uploadFile(
-        thumbnailFile,
-        thumbnailUrl,
-        thumbnailFile.type
-      );
-
-      console.log(thumbnailResult, "thumbnailResult");
+      await uploadFile(thumbnailFile, thumbnailUrl, thumbnailFile.type);
     }
 
-    // Uploading gallery files
+    // Process gallery files
     const galleryFiles = req.files?.gallery;
     let galleryEntries = [];
-    for (const id of galleryItemIds.split(",")) {
-      const galleryItem = await ProductGalleryModel.findById(id);
-      console.log(galleryItem, "galleryItem");
-      galleryEntries.push(`${galleryItem._id}`);
+
+    // Process existing gallery item IDs
+    if (galleryItemIds) {
+      const validGalleryItemIds = galleryItemIds
+        .split(",")
+        .filter((id) => id.trim() !== ""); // Remove empty strings
+      for (const id of validGalleryItemIds) {
+        const galleryItem = await ProductGalleryModel.findById(id);
+        if (galleryItem) {
+          galleryEntries.push(galleryItem._id);
+        }
+      }
     }
 
-    console.log(galleryFiles, "galleryFiles");
-
-    if (galleryFiles && galleryFiles.length > 1) {
-      for (const file of galleryFiles) {
+    // Upload new gallery files
+    if (galleryFiles) {
+      const filesArray = Array.isArray(galleryFiles)
+        ? galleryFiles
+        : [galleryFiles];
+      for (const file of filesArray) {
         const galleryUrl = `${Date.now()}-${file?.name.replace(/\s/g, "-")}`;
-        const galleryUploadResult = await uploadFile(
-          file,
-          galleryUrl,
-          file.type
-        );
+        await uploadFile(file, galleryUrl, file.type);
 
         const galleryEntry = await ProductGalleryModel.create({
           image: galleryUrl,
         });
-        console.log(galleryEntry, "galleryEntry");
-        const copy_galleryEntry = {
-          _id: galleryEntry._id,
-        };
-
-        console.log(copy_galleryEntry, "copy_galleryEntry");
-        galleryEntries.push(copy_galleryEntry._id); // Save the gallery entry IDs
-        // galleryEntries.push(galleryEntry._id); // Save the gallery entry IDs
+        galleryEntries.push(galleryEntry._id);
       }
-    } else if (galleryFiles) {
-      console.log(galleryFiles, "galleryFiles single");
-      const galleryUrl = `${Date.now()}-${galleryFiles?.name.replace(
-        /\s/g,
-        "-"
-      )}`;
-      const galleryUploadResult = await uploadFile(
-        galleryFiles,
-        galleryUrl,
-        galleryFiles.type
-      );
-
-      const galleryEntry = await ProductGalleryModel.create({
-        image: galleryUrl,
-      });
-      console.log(galleryEntry, "galleryEntry");
-      const copy_galleryEntry = {
-        _id: `${galleryEntry._id}`,
-      };
-
-      console.log(copy_galleryEntry, "copy_galleryEntry");
-      galleryEntries.push(copy_galleryEntry._id); // Save the gallery entry IDs
-      // galleryEntries.push(galleryEntry._id); // Save the gallery entry IDs
     }
 
-    console.log(galleryEntries, "galleryEntries");
-
+    // Build updated product data
     const submitData = {
       productTitle,
       shortDescription,
@@ -367,8 +543,8 @@ export const updateProductById = async (req, res) => {
       metaDescription,
       specialOffer,
       hasVariants,
-      thumbnail: thumbnailUrl, // URL for thumbnail
-      gallery: galleryEntries, // Array of gallery object IDs
+      thumbnail: thumbnailUrl || productData.thumbnail,
+      gallery: galleryEntries,
       category,
       brandValue,
       productColorValue,
@@ -376,10 +552,8 @@ export const updateProductById = async (req, res) => {
       productFlagValue,
       subcategory,
       childCategory,
-
       returnPolicy,
       specifications,
-
       isNew: isNew === "true",
       isRecommended: isRecommended === "true",
     };
@@ -388,8 +562,7 @@ export const updateProductById = async (req, res) => {
       submitData.modelOfBrandValue = modelOfBrandValue;
     }
 
-    console.log(submitData, "submitData");
-
+    // Update the product
     const updatedProduct = await ProductModel.findByIdAndUpdate(
       id,
       submitData,
@@ -399,33 +572,41 @@ export const updateProductById = async (req, res) => {
     );
 
     if (!updatedProduct) {
-      return NextResponse.json(
-        { success: false, message: "Product not found" },
-        { status: 404 }
-      );
+      return res
+        .status(404)
+        .json({ success: false, message: "Failed to update product" });
     }
 
-    // Delete thumbnail from S3 if it exists
+    // Delete gallery items if necessary
+    if (deletedGalleryItemIds) {
+      const validDeletedIds = deletedGalleryItemIds
+        .split(",")
+        .filter((id) => id.trim() !== ""); // Remove empty strings
+
+      if (validDeletedIds.length > 0) {
+        await ProductGalleryModel.deleteMany({ _id: { $in: validDeletedIds } });
+      }
+    }
+
+    // Delete old thumbnail from S3 if it has changed
     if (productData.thumbnail !== updatedProduct.thumbnail) {
       await deleteFile(productData.thumbnail);
     }
 
-    // Delete gallery images from S3
-    if (productData.gallery && productData.gallery.length > 0) {
-      for (const galleryImage of productData.gallery) {
-        const isSameImage = updatedProduct.gallery
-          .map((gallery) => gallery.image)
-          .includes(galleryImage.image);
-        if (isSameImage) {
-          await deleteFile(galleryImage.image);
-        }
+    // Delete unused gallery images from S3
+    const usedGalleryIds = updatedProduct.gallery.map((item) =>
+      item.toString()
+    );
+    for (const galleryImage of productData.gallery) {
+      if (!usedGalleryIds.includes(galleryImage.toString())) {
+        await deleteFile(galleryImage.image);
       }
     }
 
     return res.status(200).json({ success: true, data: updatedProduct });
   } catch (error) {
-    console.log(error, "error");
-    return res.status(400).json({ success: false, error: error.message });
+    console.error(error);
+    return res.status(500).json({ success: false, error: error.message });
   }
 };
 
