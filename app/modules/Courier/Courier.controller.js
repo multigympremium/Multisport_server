@@ -643,3 +643,47 @@ export const deleteSteadFastById = async (req, res) => {
     res.status(400).json({ success: false, error: error.message });
   }
 };
+
+export const getCourierOrderInfo = async (order) => {
+  const SteadFastData = await SteadFastModel.find({});
+  const url = `${
+    SteadFastData[0].baseUrl || process.env.STEAD_FAST_COURIER_URL
+  }/status_by_trackingcode`; // Replace with actual base URL
+  // const accessToken = '<access_token>'; // Replace with your access token
+
+  const headers = {
+    "Content-Type": "application/json",
+    "Api-Key":
+      SteadFastData[0].apiKey || process.env.STEAD_FAST_COURIER_API_KEY,
+    "Secret-Key":
+      SteadFastData[0].secretKey || process.env.STEAD_FAST_COURIER_SECRET_KEY,
+  };
+
+  console.log(url, "url");
+
+  try {
+    const response = await axios.get(`${url}/${order.tracking_code}`, {
+      headers: headers,
+    });
+
+    console.log(response.data, "response.data store");
+
+    return response.data;
+
+    // res.status(200).json({
+    //   message: "SteadFast Order created successfully",
+    //   store: response.data,
+    // });
+  } catch (error) {
+    console.error(
+      "Error creating SteadFast Order:",
+      error.response?.data || error.message
+    );
+
+    throw new Error(error);
+    // res.status(500).json({
+    //   message: "Error creating SteadFast Order",
+    //   error: error.response?.data || error.message,
+    // });
+  }
+};

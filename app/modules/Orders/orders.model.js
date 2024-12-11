@@ -67,6 +67,9 @@ const OrderSchema = Schema(
     note: {
       type: String,
     },
+    courier_status: {
+      type: String
+    }
   },
   { timestamps: true }
 );

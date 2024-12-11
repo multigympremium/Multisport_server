@@ -1,4 +1,6 @@
+import mongoose from "mongoose";
 import { deleteFile, uploadFile } from "../../helpers/aws-s3.js";
+import BulkProductModel from "./bulkProduct.model.js";
 import ProductModel from "./product.model.js";
 import ProductGalleryModel from "./productGallery.model.js";
 
@@ -667,5 +669,54 @@ export const updateProductWishCount = async (req, res) => {
     });
   } catch (error) {
     return res.status(400).json({ success: false, error: error.message });
+  }
+};
+
+export const productBulkUpdate = async (req, res) => {
+  try {
+    const bulkData = req.body; // Array of items sent in the request body
+    if (!Array.isArray(bulkData.data) || bulkData.data.length === 0) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid data format" });
+    }
+
+    // Insert new bulk data into the temporary collection
+    const result = await BulkProductModel.insertMany(bulkData.data);
+
+    // Use aggregation with $merge to combine data into the "products" collection
+    await BulkProductModel.aggregate([
+      {
+        $match: {
+          _id: { $in: result.map((item) => mongoose.Types.ObjectId(item._id)) },
+        },
+      },
+      {
+        $merge: {
+          into: "products", // Target collection name
+          whenMatched: "merge", // Merge documents when matched
+          whenNotMatched: "insert", // Insert documents when not matched
+        },
+      },
+    ]);
+
+    // Fetch the newly inserted or updated records from the "products" collection
+    const updatedRecords = await mongoose
+      .model("products")
+      .find({ _id: { $in: result.map((item) => item._id) } });
+
+    res.status(201).json({
+      success: true,
+      message: "Data merged successfully",
+      insertedCount: result.length,
+      data: result,
+      mergedData: updatedRecords,
+      mergedCount: updatedRecords.length,
+    });
+  } catch (error) {
+    console.error("Error merging bulk data:", error);
+    res
+      .status(500)
+      .json({ success: false, message: "Failed to merge data", error });
   }
 };

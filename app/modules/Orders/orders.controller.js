@@ -1,4 +1,7 @@
-import { createCourierOrder } from "../Courier/Courier.controller.js";
+import {
+  createCourierOrder,
+  getCourierOrderInfo,
+} from "../Courier/Courier.controller.js";
 import OrderModel from "./orders.model.js";
 
 // GET all orders with optional filters
@@ -48,10 +51,6 @@ export const createOrder = async (req, res) => {
     total: data.total,
     color: data?.color,
     size: data?.size,
-    // invoice: courierResponse?.consignment?.invoice,
-    // tracking_code: courierResponse?.consignment?.tracking_code,
-    // status: courierResponse?.consignment?.status,
-    // note: courierResponse?.consignment?.note,
   };
 
   try {
@@ -67,14 +66,23 @@ export const createOrder = async (req, res) => {
 export const getOrderById = async (req, res) => {
   const { id } = req.params;
   try {
-    if (ObjectId.isValid(id)) {
-      throw new Error("Invalid ObjectId");
-    }
+    // if (ObjectId.isValid(id)) {
+    //   throw new Error("Invalid ObjectId");
+    // }
     const order = await OrderModel.findById(id);
+
+    let courierResponse;
+
+    if (order && order.status !== "Pending") {
+      courierResponse = await getCourierOrderInfo(order);
+    }
+
     if (!order)
       return res
         .status(404)
         .json({ success: false, message: "Order not found" });
+
+    order.courier_status = courierResponse?.delivery_status;
 
     res.status(200).json({ success: true, data: order });
   } catch (error) {
@@ -112,6 +120,11 @@ export const updateOrderById = async (req, res) => {
       if (returnResponse.status === 200) {
         existingOrder.status = requestData.status;
         existingOrder.courierMethod = requestData.courierMethod;
+
+        existingOrder.invoice = returnResponse?.consignment?.invoice;
+        existingOrder.tracking_code =
+          returnResponse?.consignment?.tracking_code;
+        existingOrder.courier_status = returnResponse?.consignment?.status;
         const updatedOrder = await existingOrder.save();
 
         if (updatedOrder) {

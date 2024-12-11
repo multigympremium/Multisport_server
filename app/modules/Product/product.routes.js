@@ -1,5 +1,13 @@
 import express from "express";
-import { getProductById, updateProductById, deleteProductById, getProducts, createProduct, updateProductWishCount } from "./product.controller.js";
+import {
+  getProductById,
+  updateProductById,
+  deleteProductById,
+  getProducts,
+  createProduct,
+  updateProductWishCount,
+  productBulkUpdate,
+} from "./product.controller.js";
 
 const productRoutes = express.Router();
 
@@ -7,6 +15,7 @@ const productRoutes = express.Router();
 productRoutes.get("/", getProducts);
 productRoutes.get("/wish-count/:id", updateProductWishCount);
 productRoutes.post("/", createProduct);
+productRoutes.post("/bulk", productBulkUpdate);
 productRoutes.get("/:id", getProductById);
 productRoutes.put("/:id", updateProductById);
 productRoutes.delete("/:id", deleteProductById);
