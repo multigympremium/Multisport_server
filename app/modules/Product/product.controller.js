@@ -15,8 +15,20 @@ export const getProducts = async (req, res) => {
     product,
     category,
     subcategory,
+    currentPage,
+    limit,
   } = req.query;
   const id = req.params.id;
+
+  const page = parseInt(currentPage) || 1;
+  const limitation = parseInt(limit) || 15;
+
+  let totalItems = await ProductModel.find().countDocuments();
+
+  // console.log("query", { ...filter, ...bodyData });
+  // Calculate total items and total pages
+  // const totalItems = await Users;
+  const totalPages = Math.ceil(totalItems / limitation);
 
   try {
     const filter = {};
@@ -60,8 +72,18 @@ export const getProducts = async (req, res) => {
 
     const products = await ProductModel.find(filter)
       .populate("gallery")
-      .sort({ wishCount: -1 });
-    res.status(200).json({ success: true, data: products });
+      .sort({ wishCount: -1 })
+      .skip((page - 1) * limitation)
+      .limit(limitation);
+    res
+      .status(200)
+      .json({
+        success: true,
+        data: products,
+        totalItems,
+        totalPages,
+        currentPage,
+      });
   } catch (error) {
     res.status(400).json({ success: false, error: error.message });
   }

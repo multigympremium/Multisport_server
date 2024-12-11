@@ -7,17 +7,36 @@ import OrderModel from "./orders.model.js";
 // GET all orders with optional filters
 export const getOrders = async (req, res) => {
   console.log(req.query, "req.query");
-  const { status, start_date, end_date } = req.query;
+  const { status, start_date, end_date, currentPage, limit } = req.query;
   const filter = {};
 
   if (status) filter.status = status;
+  let totalItems = await OrderModel.find(filter).countDocuments();
   if (start_date && end_date) {
     filter.createdAt = { $gte: new Date(start_date), $lte: new Date(end_date) };
   }
 
+  const page = parseInt(currentPage) || 1;
+  const limitation = parseInt(limit) || 15;
+
+  // console.log("query", { ...filter, ...bodyData });
+  // Calculate total items and total pages
+  // const totalItems = await Users;
+  const totalPages = Math.ceil(totalItems / limitation);
+
   try {
-    const orders = await OrderModel.find(filter);
-    res.status(200).json({ success: true, data: orders });
+    const orders = await OrderModel.find(filter)
+      .skip((page - 1) * limitation)
+      .limit(limitation);
+    res
+      .status(200)
+      .json({
+        success: true,
+        data: orders,
+        totalPages,
+        totalItems,
+        currentPage,
+      });
   } catch (error) {
     res.status(400).json({ success: false, error: error.message });
   }

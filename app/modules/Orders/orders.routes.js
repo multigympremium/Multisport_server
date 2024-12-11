@@ -6,7 +6,6 @@ import {
   updateOrderById,
   deleteOrderById,
 } from "./orders.controller.js";
-import { createCourierOrder } from "../Courier/Courier.controller.js";
 
 const orderRoutes = express.Router();
 
