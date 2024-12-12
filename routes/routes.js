@@ -49,6 +49,9 @@ import ModelOfBrandRoutes from "../app/modules/ModelOfBrand/ModelOfBrand.routes.
 
 const routes = Router();
 // routes.use("/branches", BranchRoutes);gggrRoutes);
+routes.use("/about-us", aboutUsRoutes);
+routes.use("/about-mission", AboutMissionRoutes);
+routes.use("/about-vision", aboutVisionRoutes);
 routes.use("/banners", bannerRoutes);
 routes.use("/blog", blogRoutes);
 routes.use("/blog-category", blogCategoryRoutes);
