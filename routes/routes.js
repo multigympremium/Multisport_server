@@ -46,6 +46,7 @@ import MessengerRoutes from "../app/modules/Messenger/Messenger.routes.js";
 import courierRoutes from "../app/modules/Courier/Courier.routes.js";
 import SetupConfigRoutes from "../app/modules/SetupConfig/SetupConfig.routes.js";
 import ModelOfBrandRoutes from "../app/modules/ModelOfBrand/ModelOfBrand.routes.js";
+import CustomPageRoutes from "../app/modules/CustomPage/CustomPage.routes.js";
 
 const routes = Router();
 // routes.use("/branches", BranchRoutes);gggrRoutes);
@@ -58,7 +59,7 @@ routes.use("/blog-category", blogCategoryRoutes);
 routes.use("/categories", productCategoryRoutes);
 routes.use("/child-categories", childCategoryRoutes);
 routes.use("/custom-css-js", customJsCssRoutes);
-routes.use("/crisp-live-chat", CrispRoutes);
+routes.use("/custom-pages", CustomPageRoutes);
 routes.use("/courier", courierRoutes);
 
 routes.use("/departments", DepartmentsRoutes);
