@@ -137,7 +137,8 @@ export const updateOrderById = async (req, res) => {
       if (
         returnResponse.status === 200 ||
         returnResponse.status === 201 ||
-        returnResponse.code === 200
+        returnResponse.code === 200 ||
+        returnResponse.code === 202
       ) {
         existingOrder.status = requestData.status;
 
