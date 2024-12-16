@@ -68,8 +68,17 @@ const OrderSchema = Schema(
       type: String,
     },
     courier_status: {
-      type: String
-    }
+      type: String,
+    },
+    merchant_order_id: {
+      type: String,
+    },
+    delivery_fee: {
+      type: String,
+    },
+    consignment_id: {
+      type: String,
+    },
   },
   { timestamps: true }
 );

@@ -28,15 +28,13 @@ export const getOrders = async (req, res) => {
     const orders = await OrderModel.find(filter)
       .skip((page - 1) * limitation)
       .limit(limitation);
-    res
-      .status(200)
-      .json({
-        success: true,
-        data: orders,
-        totalPages,
-        totalItems,
-        currentPage,
-      });
+    res.status(200).json({
+      success: true,
+      data: orders,
+      totalPages,
+      totalItems,
+      currentPage,
+    });
   } catch (error) {
     res.status(400).json({ success: false, error: error.message });
   }
@@ -136,14 +134,32 @@ export const updateOrderById = async (req, res) => {
       const returnResponse = await createCourierOrder(existingOrder);
       console.log(returnResponse, "returnResponse");
 
-      if (returnResponse.status === 200) {
+      if (
+        returnResponse.status === 200 ||
+        returnResponse.status === 201 ||
+        returnResponse.code === 200
+      ) {
         existingOrder.status = requestData.status;
+
         existingOrder.courierMethod = requestData.courierMethod;
 
-        existingOrder.invoice = returnResponse?.consignment?.invoice;
+        existingOrder.invoice = returnResponse?.consignment?.invoice || "";
+
         existingOrder.tracking_code =
-          returnResponse?.consignment?.tracking_code;
-        existingOrder.courier_status = returnResponse?.consignment?.status;
+          returnResponse?.consignment?.tracking_code || "";
+
+        existingOrder.courier_status =
+          returnResponse?.consignment?.status ||
+          returnResponse?.data.order_status;
+
+        existingOrder.delivery_fee = returnResponse?.data.delivery_fee || "";
+
+        existingOrder.merchant_order_id =
+          returnResponse?.data.merchant_order_id || "";
+
+        existingOrder.consignment_id =
+          returnResponse?.data.consignment_id || "";
+
         const updatedOrder = await existingOrder.save();
 
         if (updatedOrder) {
