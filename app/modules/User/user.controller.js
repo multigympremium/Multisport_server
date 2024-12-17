@@ -11,7 +11,48 @@ import e from "express";
 import moment from "moment-timezone";
 import axios from "axios";
 
-export default async function updatePassword(req, res) {
+// Helper function to check if a string is a valid email
+function isValidEmail(email) {
+  const re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+  return re.test(String(email).toLowerCase());
+}
+
+export async function isUserExist(req, res) {
+  const { id } = req.params; // Extracting 'id' from the request params
+
+  try {
+    // Check if the ID is an email or ObjectId (email should not be ObjectId formatted)
+    let user;
+    if (isValidEmail(id)) {
+      // If it's an email, query by email
+      user = await Users.findOne({ email: id });
+    } else {
+      // If it's not an email, try to query by _id (assuming it's an ObjectId)
+      user = await Users.findOne({ _id: id });
+    }
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+        isExist: false,
+      });
+    }
+
+    // User exists
+    res.status(200).json({
+      message: "User exists",
+      isExist: true,
+    });
+  } catch (error) {
+    console.error("Error checking if user exists:", error);
+    res.status(500).json({
+      message: "Internal server error",
+      isExist: false,
+    });
+  }
+}
+
+export async function updatePassword(req, res) {
   const { email, password } = req.body;
 
   console.log(email, password, "email password");
