@@ -456,11 +456,33 @@ export const courierSteadFastOrderCreate = async (requestData) => {
   //     "area_id": 1,
   // }
 
-  let submitData;
+  try {
+    let submitData;
 
-  if (requestData.items?.length > 1) {
-    submitData = {
-      data: requestData.items.map((item) => ({
+    if (requestData?.items?.length > 1) {
+      submitData = {
+        data: requestData.items.map((item) => ({
+          invoice: generateInvoiceId(),
+          recipient_name: requestData.name,
+          recipient_phone: requestData.phone,
+          secondary_contact: requestData.secondary_phone,
+          recipient_address: requestData.address,
+          cod_amount: Number(requestData.total),
+          note: requestData.special_instruction,
+        })),
+      };
+
+      console.log(submitData, "requestData");
+
+      const response = await axios.post(url + "/bulk-order", submitData, {
+        headers: headers,
+      });
+
+      console.log(response.data, "response.data store");
+
+      return response.data;
+    } else {
+      submitData = {
         invoice: generateInvoiceId(),
         recipient_name: requestData.name,
         recipient_phone: requestData.phone,
@@ -468,30 +490,18 @@ export const courierSteadFastOrderCreate = async (requestData) => {
         recipient_address: requestData.address,
         cod_amount: requestData.total,
         note: requestData.special_instruction,
-      })),
-    };
-  } else {
-    submitData = {
-      invoice: generateInvoiceId(),
-      recipient_name: requestData.name,
-      recipient_phone: requestData.phone,
-      secondary_contact: requestData.secondary_phone,
-      recipient_address: requestData.address,
-      cod_amount: requestData.total,
-      note: requestData.special_instruction,
-    };
-  }
+      };
 
-  console.log(submitData, "requestData");
+      console.log(submitData, "requestData");
 
-  try {
-    const response = await axios.post(url, submitData, {
-      headers: headers,
-    });
+      const response = await axios.post(url, submitData, {
+        headers: headers,
+      });
 
-    console.log(response.data, "response.data store");
+      console.log(response.data, "response.data store");
 
-    return response.data;
+      return response.data;
+    }
 
     // res.status(200).json({
     //   message: "SteadFast Order created successfully",

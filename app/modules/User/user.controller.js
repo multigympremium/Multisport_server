@@ -299,11 +299,15 @@ export async function signUp(req, res) {
       if (existingUser.isVerified) {
         return res.status(400).json({ error: "User already exists" });
       } else {
-        const otp = generateOTP(); // Generate OTP
-        await sendVerifyOtp(email, otp);
-        return res
-          .status(400)
-          .json({ error: "Verification pending. OTP sent to email." });
+        existingUser.isVerified = true;
+        const userReport = await existingUser.save();
+
+        if (userReport) {
+          return res.status(200).json({
+            message: "User Created successfully",
+            user: userReport,
+          });
+        }
       }
     }
 

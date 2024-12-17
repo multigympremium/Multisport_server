@@ -140,9 +140,9 @@ export const updateOrderById = async (req, res) => {
         returnResponse.code === 200 ||
         returnResponse.code === 202
       ) {
-        existingOrder.status = requestData.status;
+        existingOrder.status = requestData?.status;
 
-        existingOrder.courierMethod = requestData.courierMethod;
+        existingOrder.courierMethod = requestData?.courierMethod;
 
         existingOrder.invoice = returnResponse?.consignment?.invoice || "";
 
@@ -151,15 +151,17 @@ export const updateOrderById = async (req, res) => {
 
         existingOrder.courier_status =
           returnResponse?.consignment?.status ||
-          returnResponse?.data.order_status;
+          returnResponse?.data?.order_status;
 
-        existingOrder.delivery_fee = returnResponse?.data.delivery_fee || "";
+        existingOrder.delivery_fee = returnResponse?.data?.delivery_fee || "";
 
         existingOrder.merchant_order_id =
-          returnResponse?.data.merchant_order_id || "";
+          returnResponse?.data?.merchant_order_id || "";
 
         existingOrder.consignment_id =
-          returnResponse?.data.consignment_id || "";
+          returnResponse?.data?.consignment_id ||
+          returnResponse?.consignment?.consignment_id ||
+          "";
 
         const updatedOrder = await existingOrder.save();
 
