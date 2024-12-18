@@ -14,6 +14,7 @@ import {
   updatePassword,
   changePassword,
   updateUser,
+  updateUserPhoto,
 } from "./user.controller.js";
 
 const userRoutes = express.Router();
@@ -26,6 +27,7 @@ userRoutes.get("/is_user_exist/:id", isUserExist);
 userRoutes.post("/forgot-password", updatePassword);
 userRoutes.post("/update-user/:email", updateUser);
 userRoutes.post("/change-password", changePassword);
+userRoutes.post("/change-user-photo/:email", updateUserPhoto);
 
 // GET Website SEO data by ID
 userRoutes.post("/send-otp", sendOtp);

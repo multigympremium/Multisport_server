@@ -23,7 +23,10 @@ export const getChildCategoryById = async (req, res) => {
 
   try {
     const result = await ChildCategoryModel.findById(id);
-    if (!result) return res.status(404).json({ success: false, message: "Data not found" });
+    if (!result)
+      return res
+        .status(404)
+        .json({ success: false, message: "Data not found" });
     res.status(200).json({ success: true, data: result });
   } catch (error) {
     res.status(400).json({ success: false, error: error.message });
@@ -34,24 +37,25 @@ export const getChildCategoryById = async (req, res) => {
 export const createChildCategory = async (req, res) => {
   try {
     const { category, subcategory, childCategoryName, slug } = req.body;
-    const childCategoryIcon = req.files?.image  // Assuming file is passed as `childCategoryIcon`
+    const childCategoryIcon = req.files?.image; // Assuming file is passed as `childCategoryIcon`
 
     if (!category || !childCategoryName || !slug || !subcategory) {
-      return res.status(400).json({ success: false, message: "All fields are required" });
+      return res
+        .status(400)
+        .json({ success: false, message: "All fields are required" });
     }
 
     const submitData = { category, subcategory, childCategoryName, slug };
-    
+
     if (childCategoryIcon) {
-      const iconName = `${Date.now()}-${childCategoryIcon.name.replace(/\s/g, "-")}`;
+      const iconName = `${Date.now()}-${childCategoryIcon.name.replace(
+        /\s/g,
+        "-"
+      )}`;
       await uploadFile(childCategoryIcon, iconName, childCategoryIcon.type);
       submitData.childCategoryIcon = iconName;
     }
 
-
-
-
-    
     const result = await ChildCategoryModel.create(submitData);
     res.status(200).json({ success: true, data: result });
   } catch (error) {
@@ -63,21 +67,31 @@ export const createChildCategory = async (req, res) => {
 export const updateChildCategory = async (req, res) => {
   const { id } = req.params;
   const { category, subcategory, childCategoryName, slug } = req.body;
-  const childCategoryIcon = req.files?.image
+  const childCategoryIcon = req.files?.image;
 
   try {
     const categoryData = await ChildCategoryModel.findById(id);
-    if (!categoryData) return res.status(404).json({ success: false, message: "Category not found" });
+    if (!categoryData)
+      return res
+        .status(404)
+        .json({ success: false, message: "Category not found" });
 
     const updatedData = { category, subcategory, childCategoryName, slug };
 
     if (childCategoryIcon) {
-      const iconName = `${Date.now()}-${childCategoryIcon.name.replace(/\s/g, "-")}`;
+      const iconName = `${Date.now()}-${childCategoryIcon.name.replace(
+        /\s/g,
+        "-"
+      )}`;
       await uploadFile(childCategoryIcon, iconName, childCategoryIcon.type);
       updatedData.childCategoryIcon = iconName;
     }
 
-    const updatedCategory = await ChildCategoryModel.findByIdAndUpdate(id, updatedData, { new: true });
+    const updatedCategory = await ChildCategoryModel.findByIdAndUpdate(
+      id,
+      updatedData,
+      { new: true }
+    );
     res.status(200).json({ success: true, data: updatedCategory });
   } catch (error) {
     res.status(400).json({ success: false, error: error.message });
@@ -90,14 +104,19 @@ export const deleteChildCategory = async (req, res) => {
 
   try {
     const categoryData = await ChildCategoryModel.findById(id);
-    if (!categoryData) return res.status(404).json({ success: false, message: "Category not found" });
+    if (!categoryData)
+      return res
+        .status(404)
+        .json({ success: false, message: "Category not found" });
 
-   const deleteIconResult = await deleteFile(categoryData.childCategoryIcon);
-   const deleteCategoryResult = await ChildCategoryModel.findByIdAndDelete(id);
+    const deleteIconResult = await deleteFile(categoryData.childCategoryIcon);
+    const deleteCategoryResult = await ChildCategoryModel.findByIdAndDelete(id);
 
-   console.log(deleteIconResult, "deleteIconResult");
-   console.log(deleteCategoryResult, "deleteCategoryResult");
-    res.status(200).json({ success: true, message: "Category deleted successfully" });
+    console.log(deleteIconResult, "deleteIconResult");
+    console.log(deleteCategoryResult, "deleteCategoryResult");
+    res
+      .status(200)
+      .json({ success: true, message: "Category deleted successfully" });
   } catch (error) {
     res.status(400).json({ success: false, error: error.message });
   }

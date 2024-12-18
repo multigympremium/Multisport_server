@@ -5,7 +5,7 @@ import OtpModel from "./otp.model.js";
 // import moment from "moment";
 import sendVerifyOtp from "../../../config/email/sendVerifyOtp.js";
 import { generateOTP } from "../../helpers/generateOTP.js";
-import { uploadFile } from "../../helpers/aws-s3.js";
+import { deleteFile, uploadFile } from "../../helpers/aws-s3.js";
 import e from "express";
 
 import moment from "moment-timezone";
@@ -91,6 +91,48 @@ export async function updatePassword(req, res) {
   }
 }
 
+export async function updateUserPhoto(req, res) {
+  const { email } = req.params;
+  const formData = req.body;
+
+  try {
+    // Find the user by email
+    const user = await Users.findOne({ email });
+
+    if (!user) {
+      return res
+        .status(404)
+        .json({ message: "User not found with the provided email" });
+    }
+
+    const image = req.files.image;
+    let thumbnailUrl = "";
+    if (image && image.size > 0) {
+      thumbnailUrl = `${Date.now()}-${image.name.replace(/\s/g, "-")}`;
+      const thumbnailResult = await uploadFile(image, thumbnailUrl, image.type);
+      console.log(thumbnailResult, "thumbnailResult");
+    }
+
+    if (thumbnailUrl !== "") {
+      if (user.photourl) {
+        const deleteResult = await deleteFile(user.photourl);
+        console.log(deleteResult, "deleteResult");
+      }
+      user.photourl = thumbnailUrl;
+      await user.save();
+    }
+
+    // if (thumbnailUrl !== "" && thumbnailUrl !== user.photourl) {
+    //   const deleteResult = await deleteFile(user.photourl);
+    //   console.log(deleteResult, "deleteResult");
+    // }
+
+    res.status(200).json({ message: "User Photo updated successfully", user });
+  } catch (error) {
+    console.error("Error updating password:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
 export async function updateUser(req, res) {
   const { email } = req.params;
   const formData = req.body;
