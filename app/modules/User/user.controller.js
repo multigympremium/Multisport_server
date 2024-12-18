@@ -80,11 +80,83 @@ export async function updatePassword(req, res) {
       { email },
       {
         password: hashedPassword,
-        old_password: user.password,
+        oldPassword: user.password,
       }
     );
 
     res.status(200).json({ message: "Password updated successfully" });
+  } catch (error) {
+    console.error("Error updating password:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+export async function updateUser(req, res) {
+  const { email } = req.params;
+  const formData = req.body;
+
+  try {
+    // Find the user by email
+    const user = await Users.findOne({ email });
+
+    if (!user) {
+      return res
+        .status(404)
+        .json({ message: "User not found with the provided email" });
+    }
+
+    // Update the user's password and save the old password
+    const updatedUser = await Users.updateOne({ email }, formData);
+
+    const currentUser = await Users.findOne({ email });
+
+    res
+      .status(200)
+      .json({ message: "Password updated successfully", user: currentUser });
+  } catch (error) {
+    console.error("Error updating password:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+export async function changePassword(req, res) {
+  const { email, newPassword, oldPassword } = req.body;
+
+  console.log(email, newPassword, "email password");
+
+  if (!email || !newPassword || !oldPassword) {
+    return res.status(400).json({ message: "Email and password are required" });
+  }
+
+  try {
+    // Find the user by email
+    const user = await Users.findOne({ email });
+
+    if (!user) {
+      return res
+        .status(404)
+        .json({ message: "User not found with the provided email" });
+    }
+
+    // Compare the provided password with the hashed password
+    const isMatch = await bcrypt.compare(oldPassword, user.password);
+
+    if (!isMatch) {
+      return res.status(400).json({ message: "Password is not matched" });
+    }
+
+    // Generate salt and hash the new password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+
+    user.password = hashedPassword;
+    user.oldPassword = user.password;
+
+    const updatedUser = await user.save();
+
+    res
+      .status(200)
+      .json({ message: "Password updated successfully", updatedUser });
   } catch (error) {
     console.error("Error updating password:", error);
     res.status(500).json({ message: "Internal server error" });

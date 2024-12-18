@@ -12,6 +12,8 @@ import {
   verifyRecaptcha,
   isUserExist,
   updatePassword,
+  changePassword,
+  updateUser,
 } from "./user.controller.js";
 
 const userRoutes = express.Router();
@@ -22,6 +24,8 @@ userRoutes.get("/is_user_exist/:id", isUserExist);
 
 // POST Website SEO data
 userRoutes.post("/forgot-password", updatePassword);
+userRoutes.post("/update-user/:email", updateUser);
+userRoutes.post("/change-password", changePassword);
 
 // GET Website SEO data by ID
 userRoutes.post("/send-otp", sendOtp);

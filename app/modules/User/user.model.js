@@ -58,6 +58,10 @@ const UsersSchema = Schema(
       type: Boolean,
       default: false,
     },
+    phoneNumber: {
+      type: String,
+      default: false,
+    },
     forgotPasswordToken: {
       type: String,
     },
