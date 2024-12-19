@@ -38,11 +38,65 @@ export async function isUserExist(req, res) {
       });
     }
 
-    // User exists
-    res.status(200).json({
-      message: "User exists",
-      isExist: true,
+    moment.tz.setDefault("Asia/Dhaka");
+
+    const email = user.email;
+
+    const otp = generateOTP();
+    const salt = await bcrypt.genSalt(10);
+    const hashedOTP = await bcrypt.hash(otp, salt);
+    const otp_expiration_time = process.env.OTP_EXPIRATION_TIME || 5;
+
+    const existingOtp = await OtpModel.findOne({ email });
+
+    const otp_expiry = Date.now() + otp_expiration_time * 60000;
+
+    if (existingOtp) {
+      const updateOtpResult = await OtpModel.updateOne(
+        { email },
+        {
+          otp: hashedOTP,
+          otp_expiry: moment()
+            .add(otp_expiration_time, "minutes")
+            .format("YYYY-MM-DD HH:mm:ss"),
+        },
+        { new: true }
+      );
+
+      if (updateOtpResult.acknowledged) {
+        await sendVerifyOtp(email, otp);
+
+        return res.status(200).json({
+          message: "OTP sent successfully",
+          otp_expiry: moment()
+            .add(otp_expiration_time, "minutes")
+            .format("YYYY-MM-DD HH:mm:ss"),
+          otp_limitation_time: otp_expiration_time,
+          isExist: true,
+        });
+      }
+    }
+
+    const otp_document = new OtpModel({
+      email,
+      otp: hashedOTP,
+      otp_expiry,
     });
+
+    const otpResult = await otp_document.save();
+
+    if (otpResult) {
+      await sendVerifyOtp(email, otp);
+
+      return res.status(200).json({
+        message: "OTP sent successfully",
+        otp_expiry: moment()
+          .add(otp_expiration_time, "minutes")
+          .format("YYYY-MM-DD HH:mm:ss"),
+        otp_limitation_time: otp_expiration_time,
+        siExist: true,
+      });
+    }
   } catch (error) {
     console.error("Error checking if user exists:", error);
     res.status(500).json({
