@@ -15,29 +15,32 @@ export const createShippingAddress = async (req, res) => {
   try {
     const {
       recipientName,
-      contactNumber,
-      district,
-      area,
+      contact_number,
+      city_id,
+      area_id,
       address,
       postCode,
       deliveryType,
+      zone_id,
+      userId,
     } = req.body;
 
     // Check required fields
-    if (!recipientName || !contactNumber || !district || !area || !address || !postCode) {
-      return res.status(400).json({ success: false, message: 'Required fields are missing.' });
+    if (
+      !recipientName ||
+      !contact_number ||
+      !city_id ||
+      !area_id ||
+      !zone_id ||
+      !userId
+    ) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Required fields are missing." });
     }
 
     // Create a new shipping address
-    const newAddress = await ShippingAddress.create({
-      recipientName,
-      contactNumber,
-      district,
-      area,
-      address,
-      postCode,
-      deliveryType,
-    });
+    const newAddress = await ShippingAddress.create(req.body);
 
     return res.status(201).json({ success: true, data: newAddress });
   } catch (error) {
@@ -52,7 +55,9 @@ export const getShippingAddressById = async (req, res) => {
     const shippingAddress = await ShippingAddress.findById(id);
 
     if (!shippingAddress) {
-      return res.status(404).json({ success: false, message: 'Address not found' });
+      return res
+        .status(404)
+        .json({ success: false, message: "Address not found" });
     }
 
     return res.status(200).json({ success: true, data: shippingAddress });
@@ -65,10 +70,16 @@ export const getShippingAddressById = async (req, res) => {
 export const updateShippingAddressById = async (req, res) => {
   const { id } = req.params;
   try {
-    const updatedAddress = await ShippingAddress.findByIdAndUpdate(id, req.body, { new: true });
+    const updatedAddress = await ShippingAddress.findByIdAndUpdate(
+      id,
+      req.body,
+      { new: true }
+    );
 
     if (!updatedAddress) {
-      return res.status(404).json({ success: false, message: 'Address not found' });
+      return res
+        .status(404)
+        .json({ success: false, message: "Address not found" });
     }
 
     return res.status(200).json({ success: true, data: updatedAddress });
@@ -84,10 +95,14 @@ export const deleteShippingAddressById = async (req, res) => {
     const deletedAddress = await ShippingAddress.findByIdAndDelete(id);
 
     if (!deletedAddress) {
-      return res.status(404).json({ success: false, message: 'Address not found' });
+      return res
+        .status(404)
+        .json({ success: false, message: "Address not found" });
     }
 
-    return res.status(200).json({ success: true, message: 'Address deleted successfully' });
+    return res
+      .status(200)
+      .json({ success: true, message: "Address deleted successfully" });
   } catch (error) {
     return res.status(500).json({ success: false, error: error.message });
   }
