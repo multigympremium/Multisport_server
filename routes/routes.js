@@ -47,6 +47,7 @@ import courierRoutes from "../app/modules/Courier/Courier.routes.js";
 import SetupConfigRoutes from "../app/modules/SetupConfig/SetupConfig.routes.js";
 import ModelOfBrandRoutes from "../app/modules/ModelOfBrand/ModelOfBrand.routes.js";
 import CustomPageRoutes from "../app/modules/CustomPage/CustomPage.routes.js";
+import discountRoutes from "../app/modules/Discount/Discount.routes.js";
 
 const routes = Router();
 // routes.use("/branches", BranchRoutes);gggrRoutes);
@@ -62,6 +63,7 @@ routes.use("/custom-css-js", customJsCssRoutes);
 routes.use("/custom-pages", CustomPageRoutes);
 routes.use("/courier", courierRoutes);
 
+routes.use("/discount", discountRoutes);
 routes.use("/departments", DepartmentsRoutes);
 routes.use("/district", districtRoutes);
 routes.use("/delivery-charge", deliveryChargeRoutes);
