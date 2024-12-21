@@ -9,7 +9,6 @@ export async function getPermissionsByRole(req, res) {
     const permissions = await Permission.find({ role });
     // const permissions = await Permission.find({ role, branch });
 
-    
     if (!permissions) {
       return res.status(404).json({ message: "Role not found" });
     }
@@ -18,7 +17,7 @@ export async function getPermissionsByRole(req, res) {
         $match: {
           role: role,
           isAllowed: true,
-          branch
+          // branch
         },
       },
       {
