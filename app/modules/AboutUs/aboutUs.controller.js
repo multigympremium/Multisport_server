@@ -37,13 +37,19 @@ export async function createAboutUs(req, res) {
 
     let sideImageUrl = "";
     if (sideImage && sideImage.size > 0) {
-      sideImageUrl = `${Date.now()}-${sideImage.name.replace(/\s/g, "-")}`;
+      sideImageUrl = `about-us/${Date.now()}-${sideImage.name.replace(
+        /\s/g,
+        "-"
+      )}`;
       await uploadFile(sideImage, sideImageUrl, sideImage.type);
     }
 
     let bannerImageUrl = "";
     if (bannerImage && bannerImage.size > 0) {
-      bannerImageUrl = `${Date.now()}-${bannerImage.name.replace(/\s/g, "-")}`;
+      bannerImageUrl = `about-us/${Date.now()}-${bannerImage.name.replace(
+        /\s/g,
+        "-"
+      )}`;
       await uploadFile(bannerImage, bannerImageUrl, bannerImage.type);
     }
 
@@ -101,13 +107,19 @@ export const PUT = async (req, res) => {
 
     let sideImageUrl = "";
     if (sideImage && sideImage.size > 0) {
-      sideImageUrl = `${Date.now()}-${sideImage.name.replace(/\s/g, "-")}`;
+      sideImageUrl = `about-us/${Date.now()}-${sideImage.name.replace(
+        /\s/g,
+        "-"
+      )}`;
       await uploadFile(sideImage, sideImageUrl, sideImage.type);
     }
 
     let bannerImageUrl = "";
     if (bannerImage && bannerImage.size > 0) {
-      bannerImageUrl = `${Date.now()}-${bannerImage.name.replace(/\s/g, "-")}`;
+      bannerImageUrl = `about-us/${Date.now()}-${bannerImage.name.replace(
+        /\s/g,
+        "-"
+      )}`;
       await uploadFile(bannerImage, bannerImageUrl, bannerImage.type);
     }
 

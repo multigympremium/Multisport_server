@@ -14,12 +14,15 @@ export const getBrands = async (req, res) => {
 // POST a new brand
 export const createBrand = async (req, res) => {
   try {
-    const { category, subcategory, slug, isActive, featureBrand, brandName } = req.body;
+    const { category, subcategory, slug, isActive, featureBrand, brandName } =
+      req.body;
     const logo = req.files?.logo;
     const banner = req.files?.banner;
 
     if (!category || !subcategory || !slug || !brandName) {
-      return res.status(400).json({ success: false, message: "Required fields missing" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Required fields missing" });
     }
 
     const newBrandData = {
@@ -33,14 +36,17 @@ export const createBrand = async (req, res) => {
 
     // Handle logo upload
     if (logo) {
-      const logoName = `${Date.now()}-${logo.name.replace(/\s/g, "-")}`;
+      const logoName = `brand/${Date.now()}-${logo.name.replace(/\s/g, "-")}`;
       newBrandData.logo = logoName;
       await uploadFile(logo, logoName, logo.mimetype);
     }
 
     // Handle banner upload
     if (banner) {
-      const bannerName = `${Date.now()}-${banner.name.replace(/\s/g, "-")}`;
+      const bannerName = `brand/${Date.now()}-${banner.name.replace(
+        /\s/g,
+        "-"
+      )}`;
       newBrandData.banner = bannerName;
       await uploadFile(banner, bannerName, banner.mimetype);
     }
@@ -57,7 +63,10 @@ export const getBrandById = async (req, res) => {
   const { id } = req.params;
   try {
     const brand = await BrandModel.findById(id);
-    if (!brand) return res.status(404).json({ success: false, message: "Brand not found" });
+    if (!brand)
+      return res
+        .status(404)
+        .json({ success: false, message: "Brand not found" });
     res.status(200).json({ success: true, data: brand });
   } catch (error) {
     res.status(400).json({ success: false, error: error.message });
@@ -67,13 +76,17 @@ export const getBrandById = async (req, res) => {
 // PUT to update a brand by ID
 export const updateBrand = async (req, res) => {
   const { id } = req.params;
-  const { category, subcategory, slug, isActive, featureBrand, brandName } = req.body;
+  const { category, subcategory, slug, isActive, featureBrand, brandName } =
+    req.body;
   const logo = req.files?.logo;
   const banner = req.files?.banner;
 
   try {
     const brand = await BrandModel.findById(id);
-    if (!brand) return res.status(404).json({ success: false, message: "Brand not found" });
+    if (!brand)
+      return res
+        .status(404)
+        .json({ success: false, message: "Brand not found" });
 
     const updatedData = {
       category,
@@ -98,7 +111,9 @@ export const updateBrand = async (req, res) => {
       await uploadFile(banner, bannerName, banner.mimetype);
     }
 
-    const updatedBrand = await BrandModel.findByIdAndUpdate(id, updatedData, { new: true });
+    const updatedBrand = await BrandModel.findByIdAndUpdate(id, updatedData, {
+      new: true,
+    });
     res.status(200).json({ success: true, data: updatedBrand });
   } catch (error) {
     res.status(400).json({ success: false, error: error.message });
@@ -110,14 +125,19 @@ export const deleteBrand = async (req, res) => {
   const { id } = req.params;
   try {
     const brand = await BrandModel.findById(id);
-    if (!brand) return res.status(404).json({ success: false, message: "Brand not found" });
+    if (!brand)
+      return res
+        .status(404)
+        .json({ success: false, message: "Brand not found" });
 
     // Delete files from S3
     await deleteFile(brand.logo);
     await deleteFile(brand.banner);
 
     await BrandModel.findByIdAndDelete(id);
-    res.status(200).json({ success: true, message: "Brand deleted successfully" });
+    res
+      .status(200)
+      .json({ success: true, message: "Brand deleted successfully" });
   } catch (error) {
     res.status(400).json({ success: false, error: error.message });
   }

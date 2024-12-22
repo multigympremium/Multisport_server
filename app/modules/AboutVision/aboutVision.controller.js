@@ -36,7 +36,10 @@ export const createAboutVision = async (req, res) => {
 
     let thumbnailUrl = "";
     if (image && image.size > 0) {
-      thumbnailUrl = `${Date.now()}-${image.name.replace(/\s/g, "-")}`;
+      thumbnailUrl = `about-vision/${Date.now()}-${image.name.replace(
+        /\s/g,
+        "-"
+      )}`;
       await uploadFile(image, thumbnailUrl, image.type);
     }
 
@@ -90,7 +93,10 @@ export const updateAboutVision = async (req, res) => {
 
     let thumbnailUrl = "";
     if (image && image.size > 0 && image !== existingVision.image) {
-      thumbnailUrl = `${Date.now()}-${image.name.replace(/\s/g, "-")}`;
+      thumbnailUrl = `about-vision/${Date.now()}-${image.name.replace(
+        /\s/g,
+        "-"
+      )}`;
       await uploadFile(image, thumbnailUrl, image.type);
     }
 

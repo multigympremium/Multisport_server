@@ -48,7 +48,7 @@ export const createChildCategory = async (req, res) => {
     const submitData = { category, subcategory, childCategoryName, slug };
 
     if (childCategoryIcon) {
-      const iconName = `${Date.now()}-${childCategoryIcon.name.replace(
+      const iconName = `childCategoryIon/${Date.now()}-${childCategoryIcon.name.replace(
         /\s/g,
         "-"
       )}`;
@@ -79,7 +79,7 @@ export const updateChildCategory = async (req, res) => {
     const updatedData = { category, subcategory, childCategoryName, slug };
 
     if (childCategoryIcon) {
-      const iconName = `${Date.now()}-${childCategoryIcon.name.replace(
+      const iconName = `childCategoryIon/${Date.now()}-${childCategoryIcon.name.replace(
         /\s/g,
         "-"
       )}`;

@@ -75,15 +75,13 @@ export const getProducts = async (req, res) => {
       .sort({ wishCount: -1 })
       .skip((page - 1) * limitation)
       .limit(limitation);
-    res
-      .status(200)
-      .json({
-        success: true,
-        data: products,
-        totalItems,
-        totalPages,
-        currentPage,
-      });
+    res.status(200).json({
+      success: true,
+      data: products,
+      totalItems,
+      totalPages,
+      currentPage,
+    });
   } catch (error) {
     res.status(400).json({ success: false, error: error.message });
   }
@@ -149,7 +147,10 @@ export const createProduct = async (req, res) => {
     const thumbnailFile = req.files.thumbnail;
     let thumbnailUrl = "";
     if (thumbnailFile && thumbnailFile.size > 0) {
-      thumbnailUrl = `${Date.now()}-${thumbnailFile.name.replace(/\s/g, "-")}`;
+      thumbnailUrl = `product/${Date.now()}-${thumbnailFile.name.replace(
+        /\s/g,
+        "-"
+      )}`;
       const thumbnailResult = await uploadFile(
         thumbnailFile,
         thumbnailUrl,
@@ -167,7 +168,10 @@ export const createProduct = async (req, res) => {
       console.log(Number(galleryItemCount), "Number(galleryItemCount)");
       for (const file of galleryFiles) {
         console.log(file, "file", typeof file, file instanceof File);
-        const galleryUrl = `${Date.now()}-${file?.name.replace(/\s/g, "-")}`;
+        const galleryUrl = `product/${Date.now()}-${file?.name.replace(
+          /\s/g,
+          "-"
+        )}`;
         const galleryUploadResult = await uploadFile(
           file,
           galleryUrl,
@@ -515,7 +519,10 @@ export const updateProductById = async (req, res) => {
 
     // Uploading the thumbnail file
     if (thumbnailFile && thumbnailFile.size > 0) {
-      thumbnailUrl = `${Date.now()}-${thumbnailFile.name.replace(/\s/g, "-")}`;
+      thumbnailUrl = `product/${Date.now()}-${thumbnailFile.name.replace(
+        /\s/g,
+        "-"
+      )}`;
       await uploadFile(thumbnailFile, thumbnailUrl, thumbnailFile.type);
     }
 
@@ -542,7 +549,10 @@ export const updateProductById = async (req, res) => {
         ? galleryFiles
         : [galleryFiles];
       for (const file of filesArray) {
-        const galleryUrl = `${Date.now()}-${file?.name.replace(/\s/g, "-")}`;
+        const galleryUrl = `product/${Date.now()}-${file?.name.replace(
+          /\s/g,
+          "-"
+        )}`;
         await uploadFile(file, galleryUrl, file.type);
 
         const galleryEntry = await ProductGalleryModel.create({

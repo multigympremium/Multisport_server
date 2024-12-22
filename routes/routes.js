@@ -5,7 +5,7 @@ import bagBannerRoutes from "../app/modules/BagBanner/bagBanner.routes.js";
 import bannerRoutes from "../app/modules/Banner/banner.routes.js";
 import blogRoutes from "../app/modules/Blog/blog.routes.js";
 import aboutVisionRoutes from "../app/modules/AboutVision/aboutVision.routes.js";
-import blogCategoryRoutes from "../app/modules/BagCategory/blogCategory.routes.js";
+import blogCategoryRoutes from "../app/modules/BlogCategory/blogCategory.routes.js";
 import productCategoryRoutes from "../app/modules/ProductCategory/productCategory.routes.js";
 import childCategoryRoutes from "../app/modules/ChildCategory/childCategory.routes.js";
 import customJsCssRoutes from "../app/modules/CustomJsCss/customJsCss.routes.js";
@@ -48,6 +48,7 @@ import SetupConfigRoutes from "../app/modules/SetupConfig/SetupConfig.routes.js"
 import ModelOfBrandRoutes from "../app/modules/ModelOfBrand/ModelOfBrand.routes.js";
 import CustomPageRoutes from "../app/modules/CustomPage/CustomPage.routes.js";
 import discountRoutes from "../app/modules/Discount/Discount.routes.js";
+import PromoBannerRoutes from "../app/modules/PromotionalBanner/PromotionalBanner.routes.js";
 
 const routes = Router();
 // routes.use("/branches", BranchRoutes);gggrRoutes);
@@ -83,6 +84,7 @@ routes.use("/product-color", productColorRoutes);
 routes.use("/product-flag", productFlagRoutes);
 routes.use("/product-size", productSizeRoutes);
 routes.use("/products", productRoutes);
+routes.use("/promo-banner", PromoBannerRoutes);
 routes.use("/shipping", shippingAddressRoutes);
 routes.use("/setup-config", SetupConfigRoutes);
 routes.use("/shipping_policy", shippingPolicy);

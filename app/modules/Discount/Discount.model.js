@@ -105,6 +105,15 @@ const discountSchema = new mongoose.Schema({
     default: 0,
     min: 0,
   },
+  discountText: {
+    type: String,
+    default: "",
+    trim: true,
+  },
+  discountTextActive: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const DiscountModel = mongoose.model("Discount", discountSchema);

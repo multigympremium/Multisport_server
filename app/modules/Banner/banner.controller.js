@@ -3,12 +3,12 @@ import BannerModel from "./banner.model.js";
 
 // Get Banners (GET Request)
 export const getBanners = async (req, res) => {
-  const search = req.query.search || '';
+  const search = req.query.search || "";
   const filter = search
     ? {
         $or: [
-          { title: { $regex: new RegExp(search, 'i') } },
-          { subtitle: { $regex: new RegExp(search, 'i') } },
+          { title: { $regex: new RegExp(search, "i") } },
+          { subtitle: { $regex: new RegExp(search, "i") } },
         ],
       }
     : {};
@@ -28,12 +28,14 @@ export const createBanner = async (req, res) => {
     const image = req.files.image;
 
     if (!title || !subtitle || !shortDescription) {
-      return res.status(400).json({ success: false, message: 'Required fields missing' });
+      return res
+        .status(400)
+        .json({ success: false, message: "Required fields missing" });
     }
 
-    let thumbnailUrl = '';
+    let thumbnailUrl = "";
     if (image && image.size > 0) {
-      thumbnailUrl = `${Date.now()}-${image.name.replace(/\s/g, '-')}`;
+      thumbnailUrl = `banner/${Date.now()}-${image.name.replace(/\s/g, "-")}`;
       await uploadFile(image, thumbnailUrl, image.type);
     }
 
@@ -51,14 +53,15 @@ export const createBanner = async (req, res) => {
   }
 };
 
-
 // GET Banner by ID
 export const getBannerById = async (req, res) => {
-const { id } = req.params;
+  const { id } = req.params;
   try {
     const result = await BannerModel.findById(id);
     if (!result) {
-      return res.status(404).json({ success: false, message: "Product not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Product not found" });
     }
     res.status(200).json({ success: true, data: result });
   } catch (error) {
@@ -72,7 +75,9 @@ export const updateBanner = async (req, res) => {
   try {
     const existingBanner = await BannerModel.findById(id);
     if (!existingBanner) {
-      return res.status(404).json({ success: false, message: "Banner not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Banner not found" });
     }
 
     const { title, subtitle, shortDescription } = req.body;
@@ -84,14 +89,21 @@ export const updateBanner = async (req, res) => {
     if (shortDescription) bannerData.shortDescription = shortDescription;
 
     if (image && image.size > 0 && image.name !== existingBanner.image) {
-      const thumbnailUrl = `${Date.now()}-${image.name.replace(/\s/g, "-")}`;
+      const thumbnailUrl = `banner/${Date.now()}-${image.name.replace(
+        /\s/g,
+        "-"
+      )}`;
       await uploadFile(image, thumbnailUrl, image.type);
       bannerData.image = thumbnailUrl;
     }
 
-    const updatedBanner = await BannerModel.findByIdAndUpdate(id, bannerData, { new: true });
+    const updatedBanner = await BannerModel.findByIdAndUpdate(id, bannerData, {
+      new: true,
+    });
     if (!updatedBanner) {
-      return res.status(404).json({ success: false, message: "Banner not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Banner not found" });
     }
     res.status(200).json({ success: true, data: updatedBanner });
   } catch (error) {
@@ -105,7 +117,9 @@ export const deleteBanner = async (req, res) => {
   try {
     const existingBanner = await BannerModel.findById(id);
     if (!existingBanner) {
-      return res.status(404).json({ success: false, message: "Banner not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Banner not found" });
     }
 
     await BannerModel.findByIdAndDelete(id);

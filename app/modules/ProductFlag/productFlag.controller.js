@@ -17,17 +17,26 @@ export const createFlag = async (req, res) => {
     const formData = req.body; // Use req.body with multer for file upload if needed
 
     const { flagName } = formData;
-    const flagIcon = req.files?.image // assuming `req.file` for file upload
+    const flagIcon = req.files?.image; // assuming `req.file` for file upload
 
     if (!flagName) {
-      return res.status(400).json({ success: false, message: "Required fields missing" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Required fields missing" });
     }
 
     const submitData = { flagName };
 
     if (flagIcon) {
-      const iconName = `${Date.now()}-${flagIcon.originalname.replace(/\s/g, '-')}`;
-      const logoResult = await uploadFile(flagIcon.buffer, iconName, flagIcon.mimetype);
+      const iconName = `flag/${Date.now()}-${flagIcon.originalname.replace(
+        /\s/g,
+        "-"
+      )}`;
+      const logoResult = await uploadFile(
+        flagIcon.buffer,
+        iconName,
+        flagIcon.mimetype
+      );
       submitData.flagIcon = iconName;
     }
 
@@ -44,7 +53,9 @@ export const getFlagById = async (req, res) => {
   try {
     const flag = await ProductFlagModel.findById(id);
     if (!flag) {
-      return res.status(404).json({ success: false, message: "Flag not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Flag not found" });
     }
     res.status(200).json({ success: true, data: flag });
   } catch (error) {
@@ -56,29 +67,40 @@ export const getFlagById = async (req, res) => {
 export const updateFlag = async (req, res) => {
   const { id } = req.params;
   const formData = req.body;
-  const flagIcon = req.files?.image
+  const flagIcon = req.files?.image;
 
   try {
     const existingFlag = await ProductFlagModel.findById(id);
     if (!existingFlag) {
-      return res.status(404).json({ success: false, message: "Flag not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Flag not found" });
     }
 
     const { flagName } = formData;
     if (!flagName) {
-      return res.status(400).json({ success: false, message: "Required fields missing" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Required fields missing" });
     }
 
     const submitData = { flagName };
 
     if (flagIcon) {
-      const iconName = `${Date.now()}-${flagIcon.originalname.replace(/\s/g, '-')}`;
+      const iconName = `flag/${Date.now()}-${flagIcon.originalname.replace(
+        /\s/g,
+        "-"
+      )}`;
       await deleteFile(existingFlag.flagIcon); // delete old icon if exists
       await uploadFile(flagIcon.buffer, iconName, flagIcon.mimetype);
       submitData.flagIcon = iconName;
     }
 
-    const updatedFlag = await ProductFlagModel.findByIdAndUpdate(id, submitData, { new: true, runValidators: true });
+    const updatedFlag = await ProductFlagModel.findByIdAndUpdate(
+      id,
+      submitData,
+      { new: true, runValidators: true }
+    );
     res.status(200).json({ success: true, data: updatedFlag });
   } catch (error) {
     res.status(400).json({ success: false, error: error.message });
@@ -91,13 +113,17 @@ export const deleteFlag = async (req, res) => {
   try {
     const flag = await ProductFlagModel.findById(id);
     if (!flag) {
-      return res.status(404).json({ success: false, message: "Flag not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Flag not found" });
     }
 
     await deleteFile(flag.flagIcon); // delete the icon from S3
     await ProductFlagModel.findByIdAndDelete(id);
 
-    res.status(200).json({ success: true, message: "Flag deleted successfully" });
+    res
+      .status(200)
+      .json({ success: true, message: "Flag deleted successfully" });
   } catch (error) {
     res.status(400).json({ success: false, error: error.message });
   }

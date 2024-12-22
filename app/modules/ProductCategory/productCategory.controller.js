@@ -1,7 +1,6 @@
 import { deleteFile, uploadFile } from "../../helpers/aws-s3.js";
 import CategoryModel from "./productCategory.model.js";
 
-
 // Get all categories or filter by query parameters
 export const getCategories = async (req, res) => {
   try {
@@ -28,13 +27,28 @@ export const createCategory = async (req, res) => {
     const categoryIcon = req.files?.categoryIcon;
     const categoryBanner = req.files?.categoryBanner;
 
-    if (!categoryName || !featureCategory || !showOnNavbar || !slug || !categoryIcon || !categoryBanner) {
-      return res.status(400).json({ success: false, message: "Required fields missing" });
+    if (
+      !categoryName ||
+      !featureCategory ||
+      !showOnNavbar ||
+      !slug ||
+      !categoryIcon ||
+      !categoryBanner
+    ) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Required fields missing" });
     }
 
-    const iconKey = `${Date.now()}-${categoryIcon.name.replace(/\s/g, "-")}`;
-    const bannerKey = `${Date.now()}-${categoryBanner.name.replace(/\s/g, "-")}`;
-    
+    const iconKey = `categoryIcon/${Date.now()}-${categoryIcon.name.replace(
+      /\s/g,
+      "-"
+    )}`;
+    const bannerKey = `categoryIcon/${Date.now()}-${categoryBanner.name.replace(
+      /\s/g,
+      "-"
+    )}`;
+
     await uploadFile(categoryIcon, iconKey, categoryIcon.type);
     await uploadFile(categoryBanner, bannerKey, categoryBanner.type);
 
@@ -56,8 +70,11 @@ export const createCategory = async (req, res) => {
 export const getCategoryById = async (req, res) => {
   try {
     const category = await CategoryModel.findById(req.params.id);
-    if (!category) return res.status(404).json({ success: false, message: "Category not found" });
-    
+    if (!category)
+      return res
+        .status(404)
+        .json({ success: false, message: "Category not found" });
+
     res.status(200).json({ success: true, data: category });
   } catch (error) {
     res.status(400).json({ success: false, error: error.message });
@@ -72,28 +89,41 @@ export const updateCategoryById = async (req, res) => {
     const categoryBanner = req.files?.categoryBanner;
 
     const category = await CategoryModel.findById(req.params.id);
-    if (!category) return res.status(404).json({ success: false, message: "Category not found" });
+    if (!category)
+      return res
+        .status(404)
+        .json({ success: false, message: "Category not found" });
 
     const updateData = { categoryName, featureCategory, showOnNavbar, slug };
-    
+
     if (categoryIcon) {
-      const iconKey = `${Date.now()}-${categoryIcon.name.replace(/\s/g, "-")}`;
+      const iconKey = `categoryIcon/${Date.now()}-${categoryIcon.name.replace(
+        /\s/g,
+        "-"
+      )}`;
       await uploadFile(categoryIcon, iconKey, categoryIcon.type);
       await deleteFile(category.categoryIcon);
       updateData.categoryIcon = iconKey;
     }
-    
+
     if (categoryBanner) {
-      const bannerKey = `${Date.now()}-${categoryBanner.name.replace(/\s/g, "-")}`;
+      const bannerKey = `categoryIcon/${Date.now()}-${categoryBanner.name.replace(
+        /\s/g,
+        "-"
+      )}`;
       await uploadFile(categoryBanner, bannerKey, categoryBanner.type);
       await deleteFile(category.categoryBanner);
       updateData.categoryBanner = bannerKey;
     }
 
-    const updatedCategory = await CategoryModel.findByIdAndUpdate(req.params.id, updateData, {
-      new: true,
-      runValidators: true,
-    });
+    const updatedCategory = await CategoryModel.findByIdAndUpdate(
+      req.params.id,
+      updateData,
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
     res.status(200).json({ success: true, data: updatedCategory });
   } catch (error) {
     res.status(400).json({ success: false, error: error.message });
@@ -104,17 +134,24 @@ export const updateCategoryById = async (req, res) => {
 export const deleteCategoryById = async (req, res) => {
   try {
     const category = await CategoryModel.findById(req.params.id);
-    if (!category) return res.status(404).json({ success: false, message: "Category not found" });
+    if (!category)
+      return res
+        .status(404)
+        .json({ success: false, message: "Category not found" });
 
-   const deleteIconResult = await deleteFile(category.categoryIcon);
-   const deleteBannerResult =  await deleteFile(category.categoryBanner);
-   const deleteCategoryResult = await CategoryModel.deleteOne({ _id: req.params.id });
+    const deleteIconResult = await deleteFile(category.categoryIcon);
+    const deleteBannerResult = await deleteFile(category.categoryBanner);
+    const deleteCategoryResult = await CategoryModel.deleteOne({
+      _id: req.params.id,
+    });
 
-   console.log(deleteIconResult, "deleteIconResult");
-   console.log(deleteBannerResult, "deleteBannerResult"); 
-   console.log(deleteCategoryResult, "deleteCategoryResult");
+    console.log(deleteIconResult, "deleteIconResult");
+    console.log(deleteBannerResult, "deleteBannerResult");
+    console.log(deleteCategoryResult, "deleteCategoryResult");
 
-    res.status(200).json({ success: true, message: "Category deleted successfully" });
+    res
+      .status(200)
+      .json({ success: true, message: "Category deleted successfully" });
   } catch (error) {
     console.log(error, "error");
     res.status(400).json({ success: false, error: error.message });

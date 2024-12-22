@@ -25,15 +25,20 @@ export const getBagBanners = async (req, res) => {
 export const createBagBanner = async (req, res) => {
   try {
     const { title, subtitle, shortDescription } = req.body;
-    const image = req.files?.image // assuming `multer` is used for file uploads
+    const image = req.files?.image; // assuming `multer` is used for file uploads
 
     if (!title || !subtitle || !shortDescription) {
-      return res.status(400).json({ success: false, message: "Required fields missing" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Required fields missing" });
     }
 
     let thumbnailUrl = "";
     if (image && image.size > 0) {
-      thumbnailUrl = `${Date.now()}-${image.name.replace(/\s/g, "-")}`;
+      thumbnailUrl = `bag-banner/${Date.now()}-${image.name.replace(
+        /\s/g,
+        "-"
+      )}`;
       await uploadFile(image, thumbnailUrl, image.type);
     }
 
@@ -51,17 +56,15 @@ export const createBagBanner = async (req, res) => {
   }
 };
 
-
-
-
-
 // Get BagBanner by ID
 export const getBagBannerById = async (req, res) => {
   const { id } = req.params;
   try {
     const result = await BagBannerModel.findById(id);
     if (!result) {
-      return res.status(404).json({ success: false, message: "Product not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Product not found" });
     }
     return res.status(200).json({ success: true, data: result });
   } catch (error) {
@@ -75,11 +78,13 @@ export const updateBagBanner = async (req, res) => {
   try {
     const existingBanner = await BagBannerModel.findById(id);
     if (!existingBanner) {
-      return res.status(404).json({ success: false, message: "Banner not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Banner not found" });
     }
 
     const { title, subtitle, shortDescription } = req.body;
-    const image = req.files?.image // Assuming `multer` is used for file upload
+    const image = req.files?.image; // Assuming `multer` is used for file upload
 
     const bannerData = {};
     if (title) bannerData.title = title;
@@ -87,12 +92,19 @@ export const updateBagBanner = async (req, res) => {
     if (shortDescription) bannerData.shortDescription = shortDescription;
 
     if (image && image.size > 0 && image.filename !== existingBanner.image) {
-      const thumbnailUrl = `${Date.now()}-${image.name.replace(/\s/g, "-")}`;
+      const thumbnailUrl = `bag-banner/${Date.now()}-${image.name.replace(
+        /\s/g,
+        "-"
+      )}`;
       await uploadFile(image, thumbnailUrl, image.type);
       bannerData.image = thumbnailUrl;
     }
 
-    const updatedBanner = await BagBannerModel.findByIdAndUpdate(id, bannerData, { new: true });
+    const updatedBanner = await BagBannerModel.findByIdAndUpdate(
+      id,
+      bannerData,
+      { new: true }
+    );
     return res.status(200).json({ success: true, data: updatedBanner });
   } catch (error) {
     return res.status(500).json({ success: false, error: error.message });
@@ -105,7 +117,9 @@ export const deleteBagBanner = async (req, res) => {
   try {
     const existingBanner = await BagBannerModel.findById(id);
     if (!existingBanner) {
-      return res.status(404).json({ success: false, message: "Banner not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Banner not found" });
     }
 
     await BagBannerModel.findByIdAndDelete(id);

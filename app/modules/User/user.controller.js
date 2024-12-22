@@ -162,7 +162,7 @@ export async function updateUserPhoto(req, res) {
     const image = req.files.image;
     let thumbnailUrl = "";
     if (image && image.size > 0) {
-      thumbnailUrl = `${Date.now()}-${image.name.replace(/\s/g, "-")}`;
+      thumbnailUrl = `user/${Date.now()}-${image.name.replace(/\s/g, "-")}`;
       const thumbnailResult = await uploadFile(image, thumbnailUrl, image.type);
       console.log(thumbnailResult, "thumbnailResult");
     }
