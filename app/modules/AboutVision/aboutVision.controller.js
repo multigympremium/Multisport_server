@@ -84,12 +84,14 @@ export const updateAboutVision = async (req, res) => {
     }
 
     const formData = req.body; // assuming you are sending data in the request body
-    const { title, description, image } = formData;
+    const { title, description } = formData;
 
     const visionData = {};
 
     if (title) visionData.title = title;
     if (description) visionData.description = description;
+
+    const image = req.files?.image;
 
     let thumbnailUrl = "";
     if (image && image.size > 0 && image !== existingVision.image) {

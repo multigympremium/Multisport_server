@@ -49,6 +49,7 @@ import ModelOfBrandRoutes from "../app/modules/ModelOfBrand/ModelOfBrand.routes.
 import CustomPageRoutes from "../app/modules/CustomPage/CustomPage.routes.js";
 import discountRoutes from "../app/modules/Discount/Discount.routes.js";
 import PromoBannerRoutes from "../app/modules/PromotionalBanner/PromotionalBanner.routes.js";
+import BackupRoutes from "../config/DownloadImages.js";
 
 const routes = Router();
 // routes.use("/branches", BranchRoutes);gggrRoutes);
@@ -56,6 +57,7 @@ routes.use("/about-us", aboutUsRoutes);
 routes.use("/about-mission", AboutMissionRoutes);
 routes.use("/about-vision", aboutVisionRoutes);
 routes.use("/banners", bannerRoutes);
+routes.use("/backup", BackupRoutes);
 routes.use("/blog", blogRoutes);
 routes.use("/blog-category", blogCategoryRoutes);
 routes.use("/categories", productCategoryRoutes);

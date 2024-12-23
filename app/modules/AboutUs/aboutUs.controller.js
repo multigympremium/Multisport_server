@@ -69,10 +69,10 @@ export async function createAboutUs(req, res) {
 }
 
 // GET request to fetch the AboutMission by ID
-export const GET = async (req, res) => {
+export const getAboutUsById = async (req, res) => {
   const { id } = req.params;
   try {
-    const result = await AboutMissionModel.findById(id);
+    const result = await AboutUsModel.findById(id);
 
     if (!result) {
       return res
@@ -87,23 +87,27 @@ export const GET = async (req, res) => {
 };
 
 // PUT request to update the AboutMission by ID
-export const PUT = async (req, res) => {
+export const updateAboutUs = async (req, res) => {
   const { id } = req.params;
+  console.log(id, "id");
   try {
-    const existingVision = await AboutMissionModel.findById(id);
+    const existingVision = await AboutUsModel.findById(id);
 
     if (!existingVision) {
       return res
-        .status(400)
+        .status(404)
         .json({ success: false, message: "Item not found" });
     }
 
-    const { title, description, sideImage, bannerImage } = req.body;
+    const { title, description } = req.body;
 
     let aboutData = {};
 
     if (title) aboutData.title = title;
     if (description) aboutData.description = description;
+
+    const sideImage = req.files?.sideImage;
+    const bannerImage = req.files?.bannerImage;
 
     let sideImageUrl = "";
     if (sideImage && sideImage.size > 0) {
@@ -126,16 +130,14 @@ export const PUT = async (req, res) => {
     if (sideImageUrl) aboutData.sideImage = sideImageUrl;
     if (bannerImageUrl) aboutData.bannerImage = bannerImageUrl;
 
-    const updatedBanner = await AboutMissionModel.findByIdAndUpdate(
-      id,
-      aboutData,
-      { new: true }
-    );
+    const updatedBanner = await AboutUsModel.findByIdAndUpdate(id, aboutData, {
+      new: true,
+    });
 
     if (!updatedBanner) {
       return res
         .status(404)
-        .json({ success: false, message: "Banner not found" });
+        .json({ success: false, message: "Item not found" });
     }
 
     return res.status(200).json({ success: true, data: updatedBanner });
@@ -145,11 +147,11 @@ export const PUT = async (req, res) => {
 };
 
 // DELETE request to delete the AboutMission by ID
-export const DELETE = async (req, res) => {
+export const deleteAboutUs = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const existingVision = await AboutMissionModel.findById(id);
+    const existingVision = await AboutUsModel.findById(id);
 
     if (!existingVision) {
       return res
@@ -160,7 +162,7 @@ export const DELETE = async (req, res) => {
     await deleteFile(existingVision.sideImage);
     await deleteFile(existingVision.bannerImage);
 
-    await AboutMissionModel.findByIdAndDelete(id);
+    await AboutUsModel.findByIdAndDelete(id);
 
     return res.status(200).json({ success: true, message: "Banner deleted" });
   } catch (error) {
