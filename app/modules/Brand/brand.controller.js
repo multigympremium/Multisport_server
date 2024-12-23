@@ -36,14 +36,17 @@ export const createBrand = async (req, res) => {
 
     // Handle logo upload
     if (logo) {
-      const logoName = `brand/${Date.now()}-${logo.name.replace(/\s/g, "-")}`;
+      const logoName = `other-image/brand/${Date.now()}-${logo.name.replace(
+        /\s/g,
+        "-"
+      )}`;
       newBrandData.logo = logoName;
       await uploadFile(logo, logoName, logo.mimetype);
     }
 
     // Handle banner upload
     if (banner) {
-      const bannerName = `brand/${Date.now()}-${banner.name.replace(
+      const bannerName = `other-image/brand/${Date.now()}-${banner.name.replace(
         /\s/g,
         "-"
       )}`;

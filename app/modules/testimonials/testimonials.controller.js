@@ -1,8 +1,6 @@
 import { deleteFile, uploadFile } from "../../helpers/aws-s3.js";
 import TestimonialsModel from "./testimonials.model.js";
 
-
-
 // GET all testimonials with optional search filter
 export async function getTestimonials(req, res) {
   const { search } = req.query;
@@ -31,18 +29,29 @@ export async function postTestimonial(req, res) {
     const { customerName, designation, rating, description } = formData;
 
     if (!customerName || !designation || !rating || !description || !image) {
-      return res.status(400).json({ success: false, message: "Required fields missing" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Required fields missing" });
     }
 
     const image = req.files.image;
 
     let thumbnailUrl = "";
     if (image && image.size > 0) {
-      thumbnailUrl = `${Date.now()}-${image.name.replace(/\s/g, "-")}`;
+      thumbnailUrl = `other-image/testimonial/${Date.now()}-${image.name.replace(
+        /\s/g,
+        "-"
+      )}`;
       await uploadFile(image, thumbnailUrl, image.type);
     }
 
-    const testimonialData = { customerName, designation, rating, description, image: thumbnailUrl };
+    const testimonialData = {
+      customerName,
+      designation,
+      rating,
+      description,
+      image: thumbnailUrl,
+    };
     const testimonialResult = await TestimonialsModel.create(testimonialData);
     res.status(200).json({ success: true, data: testimonialResult });
   } catch (error) {
@@ -57,7 +66,9 @@ export async function getTestimonialById(req, res) {
   try {
     const result = await TestimonialsModel.findById(id);
     if (!result) {
-      return res.status(404).json({ success: false, message: "Testimonial not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Testimonial not found" });
     }
     res.status(200).json({ success: true, data: result });
   } catch (error) {
@@ -74,20 +85,37 @@ export async function updateTestimonial(req, res) {
 
     const existingTestimonial = await TestimonialsModel.findById(id);
     if (!existingTestimonial) {
-      return res.status(404).json({ success: false, message: "Testimonial not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Testimonial not found" });
     }
 
     let thumbnailUrl = "";
     if (image && image.size > 0) {
-      thumbnailUrl = `${Date.now()}-${image.name.replace(/\s/g, "-")}`;
+      thumbnailUrl = `other-image/testimonial/${Date.now()}-${image.name.replace(
+        /\s/g,
+        "-"
+      )}`;
       await uploadFile(image, thumbnailUrl, image.type);
     }
 
-    const updatedData = { customerName, designation, rating, description, image: thumbnailUrl };
-    const updatedTestimonial = await TestimonialsModel.findByIdAndUpdate(id, updatedData, { new: true });
+    const updatedData = {
+      customerName,
+      designation,
+      rating,
+      description,
+      image: thumbnailUrl,
+    };
+    const updatedTestimonial = await TestimonialsModel.findByIdAndUpdate(
+      id,
+      updatedData,
+      { new: true }
+    );
 
     if (!updatedTestimonial) {
-      return res.status(404).json({ success: false, message: "Testimonial not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Testimonial not found" });
     }
 
     if (existingTestimonial.image !== updatedTestimonial.image) {
@@ -107,7 +135,9 @@ export async function deleteTestimonial(req, res) {
   try {
     const deletedTestimonial = await TestimonialsModel.findByIdAndDelete(id);
     if (!deletedTestimonial) {
-      return res.status(404).json({ success: false, message: "Testimonial not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Testimonial not found" });
     }
 
     await deleteFile(deletedTestimonial.image);

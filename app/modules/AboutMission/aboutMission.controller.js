@@ -41,7 +41,7 @@ export async function postAboutMission(req, res) {
 
     let thumbnailUrl = "";
     if (image && image.size > 0) {
-      thumbnailUrl = `about-mission/${Date.now()}-${image.name.replace(
+      thumbnailUrl = `other-image/about-mission/${Date.now()}-${image.name.replace(
         /\s/g,
         "-"
       )}`;
@@ -105,7 +105,7 @@ export async function updateAboutMission(req, res) {
 
     let thumbnailUrl = "";
     if (image && image.size > 0 && image !== existingVision.image) {
-      thumbnailUrl = `about-mission/${Date.now()}-${image.name.replace(
+      thumbnailUrl = `other-image/about-mission/${Date.now()}-${image.name.replace(
         /\s/g,
         "-"
       )}`;

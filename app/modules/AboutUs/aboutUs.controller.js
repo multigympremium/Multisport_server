@@ -37,7 +37,7 @@ export async function createAboutUs(req, res) {
 
     let sideImageUrl = "";
     if (sideImage && sideImage.size > 0) {
-      sideImageUrl = `about-us/${Date.now()}-${sideImage.name.replace(
+      sideImageUrl = `other-image/about-us/${Date.now()}-${sideImage.name.replace(
         /\s/g,
         "-"
       )}`;
@@ -46,7 +46,7 @@ export async function createAboutUs(req, res) {
 
     let bannerImageUrl = "";
     if (bannerImage && bannerImage.size > 0) {
-      bannerImageUrl = `about-us/${Date.now()}-${bannerImage.name.replace(
+      bannerImageUrl = `other-image/about-us/${Date.now()}-${bannerImage.name.replace(
         /\s/g,
         "-"
       )}`;
@@ -111,7 +111,7 @@ export const updateAboutUs = async (req, res) => {
 
     let sideImageUrl = "";
     if (sideImage && sideImage.size > 0) {
-      sideImageUrl = `about-us/${Date.now()}-${sideImage.name.replace(
+      sideImageUrl = `other-image/about-us/${Date.now()}-${sideImage.name.replace(
         /\s/g,
         "-"
       )}`;
@@ -120,7 +120,7 @@ export const updateAboutUs = async (req, res) => {
 
     let bannerImageUrl = "";
     if (bannerImage && bannerImage.size > 0) {
-      bannerImageUrl = `about-us/${Date.now()}-${bannerImage.name.replace(
+      bannerImageUrl = `other-image/about-us/${Date.now()}-${bannerImage.name.replace(
         /\s/g,
         "-"
       )}`;

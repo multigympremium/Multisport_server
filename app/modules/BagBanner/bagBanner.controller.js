@@ -35,10 +35,7 @@ export const createBagBanner = async (req, res) => {
 
     let thumbnailUrl = "";
     if (image && image.size > 0) {
-      thumbnailUrl = `bag-banner/${Date.now()}-${image.name.replace(
-        /\s/g,
-        "-"
-      )}`;
+      thumbnailUrl = `banner/${Date.now()}-${image.name.replace(/\s/g, "-")}`;
       await uploadFile(image, thumbnailUrl, image.type);
     }
 
@@ -92,7 +89,7 @@ export const updateBagBanner = async (req, res) => {
     if (shortDescription) bannerData.shortDescription = shortDescription;
 
     if (image && image.size > 0 && image.filename !== existingBanner.image) {
-      const thumbnailUrl = `bag-banner/${Date.now()}-${image.name.replace(
+      const thumbnailUrl = `banner/${Date.now()}-${image.name.replace(
         /\s/g,
         "-"
       )}`;

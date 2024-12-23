@@ -8,10 +8,10 @@ export const getBlogs = async (req, res) => {
 
   if (search) {
     filter.$or = [
-      { title: new RegExp(search, 'i') },
-      { writer: new RegExp(search, 'i') },
-      { blogCategory: new RegExp(search, 'i') },
-      { slug: new RegExp(search, 'i') },
+      { title: new RegExp(search, "i") },
+      { writer: new RegExp(search, "i") },
+      { blogCategory: new RegExp(search, "i") },
+      { slug: new RegExp(search, "i") },
     ];
   }
 
@@ -31,7 +31,9 @@ export const getBlogById = async (req, res) => {
     const blog = await BlogModel.findById(id);
 
     if (!blog) {
-      return res.status(404).json({ success: false, message: 'Blog not found' });
+      return res
+        .status(404)
+        .json({ success: false, message: "Blog not found" });
     }
 
     res.status(200).json({ success: true, data: blog });
@@ -54,7 +56,7 @@ export const createBlog = async (req, res) => {
       metaDescription,
       slug,
     } = req.body;
-    const image = req.files?.image
+    const image = req.files?.image;
 
     if (
       !title ||
@@ -67,12 +69,14 @@ export const createBlog = async (req, res) => {
       !metaKeywords ||
       !metaDescription
     ) {
-      return res.status(400).json({ success: false, message: 'Required fields missing' });
+      return res
+        .status(400)
+        .json({ success: false, message: "Required fields missing" });
     }
 
-    let thumbnailUrl = '';
+    let thumbnailUrl = "";
     if (image) {
-      thumbnailUrl = `${Date.now()}-${image.name.replace(/\s/g, '-')}`;
+      thumbnailUrl = `blog/${Date.now()}-${image.name.replace(/\s/g, "-")}`;
       await uploadFile(image, thumbnailUrl, image.type);
     }
 
@@ -104,7 +108,9 @@ export const updateBlogById = async (req, res) => {
     const existingBlog = await BlogModel.findById(id);
 
     if (!existingBlog) {
-      return res.status(404).json({ success: false, message: 'Blog not found' });
+      return res
+        .status(404)
+        .json({ success: false, message: "Blog not found" });
     }
 
     const {
@@ -118,11 +124,11 @@ export const updateBlogById = async (req, res) => {
       metaDescription,
       slug,
     } = req.body;
-    const image = req.files?.image
+    const image = req.files?.image;
 
     let thumbnailUrl = existingBlog.image;
     if (image) {
-      thumbnailUrl = `${Date.now()}-${image.name.replace(/\s/g, '-')}`;
+      thumbnailUrl = `blog/${Date.now()}-${image.name.replace(/\s/g, "-")}`;
       await uploadFile(image, thumbnailUrl, image.type);
     }
 
@@ -139,7 +145,9 @@ export const updateBlogById = async (req, res) => {
       slug,
     };
 
-    const updatedBlog = await BlogModel.findByIdAndUpdate(id, updatedBlogData, { new: true });
+    const updatedBlog = await BlogModel.findByIdAndUpdate(id, updatedBlogData, {
+      new: true,
+    });
 
     if (existingBlog.image !== thumbnailUrl) {
       await deleteFile(existingBlog.image);
@@ -159,11 +167,13 @@ export const deleteBlogById = async (req, res) => {
     const blog = await BlogModel.findByIdAndDelete(id);
 
     if (!blog) {
-      return res.status(404).json({ success: false, message: 'Blog not found' });
+      return res
+        .status(404)
+        .json({ success: false, message: "Blog not found" });
     }
 
     await deleteFile(blog.image);
-    res.status(200).json({ success: true, message: 'Blog deleted' });
+    res.status(200).json({ success: true, message: "Blog deleted" });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }
