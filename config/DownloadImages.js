@@ -11,8 +11,7 @@ BackupRoutes.get("/images/:folderName", async (req, res) => {
   if (!folderName) {
     return res.status(400).send("Folder name is required");
   }
-  let zipResult;
-  let filepath;
+
   try {
     switch (folderName) {
       case "user":
@@ -39,12 +38,23 @@ BackupRoutes.get("/images/:folderName", async (req, res) => {
         }
 
         break;
-      case "blog":
-        const missionFiles = await getFilesFromFolder(
+      case "flag":
+        const flagFiles = await getFilesFromFolder(
           `multi-sports/${folderName}`
         );
-        if (missionFiles?.length > 0) {
-          res.data = missionFiles;
+        if (flagFiles?.length > 0) {
+          res.data = flagFiles;
+          await sendFileAsZip(res);
+        } else {
+          res.status(404).json({ success: false, message: "No files found" });
+        }
+        break;
+      case "blog":
+        const blogFiles = await getFilesFromFolder(
+          `multi-sports/${folderName}`
+        );
+        if (blogFiles?.length > 0) {
+          res.data = blogFiles;
           await sendFileAsZip(res);
         } else {
           res.status(404).json({ success: false, message: "No files found" });
