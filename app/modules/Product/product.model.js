@@ -107,6 +107,9 @@ const ProductSchema = new mongoose.Schema(
     modelOfBrandValue: {
       type: String,
     },
+    colorAndSize: {
+      type: Array,
+    },
   },
   { timestamps: true }
 );

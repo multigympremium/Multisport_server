@@ -5,7 +5,7 @@ export default async function courierAccessToken() {
   const PathaoCourierData = await PathaoModel.find({});
 
   const url = `${
-    PathaoCourierData[0].baseUrl || process.env.PATHAO_COURIER_URL
+    PathaoCourierData[0]?.baseUrl || process.env.PATHAO_COURIER_URL
   }/aladdin/api/v1/issue-token`;
 
   const requestData = {

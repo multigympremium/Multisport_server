@@ -15,11 +15,10 @@ import admin from "firebase-admin";
 //   credential: admin.credential.cert(serviceAccount),
 // });
 
-
 environment.config();
 const app = express();
 const server = createServer(app);
-const port = process.env.PORT || 5000 ;
+const port = process.env.PORT || 5000;
 connectDB();
 
 const io = new Server(server, {
@@ -44,12 +43,13 @@ app.use(
       "http://localhost:5173",
       "http://localhost:5174",
       "http://localhost:3000",
+      "http://localhost:3001",
       "https://json-converter-pro.vercel.app",
       "https://web-app-6mfew.ondigitalocean.app",
       "https://webaps.multigympremium.com",
       "https://gymwebsite-pearl.vercel.app",
       "https://multigympremium.com",
-      "https://king-prawn-app-qkhg8.ondigitalocean.app"
+      "https://king-prawn-app-qkhg8.ondigitalocean.app",
     ],
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
@@ -79,12 +79,10 @@ app.get("/", (req, res) => {
   });
 });
 
-
 app.get("/test-firebase", async (req, res) => {
   try {
-   
     const listUsersResult = await admin.auth().listUsers(1);
-    
+
     res.status(200).json({
       message: "Firebase Admin SDK connected!",
       users: listUsersResult.users,
@@ -98,30 +96,30 @@ app.get("/test-firebase", async (req, res) => {
 });
 
 app.post("/createFirebaseUser", async (req, res) => {
-  const {email , password} =req.body ;
+  const { email, password } = req.body;
   try {
     const user = await admin.auth().createUser({
       email: email,
       password: password,
     });
-    
-    return res.status(201).json({ message: 'User created successfully', user });
-  
+
+    return res.status(201).json({ message: "User created successfully", user });
   } catch (error) {
     // console.log(error);
     switch (error.code) {
-      case 'auth/invalid-email':
-        return res.status(400).json({ message: 'Invalid email format' ,error });
-      
-      case 'auth/email-already-exists':
-        return res.status(409).json({ message: 'Email already in use' ,error });
+      case "auth/invalid-email":
+        return res.status(400).json({ message: "Invalid email format", error });
+
+      case "auth/email-already-exists":
+        return res.status(409).json({ message: "Email already in use", error });
 
       default:
-        return res.status(500).json({ message: 'Internal Server Error', error: error.message });
+        return res
+          .status(500)
+          .json({ message: "Internal Server Error", error: error.message });
     }
   }
 });
-
 
 app.use(errorHandler);
 

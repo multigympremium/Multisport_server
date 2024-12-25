@@ -7,7 +7,7 @@ import SteadFastModel from "./models/SteadFast.model.js";
 export const pathaoCourierOrderCreate = async (data) => {
   const PathaoCourierData = await PathaoModel.find({});
   const url = `${
-    PathaoCourierData[0].baseUrl || process.env.PATHAO_COURIER_URL
+    PathaoCourierData[0]?.baseUrl || process.env.PATHAO_COURIER_URL
   }/aladdin/api/v1/orders`; // Replace with actual base URL
   // const accessToken = '<access_token>'; // Replace with your access token
 
@@ -273,7 +273,7 @@ export const pathaoCourierOrderCreate = async (data) => {
 export async function courierCities(req, res) {
   const PathaoCourierData = await PathaoModel.find({});
   const url = `${
-    PathaoCourierData[0].baseUrl || process.env.PATHAO_COURIER_URL
+    PathaoCourierData[0]?.baseUrl || process.env.PATHAO_COURIER_URL
   }/aladdin/api/v1/city-list`;
 
   const accessToken = await courierAccessToken();
@@ -433,7 +433,7 @@ export const courierSteadFastOrderCreate = async (requestData) => {
   console.log(requestData, "request data");
 
   const url = `${
-    SteadFastData[0].baseUrl || process.env.STEAD_FAST_COURIER_URL
+    SteadFastData[0]?.baseUrl || process.env.STEAD_FAST_COURIER_URL
   }/create_order`; // Replace with actual base URL
   // const accessToken = '<access_token>'; // Replace with your access token
 
@@ -730,7 +730,7 @@ export const deleteSteadFastById = async (req, res) => {
 export const getCourierOrderInfo = async (order) => {
   const SteadFastData = await SteadFastModel.find({});
   const url = `${
-    SteadFastData[0].baseUrl || process.env.STEAD_FAST_COURIER_URL
+    SteadFastData[0]?.baseUrl || process.env.STEAD_FAST_COURIER_URL
   }/status_by_trackingcode`; // Replace with actual base URL
   // const accessToken = '<access_token>'; // Replace with your access token
 

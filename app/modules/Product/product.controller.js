@@ -56,8 +56,8 @@ export const getProducts = async (req, res) => {
       ];
     }
 
-    if (size) filter.productSizeValue = { $in: size.split(",") };
-    if (color) filter.productColorValue = { $in: color.split(",") };
+    // if (size) filter.productSizeValue = { $in: size.split(",") };
+    // if (color) filter.productColorValue = { $in: color.split(",") };
     if (brand) filter.brandValue = { $in: brand.split(",") };
     if (category) filter.category = category;
     if (subcategory) filter.subcategory = subcategory;
@@ -70,11 +70,9 @@ export const getProducts = async (req, res) => {
 
     console.log(filter, "filter");
 
-    const products = await ProductModel.find(filter)
-      .populate("gallery")
-      .sort({ wishCount: -1 })
-      .skip((page - 1) * limitation)
-      .limit(limitation);
+    const products = await ProductModel.find(filter).populate("gallery");
+    // .skip((page - 1) * limitation)
+    // .limit(limitation);
     res.status(200).json({
       success: true,
       data: products,
@@ -116,6 +114,7 @@ export const createProduct = async (req, res) => {
     isRecommended,
     modelOfBrandValue,
     galleryItemCount,
+    colorAndSize,
   } = req.body;
 
   try {
@@ -137,7 +136,7 @@ export const createProduct = async (req, res) => {
     // }
 
     // Checking required fields
-    if (!productTitle || !price) {
+    if (!productTitle || !price || !colorAndSize) {
       return res
         .status(400)
         .json({ success: false, message: "Required fields missing" });
@@ -235,9 +234,11 @@ export const createProduct = async (req, res) => {
       isNew: isNew === "true",
       isRecommended: isRecommended === "true",
       modelOfBrandValue,
+      colorAndSize: JSON.parse(colorAndSize),
     };
 
     console.log(submitData, "submitData");
+    console.log(JSON.parse(colorAndSize), "colorAndSize");
 
     const newProduct = new ProductModel(submitData);
 
