@@ -513,6 +513,7 @@ export const updateProductById = async (req, res) => {
       galleryItemIds = "",
       modelOfBrandValue,
       deletedGalleryItemIds = "",
+      colorAndSize,
     } = formData;
 
     const thumbnailFile = req?.files?.thumbnail;
@@ -591,6 +592,7 @@ export const updateProductById = async (req, res) => {
       specifications,
       isNew: isNew === "true",
       isRecommended: isRecommended === "true",
+      colorAndSize: JSON.parse(colorAndSize),
     };
 
     if (modelOfBrandValue) {
