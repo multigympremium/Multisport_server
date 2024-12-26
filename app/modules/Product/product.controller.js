@@ -23,6 +23,8 @@ export const getProducts = async (req, res) => {
   const page = parseInt(currentPage) || 1;
   const limitation = parseInt(limit) || 15;
 
+  console.log(limitation, "limitation");
+
   let totalItems = await ProductModel.find().countDocuments();
 
   // console.log("query", { ...filter, ...bodyData });
@@ -70,9 +72,10 @@ export const getProducts = async (req, res) => {
 
     console.log(filter, "filter");
 
-    const products = await ProductModel.find(filter).populate("gallery");
-    // .skip((page - 1) * limitation)
-    // .limit(limitation);
+    const products = await ProductModel.find(filter)
+      .populate("gallery")
+      .skip((page - 1) * limitation)
+      .limit(limitation);
     res.status(200).json({
       success: true,
       data: products,
@@ -515,6 +518,12 @@ export const updateProductById = async (req, res) => {
       deletedGalleryItemIds = "",
       colorAndSize,
     } = formData;
+
+    if (!colorAndSize) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Color and Size is required" });
+    }
 
     const thumbnailFile = req?.files?.thumbnail;
     let thumbnailUrl = "";
