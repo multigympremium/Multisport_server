@@ -41,6 +41,16 @@ const PromoSchema = new mongoose.Schema({
     required: true,
     default: true,
   },
+  image: {
+    type: String,
+    required: true,
+    default: "https://via.placeholder.com/150",
+  },
+  color: {
+    type: String, 
+    required: true,
+    default: "#000000",
+  },
 });
 
 const PromoBannerModel = mongoose.model("promotional_banner", PromoSchema);
