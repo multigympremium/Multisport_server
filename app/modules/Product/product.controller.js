@@ -5,18 +5,106 @@ import ProductModel from "./product.model.js";
 import ProductGalleryModel from "./productGallery.model.js";
 
 // GET Products
+// export const getProducts = async (req, res) => {
+//   const {
+//     search,
+//     size,
+//     color,
+//     brand,
+//     newArrival,
+//     product,
+//     category,
+//     subcategory,
+//     currentPage,
+//     limit,
+//     isNew,
+//     isRecommended,
+//   } = req.query;
+//   const id = req.params.id;
+
+//   const page = parseInt(currentPage) || 1;
+//   const limitation = parseInt(limit) || 15;
+
+//   console.log(limitation, "limitation");
+
+//   let totalItems = await ProductModel.find().countDocuments();
+
+//   // console.log("query", { ...filter, ...bodyData });
+//   // Calculate total items and total pages
+//   // const totalItems = await Users;
+//   const totalPages = Math.ceil(totalItems / limitation);
+
+//   try {
+//     const filter = {};
+
+//     if (product) {
+//       console.log(id, "id", search, "search", product, "product");
+//       const productResult = await ProductModel.findById(product).populate(
+//         "gallery"
+//       );
+//       if (!productResult) {
+//         return res
+//           .status(404)
+//           .json({ success: false, message: "Product not found" });
+//       }
+//       return res.status(200).json({ success: true, data: [productResult] });
+//     }
+//     if (search && search !== "all") {
+//       filter.$or = [
+//         // { slug: { $regex: new RegExp(search, 'i') } },
+//         { productTitle: { $regex: new RegExp(search, "i") } },
+//         { category: { $regex: new RegExp(search, "i") } },
+//         { subcategory: { $regex: new RegExp(search, "i") } },
+//         { childCategory: { $regex: new RegExp(search, "i") } },
+//         { productFlagValue: { $regex: new RegExp(search, "i") } },
+//       ];
+//     }
+
+//     // if (size) filter.productSizeValue = { $in: size.split(",") };
+//     // if (color) filter.productColorValue = { $in: color.split(",") };
+//     if (brand) filter.brandValue = { $in: brand.split(",") };
+//     if (category) filter.category = category;
+//     if (subcategory) filter.subcategory = subcategory;
+
+//     if (newArrival === "true") {
+//       filter.createdAt = {
+//         $gte: new Date(Date.now() - 1000 * 60 * 60 * 24 * 30),
+//       }; // Last 30 days
+//     }
+
+//     console.log(filter, "filter");
+
+//     const products = await ProductModel.find(filter)
+//       .populate("gallery")
+//       .skip((page - 1) * limitation)
+//       .limit(limitation);
+//     res.status(200).json({
+//       success: true,
+//       data: products,
+//       totalItems,
+//       totalPages,
+//       currentPage,
+//     });
+//   } catch (error) {
+//     res.status(400).json({ success: false, error: error.message });
+//   }
+// };
+
 export const getProducts = async (req, res) => {
   const {
     search,
     size,
     color,
     brand,
-    "new-arrival": newArrival,
+    newArrival,
     product,
     category,
     subcategory,
     currentPage,
     limit,
+    isNew,
+    isRecommended,
+    isFeatured,
   } = req.query;
   const id = req.params.id;
 
@@ -25,16 +113,10 @@ export const getProducts = async (req, res) => {
 
   console.log(limitation, "limitation");
 
-  let totalItems = await ProductModel.find().countDocuments();
-
-  // console.log("query", { ...filter, ...bodyData });
-  // Calculate total items and total pages
-  // const totalItems = await Users;
-  const totalPages = Math.ceil(totalItems / limitation);
-
   try {
     const filter = {};
 
+    // Filter by product ID
     if (product) {
       console.log(id, "id", search, "search", product, "product");
       const productResult = await ProductModel.findById(product).populate(
@@ -47,9 +129,10 @@ export const getProducts = async (req, res) => {
       }
       return res.status(200).json({ success: true, data: [productResult] });
     }
+
+    // Search filter
     if (search && search !== "all") {
       filter.$or = [
-        // { slug: { $regex: new RegExp(search, 'i') } },
         { productTitle: { $regex: new RegExp(search, "i") } },
         { category: { $regex: new RegExp(search, "i") } },
         { subcategory: { $regex: new RegExp(search, "i") } },
@@ -58,24 +141,52 @@ export const getProducts = async (req, res) => {
       ];
     }
 
-    // if (size) filter.productSizeValue = { $in: size.split(",") };
-    // if (color) filter.productColorValue = { $in: color.split(",") };
+    // Filter by brand
     if (brand) filter.brandValue = { $in: brand.split(",") };
+
+    // Filter by category and subcategory
     if (category) filter.category = category;
     if (subcategory) filter.subcategory = subcategory;
 
+    // Filter by color and size
+    if (color || size) {
+      filter.colorAndSize = {
+        $elemMatch: {
+          ...(color && { "color.value": { $in: color.split(",") } }),
+          ...(size && { "size.value": { $in: size.split(",") } }),
+        },
+      };
+    }
+
+    // Filter for new arrivals
     if (newArrival === "true") {
       filter.createdAt = {
-        $gte: new Date(Date.now() - 1000 * 60 * 60 * 24 * 30),
-      }; // Last 30 days
+        $gte: new Date(Date.now() - 1000 * 60 * 60 * 24 * 30), // Last 30 days
+      };
+    }
+    if (isNew === "true") {
+      filter.isNew = true;
+    }
+
+    if (isRecommended === "true") {
+      filter.isRecommended = true;
     }
 
     console.log(filter, "filter");
 
+    if (isFeatured === "true" || isFeatured === true) {
+      filter.isFeatured = true;
+    }
+
+    let totalItems = await ProductModel.find(filter).countDocuments();
+    const totalPages = Math.ceil(totalItems / limitation);
+
+    // Fetch products
     const products = await ProductModel.find(filter)
       .populate("gallery")
       .skip((page - 1) * limitation)
       .limit(limitation);
+
     res.status(200).json({
       success: true,
       data: products,
@@ -762,5 +873,56 @@ export const productBulkUpdate = async (req, res) => {
     res
       .status(500)
       .json({ success: false, message: "Failed to merge data", error });
+  }
+};
+
+export const getNewArrivals = async (req, res) => {
+  try {
+    const newArrivals = await ProductModel.find({ isNew: true });
+    const newItems = await ProductModel.find({}).sort({
+      createdAt: -1,
+      updatedAt: -1,
+    });
+    res
+      .status(200)
+      .json({ success: true, products: [...newArrivals, newItems] });
+  } catch (error) {
+    console.error("Error getting new arrivals:", error);
+    res
+      .status(500)
+      .json({ success: false, message: "Failed to get new arrivals", error });
+  }
+};
+
+export const getNewFeaturedProducts = async (req, res) => {
+  try {
+    const featuredProducts = await ProductModel.find({ isFeatured: true });
+    const newItems = await ProductModel.find({}).sort({
+      createdAt: -1,
+      updatedAt: -1,
+    });
+    res
+      .status(200)
+      .json({ success: true, products: [...featuredProducts, newItems] });
+  } catch (error) {
+    console.error("Error getting new arrivals:", error);
+    res
+      .status(500)
+      .json({ success: false, message: "Failed to get new arrivals", error });
+  }
+};
+
+export const getNewPopularProducts = async (req, res) => {
+  try {
+    const foundItems = await ProductModel.find({}).sort({
+      sellingCount: -1,
+      wishCount: -1,
+    });
+    res.status(200).json({ success: true, products: foundItems });
+  } catch (error) {
+    console.error("Error getting new arrivals:", error);
+    res
+      .status(500)
+      .json({ success: false, message: "Failed to get new arrivals", error });
   }
 };

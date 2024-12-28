@@ -110,6 +110,10 @@ const ProductSchema = new mongoose.Schema(
     colorAndSize: {
       type: Array,
     },
+    isFeatured: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );
