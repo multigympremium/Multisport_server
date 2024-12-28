@@ -41,6 +41,9 @@ const PromoSchema = new mongoose.Schema({
     required: true,
     default: true,
   },
+  image: {
+    type: String,
+  },
 });
 
 const PromoBannerModel = mongoose.model("promotional_banner", PromoSchema);

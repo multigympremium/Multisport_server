@@ -1,3 +1,4 @@
+import { deleteFile, uploadFile } from "../../helpers/aws-s3.js";
 import PromoBannerModel from "./PromotionalBanner.model.js";
 
 // GET: Fetch all social links
@@ -14,6 +15,20 @@ export async function getPromoBanners(req, res) {
 export async function createPromoBanner(req, res) {
   try {
     const requestData = req.body;
+    const image = req.files?.image;
+
+    let thumbnailUrl = "";
+    if (image && image.size > 0) {
+      thumbnailUrl = `other-image/promo-banner/${Date.now()}-${image.name.replace(
+        /\s/g,
+        "-"
+      )}`;
+      const thumbnailResult = await uploadFile(image, thumbnailUrl, image.type);
+
+      requestData.image = thumbnailUrl;
+      await deleteFile(existingData.image);
+    }
+
     const insertResult = await PromoBannerModel.create(requestData);
 
     if (insertResult) {
@@ -45,13 +60,25 @@ export async function getPromoBannerById(req, res) {
 export async function updatePromoBanner(req, res) {
   const { id } = req.params;
   const requestData = req.body;
+  const image = req.files.image;
 
   try {
     const existingData = await PromoBannerModel.findById(id);
     if (!existingData) {
       return res
         .status(404)
-        .json({ success: false, message: "PromoBanner not found" });
+        .json({ success: false, message: "Promo  Banner not found" });
+    }
+
+    let thumbnailUrl = "";
+    if (image && image.size > 0) {
+      thumbnailUrl = `other-image/promo-banner/${Date.now()}-${image.name.replace(
+        /\s/g,
+        "-"
+      )}`;
+      const thumbnailResult = await uploadFile(image, thumbnailUrl, image.type);
+
+      requestData.image = thumbnailUrl;
     }
 
     const updatedPromoBanner = await PromoBannerModel.findByIdAndUpdate(
@@ -66,7 +93,7 @@ export async function updatePromoBanner(req, res) {
     if (!updatedPromoBanner) {
       return res
         .status(404)
-        .json({ success: false, message: "PromoBanner not found" });
+        .json({ success: false, message: "Promo Banner not found" });
     }
 
     return res.status(200).json({ success: true, data: updatedPromoBanner });
