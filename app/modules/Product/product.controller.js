@@ -883,9 +883,11 @@ export const getNewArrivals = async (req, res) => {
       createdAt: -1,
       updatedAt: -1,
     });
-    res
-      .status(200)
-      .json({ success: true, products: [...newArrivals, newItems] });
+
+    const uniqueObjects = Array.from(
+      new Set([...newArrivals, ...newItems].map((obj) => JSON.stringify(obj)))
+    ).map((str) => JSON.parse(str));
+    res.status(200).json({ success: true, products: uniqueObjects });
   } catch (error) {
     console.error("Error getting new arrivals:", error);
     res
@@ -901,9 +903,14 @@ export const getNewFeaturedProducts = async (req, res) => {
       createdAt: -1,
       updatedAt: -1,
     });
-    res
-      .status(200)
-      .json({ success: true, products: [...featuredProducts, newItems] });
+
+    const uniqueObjects = Array.from(
+      new Set(
+        [...featuredProducts, ...newItems].map((obj) => JSON.stringify(obj))
+      )
+    ).map((str) => JSON.parse(str));
+
+    res.status(200).json({ success: true, products: uniqueObjects });
   } catch (error) {
     console.error("Error getting new arrivals:", error);
     res
@@ -918,7 +925,28 @@ export const getNewPopularProducts = async (req, res) => {
       sellingCount: -1,
       wishCount: -1,
     });
+
     res.status(200).json({ success: true, products: foundItems });
+  } catch (error) {
+    console.error("Error getting new arrivals:", error);
+    res
+      .status(500)
+      .json({ success: false, message: "Failed to get new arrivals", error });
+  }
+};
+
+export const getNewDiscountProducts = async (req, res) => {
+  try {
+    const allItems = await ProductModel.find({});
+    const foundItems = await ProductModel.find({ specialOffer: true }).sort({
+      discount: -1,
+    });
+
+    const uniqueObjects = Array.from(
+      new Set([...foundItems, ...allItems].map((obj) => JSON.stringify(obj)))
+    ).map((str) => JSON.parse(str));
+
+    res.status(200).json({ success: true, products: uniqueObjects });
   } catch (error) {
     console.error("Error getting new arrivals:", error);
     res

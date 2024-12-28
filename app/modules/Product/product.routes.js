@@ -19,6 +19,7 @@ productRoutes.get("/", getProducts);
 productRoutes.get("/new_arrivals", getNewArrivals);
 productRoutes.get("/featured", getNewFeaturedProducts);
 productRoutes.get("/popular", getNewPopularProducts);
+productRoutes.get("/discount", getNewPopularProducts);
 productRoutes.get("/wish-count/:id", updateProductWishCount);
 productRoutes.post("/", createProduct);
 productRoutes.post("/bulk", productBulkUpdate);
