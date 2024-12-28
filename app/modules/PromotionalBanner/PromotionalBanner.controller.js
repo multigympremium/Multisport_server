@@ -42,6 +42,40 @@ export async function getPromoBannerById(req, res) {
 }
 
 // PUT: Update social link by ID
+// export async function updatePromoBanner(req, res) {
+//   const { id } = req.params;
+//   const requestData = req.body;
+
+//   try {
+//     const existingData = await PromoBannerModel.findById(id);
+//     if (!existingData) {
+//       return res
+//         .status(404)
+//         .json({ success: false, message: "PromoBanner not found" });
+//     }
+
+//     const updatedPromoBanner = await PromoBannerModel.findByIdAndUpdate(
+//       id,
+//       requestData,
+//       {
+//         new: true,
+//         runValidators: true,
+//       }
+//     );
+
+//     if (!updatedPromoBanner) {
+//       return res
+//         .status(404)
+//         .json({ success: false, message: "PromoBanner not found" });
+//     }
+
+//     return res.status(200).json({ success: true, data: updatedPromoBanner });
+//   } catch (error) {
+//     return res.status(400).json({ success: false, error: error.message });
+//   }
+// }
+
+// PUT: Update social link by ID
 export async function updatePromoBanner(req, res) {
   const { id } = req.params;
   const requestData = req.body;
@@ -52,8 +86,8 @@ export async function updatePromoBanner(req, res) {
       return res
         .status(404)
         .json({ success: false, message: "PromoBanner not found" });
-    }
-
+    } 
+    
     const updatedPromoBanner = await PromoBannerModel.findByIdAndUpdate(
       id,
       requestData,
