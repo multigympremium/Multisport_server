@@ -421,7 +421,7 @@ export async function createSystemUser(req, res) {
       return res.status(400).json({ error: "Please fill in all fields" });
     }
 
-    const image = req.files.photourl;
+    const image = req.files?.photourl;
 
     let thumbnailUrl = "";
     if (image && image.size > 0) {

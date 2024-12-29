@@ -3,10 +3,18 @@ import SubcategoryModel from "./subcategory.model.js";
 
 // GET Request: Get categories and child categories
 export async function getCategories(req, res) {
-  const { category } = req.query;
+  const { category, slug } = req.query;
   const filter = {};
 
   if (category) filter.category = category;
+  if (slug) {
+    const result = await SubcategoryModel.find({ slug });
+    if (result.length == 1) {
+      filter.category = result[0].category;
+    } else {
+      filter.category = slug;
+    }
+  }
 
   try {
     const categories = await SubcategoryModel.find(filter);

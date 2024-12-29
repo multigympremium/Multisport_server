@@ -145,8 +145,8 @@ export const getProducts = async (req, res) => {
     if (brand) filter.brandValue = { $in: brand.split(",") };
 
     // Filter by category and subcategory
-    if (category) filter.category = category;
-    if (subcategory) filter.subcategory = subcategory;
+    if (category) filter.category = { $or: [category.split(",")] };
+    if (subcategory) filter.subcategory = { $or: [subcategory.split(",")] };
 
     // Filter by color and size
     if (color || size) {

@@ -34,7 +34,7 @@ const UsersSchema = Schema(
       type: String,
       // required: [true, "Please Select Gender"],
 
-      enum: ["male", "female", "other"],
+      // enum: ["male", "female", "other"],
     },
     photourl: {
       type: String,
