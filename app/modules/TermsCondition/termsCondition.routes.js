@@ -15,8 +15,6 @@ termsConditionRoutes.get("/", getTermsConditions);
 // Route for creating or updating terms and conditions
 termsConditionRoutes.post("/", postTermsCondition);
 
-
-
 // Route for fetching a single terms and conditions by ID
 termsConditionRoutes.get("/:id", getTermsConditionById);
 
