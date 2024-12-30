@@ -145,15 +145,15 @@ export const getProducts = async (req, res) => {
     if (brand) filter.brandValue = { $in: brand.split(",") };
 
     // Filter by category and subcategory
-    if (category) filter.category = { $or: [category.split(",")] };
-    if (subcategory) filter.subcategory = { $or: [subcategory.split(",")] };
+    if (category) filter.category = { $in: category.split(",") };
+    if (subcategory) filter.subcategory = { $in: subcategory.split(",") };
 
     // Filter by color and size
     if (color || size) {
       filter.colorAndSize = {
         $elemMatch: {
-          ...(color && { "color.value": { $in: color.split(",") } }),
-          ...(size && { "size.value": { $in: size.split(",") } }),
+          ...(color && { "color.label": { $in: color.split(",") } }),
+          ...(size && { "size.label": { $in: size.split(",") } }),
         },
       };
     }

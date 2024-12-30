@@ -8,11 +8,15 @@ export async function getCategories(req, res) {
 
   if (category) filter.category = category;
   if (slug) {
-    const result = await SubcategoryModel.find({ slug });
-    if (result.length == 1) {
-      filter.category = result[0].category;
+    if (slug.includes(",")) {
+      filter.category = { $in: slug.split(",") };
     } else {
-      filter.category = slug;
+      const result = await SubcategoryModel.find({ slug });
+      if (result.length == 1) {
+        filter.category = result[0].category;
+      } else {
+        filter.category = slug;
+      }
     }
   }
 
