@@ -10,6 +10,7 @@ import {
   getNewArrivals,
   getNewFeaturedProducts,
   getNewPopularProducts,
+  getNewRelatedProducts,
 } from "./product.controller.js";
 
 const productRoutes = express.Router();
@@ -17,6 +18,7 @@ const productRoutes = express.Router();
 // Routes for managing products
 productRoutes.get("/", getProducts);
 productRoutes.get("/new_arrivals", getNewArrivals);
+productRoutes.get("/related/:category", getNewRelatedProducts);
 productRoutes.get("/featured", getNewFeaturedProducts);
 productRoutes.get("/popular", getNewPopularProducts);
 productRoutes.get("/discount", getNewPopularProducts);
