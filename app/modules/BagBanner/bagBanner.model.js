@@ -28,7 +28,6 @@ const BannerSchema = new mongoose.Schema(
   }
 );
 
-const BagBannerModel =
- mongoose.model("bag_banners", BannerSchema);
+const BagBannerModel = mongoose.model("bag_banners", BannerSchema);
 
 export default BagBannerModel;

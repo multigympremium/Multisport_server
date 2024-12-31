@@ -60,7 +60,7 @@ export async function getPromoBannerById(req, res) {
 export async function updatePromoBanner(req, res) {
   const { id } = req.params;
   const requestData = req.body;
-  const image = req.files.image;
+  const image = req?.files?.image;
 
   try {
     const existingData = await PromoBannerModel.findById(id);

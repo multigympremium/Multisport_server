@@ -1044,11 +1044,30 @@ export const getNewPopularProducts = async (req, res) => {
   }
 };
 
+export const getBestSellingProducts = async (req, res) => {
+  try {
+    const foundItems = await ProductModel.find({}).sort({
+      sellingCount: -1,
+      createdAt: -1,
+      updatedAt: -1,
+    });
+
+    res.status(200).json({ success: true, products: foundItems });
+  } catch (error) {
+    console.error("Error getting new arrivals:", error);
+    res
+      .status(500)
+      .json({ success: false, message: "Failed to get new arrivals", error });
+  }
+};
+
 export const getNewDiscountProducts = async (req, res) => {
   try {
     const allItems = await ProductModel.find({});
     const foundItems = await ProductModel.find({ specialOffer: true }).sort({
       discount: -1,
+      createdAt: -1,
+      updatedAt: -1,
     });
 
     const uniqueObjects = Array.from(

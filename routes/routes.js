@@ -1,7 +1,6 @@
 import { Router } from "express";
 import AboutMissionRoutes from "../app/modules/AboutMission/aboutMission.routes.js";
 import aboutUsRoutes from "../app/modules/AboutUs/aboutUs.routes.js";
-import bagBannerRoutes from "../app/modules/BagBanner/bagBanner.routes.js";
 import bannerRoutes from "../app/modules/Banner/banner.routes.js";
 import blogRoutes from "../app/modules/Blog/blog.routes.js";
 import aboutVisionRoutes from "../app/modules/AboutVision/aboutVision.routes.js";
@@ -50,6 +49,7 @@ import CustomPageRoutes from "../app/modules/CustomPage/CustomPage.routes.js";
 import discountRoutes from "../app/modules/Discount/Discount.routes.js";
 import PromoBannerRoutes from "../app/modules/PromotionalBanner/PromotionalBanner.routes.js";
 import BackupRoutes from "../config/DownloadImages.js";
+import bagBannerRoutes from "../app/modules/BagBanner/bagBanner.routes.js";
 
 const routes = Router();
 // routes.use("/branches", BranchRoutes);gggrRoutes);
@@ -65,6 +65,7 @@ routes.use("/child-categories", childCategoryRoutes);
 routes.use("/custom-css-js", customJsCssRoutes);
 routes.use("/custom-pages", CustomPageRoutes);
 routes.use("/courier", courierRoutes);
+routes.use("/bag-banners", bagBannerRoutes);
 
 routes.use("/discount", discountRoutes);
 routes.use("/departments", DepartmentsRoutes);
