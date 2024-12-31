@@ -67,7 +67,7 @@ export const pathaoCourierOrderCreate = async (data) => {
         {
           orders: data.items.map((item) => ({
             store_id:
-              Number(PathaoCourierData[0].storeId) || Number(item.store_id),
+              Number(PathaoCourierData[0]?.storeId) || Number(item.store_id),
             merchant_order_id: generateInvoiceId(),
             recipient_name: data.name,
             recipient_phone: data.phone,
@@ -91,7 +91,7 @@ export const pathaoCourierOrderCreate = async (data) => {
       submitData = {
         orders: data.items.map((item) => ({
           store_id:
-            Number(PathaoCourierData[0].storeId) || Number(item.store_id),
+            Number(PathaoCourierData[0]?.storeId) || Number(item.store_id),
           merchant_order_id: generateInvoiceId(),
           recipient_name: data.name,
           recipient_phone: data.phone,
@@ -124,7 +124,7 @@ export const pathaoCourierOrderCreate = async (data) => {
           // },
         })),
         // orders: data.items.map((item) => ({
-        //   store_id: PathaoCourierData[0].storeId,
+        //   store_id: PathaoCourierData[0]?.storeId,
         //   merchant_order_id: "asfdads",
         //   recipient_name: "Anamul",
         //   recipient_phone: "01987654321",
@@ -170,7 +170,7 @@ export const pathaoCourierOrderCreate = async (data) => {
       submitData = {
         // store_id: 239581,
         store_id:
-          Number(PathaoCourierData[0].storeId) ||
+          Number(PathaoCourierData[0]?.storeId) ||
           Number(data.items[0].store_id),
         merchant_order_id: generateInvoiceId(),
         recipient_name: data.name,

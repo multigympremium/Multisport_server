@@ -9,12 +9,12 @@ export default async function courierAccessToken() {
   }/aladdin/api/v1/issue-token`;
 
   const requestData = {
-    client_id: PathaoCourierData[0].clientId || process.env.COURIER_CLIENT_ID,
+    client_id: PathaoCourierData[0]?.clientId || process.env.COURIER_CLIENT_ID,
     client_secret:
-      PathaoCourierData[0].clientSecret || process.env.COURIER_CLIENT_SECRET,
-    username: PathaoCourierData[0].clientEmail || process.env.COURIER_EMAIL,
+      PathaoCourierData[0]?.clientSecret || process.env.COURIER_CLIENT_SECRET,
+    username: PathaoCourierData[0]?.clientEmail || process.env.COURIER_EMAIL,
     password:
-      PathaoCourierData[0].clientPassword || process.env.COURIER_PASSWORD,
+      PathaoCourierData[0]?.clientPassword || process.env.COURIER_PASSWORD,
     grant_type: "password",
   };
 

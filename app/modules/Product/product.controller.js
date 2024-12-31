@@ -199,6 +199,115 @@ export const getProducts = async (req, res) => {
   }
 };
 
+export const getPublicProducts = async (req, res) => {
+  const {
+    search,
+    size,
+    color,
+    brand,
+    newArrival,
+    product,
+    category,
+    subcategory,
+    currentPage,
+    limit,
+    isNew,
+    isRecommended,
+    isFeatured,
+  } = req.query;
+  const id = req.params.id;
+
+  const page = parseInt(currentPage) || 1;
+  const limitation = parseInt(limit) || 15;
+
+  console.log(limitation, "limitation");
+
+  try {
+    const filter = {};
+
+    // Filter by product ID
+    if (product) {
+      console.log(id, "id", search, "search", product, "product");
+      const productResult = await ProductModel.findById(product).populate(
+        "gallery"
+      );
+      if (!productResult) {
+        return res
+          .status(404)
+          .json({ success: false, message: "Product not found" });
+      }
+      return res.status(200).json({ success: true, data: [productResult] });
+    }
+
+    // Search filter
+    if (search && search !== "all") {
+      filter.$or = [
+        { productTitle: { $regex: new RegExp(search, "i") } },
+        { category: { $regex: new RegExp(search, "i") } },
+        { subcategory: { $regex: new RegExp(search, "i") } },
+        { childCategory: { $regex: new RegExp(search, "i") } },
+        { productFlagValue: { $regex: new RegExp(search, "i") } },
+      ];
+    }
+
+    // Filter by brand
+    if (brand) filter.brandValue = { $in: brand.split(",") };
+
+    // Filter by category and subcategory
+    if (category) filter.category = { $in: category.split(",") };
+    if (subcategory) filter.subcategory = { $in: subcategory.split(",") };
+
+    // Filter by color and size
+    if (color || size) {
+      filter.colorAndSize = {
+        $elemMatch: {
+          ...(color && { "color.label": { $in: color.split(",") } }),
+          ...(size && { "size.label": { $in: size.split(",") } }),
+        },
+      };
+    }
+
+    // Filter for new arrivals
+    if (newArrival === "true") {
+      filter.createdAt = {
+        $gte: new Date(Date.now() - 1000 * 60 * 60 * 24 * 30), // Last 30 days
+      };
+    }
+    if (isNew === "true") {
+      filter.isNew = true;
+    }
+
+    if (isRecommended === "true") {
+      filter.isRecommended = true;
+    }
+
+    console.log(filter, "filter");
+
+    if (isFeatured === "true" || isFeatured === true) {
+      filter.isFeatured = true;
+    }
+
+    let totalItems = await ProductModel.find(filter).countDocuments();
+    const totalPages = Math.ceil(totalItems / limitation);
+
+    // Fetch products
+    const products = await ProductModel.find(filter)
+      .populate("gallery")
+      // .skip((page - 1) * limitation)
+      .limit(page * limitation);
+
+    res.status(200).json({
+      success: true,
+      data: products,
+      totalItems,
+      totalPages,
+      currentPage,
+    });
+  } catch (error) {
+    res.status(400).json({ success: false, error: error.message });
+  }
+};
+
 // POST New Product
 export const createProduct = async (req, res) => {
   const {

@@ -11,12 +11,14 @@ import {
   getNewFeaturedProducts,
   getNewPopularProducts,
   getNewRelatedProducts,
+  getPublicProducts,
 } from "./product.controller.js";
 
 const productRoutes = express.Router();
 
 // Routes for managing products
 productRoutes.get("/", getProducts);
+productRoutes.get("/public", getPublicProducts);
 productRoutes.get("/new_arrivals", getNewArrivals);
 productRoutes.get("/related/:category", getNewRelatedProducts);
 productRoutes.get("/featured", getNewFeaturedProducts);
