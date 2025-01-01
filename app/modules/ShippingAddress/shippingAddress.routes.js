@@ -1,10 +1,11 @@
-import express from 'express';
+import express from "express";
 import {
   getAllShippingAddresses,
   createShippingAddress,
   getShippingAddressById,
   updateShippingAddressById,
   deleteShippingAddressById,
+  getShippingAddressByUserId,
 } from "./shippingAddress.controller.js";
 
 const shippingAddressRoutes = express.Router();
@@ -16,7 +17,8 @@ shippingAddressRoutes.get("/", getAllShippingAddresses);
 shippingAddressRoutes.post("/", createShippingAddress);
 
 // GET a specific shipping address by ID
-shippingAddressRoutes.get("/:id", getShippingAddressById);
+shippingAddressRoutes.get("/single/:id", getShippingAddressById);
+shippingAddressRoutes.get("/user/:id", getShippingAddressByUserId);
 
 // PUT update a shipping address by ID
 shippingAddressRoutes.put("/:id", updateShippingAddressById);

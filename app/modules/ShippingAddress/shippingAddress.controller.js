@@ -66,6 +66,18 @@ export const getShippingAddressById = async (req, res) => {
   }
 };
 
+// GET Request: Get shipping address by ID
+export const getShippingAddressByUserId = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const shippingAddress = await ShippingAddress.find({ userId: id });
+
+    return res.status(200).json({ success: true, data: shippingAddress });
+  } catch (error) {
+    return res.status(400).json({ success: false, error: error.message });
+  }
+};
+
 // PUT Request: Update shipping address by ID
 export const updateShippingAddressById = async (req, res) => {
   const { id } = req.params;
