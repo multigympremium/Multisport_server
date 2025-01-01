@@ -79,6 +79,29 @@ const OrderSchema = Schema(
     consignment_id: {
       type: String,
     },
+    deliveryCharge: {
+      type: String,
+    },
+    itemPerDiscount: {
+      type: String,
+    },
+    discount: {
+      type: String,
+    },
+    coupon: {
+      type: String,
+      default: "",
+      trim: true,
+    },
+    userId: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    totalItems: {
+      type: Number,
+      required: true,
+    },
   },
   { timestamps: true }
 );

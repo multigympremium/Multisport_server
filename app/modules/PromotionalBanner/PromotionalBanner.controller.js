@@ -79,6 +79,7 @@ export async function updatePromoBanner(req, res) {
       const thumbnailResult = await uploadFile(image, thumbnailUrl, image.type);
 
       requestData.image = thumbnailUrl;
+      await deleteFile(existingData.image);
     }
 
     const updatedPromoBanner = await PromoBannerModel.findByIdAndUpdate(
@@ -86,7 +87,6 @@ export async function updatePromoBanner(req, res) {
       requestData,
       {
         new: true,
-        runValidators: true,
       }
     );
 

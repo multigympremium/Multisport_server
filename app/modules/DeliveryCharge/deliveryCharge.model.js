@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const DeliveryChargeSchema = new mongoose.Schema(
   {
@@ -6,9 +6,9 @@ const DeliveryChargeSchema = new mongoose.Schema(
       type: String,
       required: [true, "District is required"],
     },
-    subdistricts: {
+    district_id: {
       type: Array,
-      required: [true, "Subdistricts is required"],
+      required: [true, "district_id is required"],
     },
     charge: {
       type: Number,
@@ -20,6 +20,9 @@ const DeliveryChargeSchema = new mongoose.Schema(
   }
 );
 
-const DeliveryChargeModel =  mongoose.model('delivery_charges', DeliveryChargeSchema);
+const DeliveryChargeModel = mongoose.model(
+  "delivery_charges",
+  DeliveryChargeSchema
+);
 
-export default DeliveryChargeModel
+export default DeliveryChargeModel;

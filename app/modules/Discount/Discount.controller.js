@@ -59,7 +59,6 @@ export async function updateDiscount(req, res) {
       requestData,
       {
         new: true,
-        runValidators: true,
       }
     );
 

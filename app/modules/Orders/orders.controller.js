@@ -68,7 +68,15 @@ export const createOrder = async (req, res) => {
     total: data.total,
     color: data?.color,
     size: data?.size,
+    deliveryCharge: data?.deliveryCharge,
+    itemPerDiscount: data?.itemPerDiscount,
+    discount: data?.discount,
+    coupon: data?.coupon,
+    userId: data?.userId,
+    totalItems: data?.totalItems,
   };
+
+  console.log(submitData, "submitData");
 
   try {
     const orderResult = await OrderModel.create(submitData);
@@ -102,6 +110,25 @@ export const getOrderById = async (req, res) => {
     order.courier_status = courierResponse?.delivery_status;
 
     res.status(200).json({ success: true, data: order });
+  } catch (error) {
+    res.status(400).json({ success: false, error: error.message });
+  }
+};
+
+export const getOrderByUserId = async (req, res) => {
+  const { id } = req.params;
+  try {
+    // if (ObjectId.isValid(id)) {
+    //   throw new Error("Invalid ObjectId");
+    // }
+    const orders = await OrderModel.find({ userId: id });
+
+    if (!orders && orders.length === 0)
+      return res
+        .status(404)
+        .json({ success: false, message: "Order not found" });
+
+    res.status(200).json({ success: true, data: orders });
   } catch (error) {
     res.status(400).json({ success: false, error: error.message });
   }
