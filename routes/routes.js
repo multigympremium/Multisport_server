@@ -50,6 +50,7 @@ import discountRoutes from "../app/modules/Discount/Discount.routes.js";
 import PromoBannerRoutes from "../app/modules/PromotionalBanner/PromotionalBanner.routes.js";
 import BackupRoutes from "../config/DownloadImages.js";
 import bagBannerRoutes from "../app/modules/BagBanner/bagBanner.routes.js";
+import TransactionRoutes from "../app/modules/Transaction/Transaction.routes.js";
 
 const routes = Router();
 // routes.use("/branches", BranchRoutes);gggrRoutes);
@@ -105,5 +106,6 @@ routes.use("/website-theme-color", websiteThemeColorRoutes);
 routes.use("/wishlist", wishlistRoutes);
 routes.use("/users", userRoutes);
 routes.use("/subcategories", subcategoryRoutes);
+routes.use("/transaction", TransactionRoutes);
 
 export default routes;

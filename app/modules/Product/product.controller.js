@@ -138,6 +138,7 @@ export const getProducts = async (req, res) => {
         { subcategory: { $regex: new RegExp(search, "i") } },
         { childCategory: { $regex: new RegExp(search, "i") } },
         { productFlagValue: { $regex: new RegExp(search, "i") } },
+        { brandValue: { $regex: new RegExp(search, "i") } },
       ];
     }
 

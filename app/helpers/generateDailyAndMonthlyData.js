@@ -6,7 +6,14 @@ export const generateMonthlyData = (data) => {
 
   const lastDate = new Date(yearDate, monthDate + 1, 0).getDate();
 
-  console.log("asdfsdf", data.startDate, data.endDate, startDate, lastDate);
+  console.log(
+    "asdfsdf",
+    data,
+    data.startDate,
+    data.endDate,
+    startDate,
+    lastDate
+  );
 
   const monthlyData = [];
 
@@ -55,7 +62,14 @@ export const generateMonthlyTransactionData = (data) => {
 
   const lastDate = new Date(yearDate, monthDate + 1, 0).getDate();
 
-  console.log("asdfsdf", data.startDate, data.endDate, startDate, lastDate);
+  console.log(
+    "asdfsdf",
+    data,
+    data.startDate,
+    data.endDate,
+    startDate,
+    lastDate
+  );
 
   const monthlyData = [];
 
@@ -72,22 +86,26 @@ export const generateMonthlyTransactionData = (data) => {
     });
 
     if (isMachDate) {
-      const totalIncome =
-        feesData?.totalIncome +
-        feesData?.totalPackageFees +
-        feesData?.totalAdmissionFees;
-      const totalExpense = feesData?.totalExpense + feesData?.discount;
+      const total = feesData?.total;
+      const totalDiscount = feesData?.totalDiscount;
+      const totalItemPerDiscount = feesData?.totalItemPerDiscount;
+      const totalItems = feesData?.totalItems;
+      const totalDeliveryFee = feesData?.totalDeliveryFee;
       monthlyData.push({
         date: i < 10 ? `0${i}` : i,
-        income: totalIncome,
-        expense: totalExpense,
-        total: totalIncome - totalExpense,
+        totalItemPerDiscount: totalItemPerDiscount,
+        totalItems: totalItems,
+        totalDeliveryFee: totalDeliveryFee,
+        discount: totalDiscount,
+        total: total,
       });
     } else {
       monthlyData.push({
         date: i < 10 ? `0${i}` : i,
-        income: 0,
-        expense: 0,
+        totalItemPerDiscount: 0,
+        totalItems: 0,
+        totalDeliveryFee: 0,
+        discount: 0,
         total: 0,
       });
     }
@@ -97,10 +115,14 @@ export const generateMonthlyTransactionData = (data) => {
 };
 
 const isMachDateAndFindFees = (data) => {
-  const dates = data.data.map((item) => item._id);
+  const dates = data.data.map((item) => item.date);
+
+  console.log(dates, "dates", data);
 
   const isMachDate = dates.includes(data.date);
-  const feesData = data.data.find((item) => item._id === data.date);
+  const feesData = data.data.find((item) => item.date == data.date);
+
+  console.log(feesData, "feesData", isMachDate, "isMachDate");
 
   return { isMachDate, feesData };
 };

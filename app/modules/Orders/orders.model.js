@@ -102,6 +102,10 @@ const OrderSchema = Schema(
       type: Number,
       required: true,
     },
+    totalActualPrice: {
+      type: Number,
+      required: true,
+    },
   },
   { timestamps: true }
 );
