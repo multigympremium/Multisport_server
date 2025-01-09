@@ -28,7 +28,7 @@ export async function postTestimonial(req, res) {
     const formData = req.body;
     const { customerName, designation, rating, description } = formData;
 
-    if (!customerName || !designation || !rating || !description || !image) {
+    if (!customerName || !designation || !rating || !description) {
       return res
         .status(400)
         .json({ success: false, message: "Required fields missing" });
@@ -81,7 +81,7 @@ export async function updateTestimonial(req, res) {
   const { id } = req.params;
   try {
     const formData = req.body;
-    const { customerName, designation, rating, description, image } = formData;
+    const { customerName, designation, rating, description } = formData;
 
     const existingTestimonial = await TestimonialsModel.findById(id);
     if (!existingTestimonial) {
@@ -89,6 +89,8 @@ export async function updateTestimonial(req, res) {
         .status(404)
         .json({ success: false, message: "Testimonial not found" });
     }
+
+    const image = req?.files?.image;
 
     let thumbnailUrl = "";
     if (image && image.size > 0) {
@@ -104,8 +106,11 @@ export async function updateTestimonial(req, res) {
       designation,
       rating,
       description,
-      image: thumbnailUrl,
     };
+
+    if (image && image.size > 0) {
+      updatedData.image = thumbnailUrl;
+    }
     const updatedTestimonial = await TestimonialsModel.findByIdAndUpdate(
       id,
       updatedData,
@@ -140,7 +145,8 @@ export async function deleteTestimonial(req, res) {
         .json({ success: false, message: "Testimonial not found" });
     }
 
-    await deleteFile(deletedTestimonial.image);
+    const deletedResponse = await deleteFile(deletedTestimonial.image);
+    console.log(deletedResponse, "deletedResponse");
     res.status(200).json({ success: true, message: "Testimonial deleted" });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
