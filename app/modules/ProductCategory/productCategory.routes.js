@@ -7,7 +7,7 @@ import {
   getCategoryById,
   updateCategoryById,
   deleteCategoryById,
-  getProductCategories,
+  getProductQueries,
 } from "./productCategory.controller.js";
 
 const productCategoryRoutes = express.Router();
@@ -15,7 +15,7 @@ const productCategoryRoutes = express.Router();
 productCategoryRoutes.get("/", getCategories);
 productCategoryRoutes.post("/", createCategory);
 productCategoryRoutes.get("/single/:id", getCategoryById);
-productCategoryRoutes.get("/exist_categories", getProductCategories);
+productCategoryRoutes.get("/exist_queries", getProductQueries);
 productCategoryRoutes.put("/:id", updateCategoryById);
 productCategoryRoutes.delete("/:id", deleteCategoryById);
 

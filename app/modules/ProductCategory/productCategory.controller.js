@@ -159,106 +159,748 @@ export const deleteCategoryById = async (req, res) => {
   }
 };
 
-export const getProductCategories = async (req, res) => {
+export const getProductQueries = async (req, res) => {
   try {
-    const result = await ProductModel.aggregate([
-      // Unwind colorAndSize array
+    // const result = await ProductModel.aggregate([
+    //   // Unwind colorAndSize array
+    //   {
+    //     $unwind: {
+    //       path: "$colorAndSize",
+    //       preserveNullAndEmptyArrays: true,
+    //     },
+    //   },
+    //   // Unwind sizes inside each colorAndSize
+    //   {
+    //     $unwind: {
+    //       path: "$colorAndSize.size",
+    //       preserveNullAndEmptyArrays: true,
+    //     },
+    //   },
+    //   // Group by category, subcategory, and brand to aggregate colors, sizes, stock, and product count
+    //   {
+    //     $group: {
+    //       _id: {
+    //         category: "$category",
+    //         subcategory: "$subcategory",
+    //         brand: "$brandValue",
+    //       },
+    //       category: { $first: "$category" },
+    //       subcategory: { $first: "$subcategory" },
+    //       brand: { $first: "$brandValue" },
+    //       colors: {
+    //         $addToSet: {
+    //           value: "$colorAndSize.color.value",
+    //           label: "$colorAndSize.color.label",
+    //         },
+    //       },
+    //       sizes: {
+    //         $addToSet: {
+    //           value: "$colorAndSize.size.value",
+    //           label: "$colorAndSize.size.label",
+    //         },
+    //       },
+    //       totalStock: { $sum: { $toInt: "$colorAndSize.quantity" } },
+    //       productCount: { $sum: 1 },
+    //     },
+    //   },
+    //   // Group by category to nest subcategories and brands
+    //   {
+    //     $group: {
+    //       _id: "$category",
+    //       category: { $first: "$category" },
+    //       subcategories: {
+    //         $addToSet: {
+    //           subcategory: "$subcategory",
+    //           stock: "$totalStock",
+    //           productCount: "$productCount",
+    //         },
+    //       },
+    //       brands: {
+    //         $addToSet: {
+    //           brand: "$brand",
+    //           stock: "$totalStock",
+    //           productCount: "$productCount",
+    //         },
+    //       },
+    //       colors: { $addToSet: "$colors" },
+    //       sizes: { $addToSet: "$sizes" },
+    //       categoryStock: { $sum: "$totalStock" },
+    //       categoryProductCount: { $sum: "$productCount" },
+    //     },
+    //   },
+    //   // Flatten the final structure
+    //   {
+    //     $project: {
+    //       _id: 0,
+    //       category: 1,
+    //       subcategories: 1,
+    //       brands: 1,
+    //       colors: {
+    //         $reduce: {
+    //           input: "$colors",
+    //           initialValue: [],
+    //           in: { $setUnion: ["$$value", "$$this"] },
+    //         },
+    //       },
+    //       sizes: {
+    //         $reduce: {
+    //           input: "$sizes",
+    //           initialValue: [],
+    //           in: { $setUnion: ["$$value", "$$this"] },
+    //         },
+    //       },
+    //       totalStock: "$categoryStock",
+    //       productCount: "$categoryProductCount",
+    //     },
+    //   },
+    // ]);
+
+    // const result = await ProductModel.aggregate([
+    //   // Unwind colorAndSize array
+    //   {
+    //     $unwind: {
+    //       path: "$colorAndSize",
+    //       preserveNullAndEmptyArrays: true,
+    //     },
+    //   },
+    //   // Unwind sizes inside each colorAndSize
+    //   {
+    //     $unwind: {
+    //       path: "$colorAndSize.size",
+    //       preserveNullAndEmptyArrays: true,
+    //     },
+    //   },
+    //   // Group by category, subcategory, and brand to aggregate colors, sizes, stock, and product count
+    //   {
+    //     $group: {
+    //       _id: {
+    //         category: "$category",
+    //         subcategory: "$subcategory",
+    //         brand: "$brandValue",
+    //       },
+    //       category: { $first: "$category" },
+    //       subcategory: { $first: "$subcategory" },
+    //       brand: { $first: "$brandValue" },
+    //       colors: {
+    //         $addToSet: {
+    //           value: "$colorAndSize.color.value",
+    //           label: "$colorAndSize.color.label",
+    //         },
+    //       },
+    //       sizes: {
+    //         $addToSet: {
+    //           value: "$colorAndSize.size.value",
+    //           label: "$colorAndSize.size.label",
+    //         },
+    //       },
+    //       totalStock: { $sum: { $toInt: "$colorAndSize.quantity" } },
+    //       productCount: { $sum: 1 },
+    //     },
+    //   },
+    //   // Group by category to nest subcategories and brands
+    //   {
+    //     $group: {
+    //       _id: "$category",
+    //       categoryDetails: {
+    //         $addToSet: {
+    //           category: "$category",
+    //           stock: "$totalStock",
+    //           productCount: "$productCount",
+    //         },
+    //       },
+    //       subcategories: {
+    //         $addToSet: {
+    //           subcategory: "$subcategory",
+    //           stock: "$totalStock",
+    //           productCount: "$productCount",
+    //         },
+    //       },
+    //       brands: {
+    //         $addToSet: {
+    //           brand: "$brand",
+    //           stock: "$totalStock",
+    //           productCount: "$productCount",
+    //         },
+    //       },
+    //       colors: { $addToSet: "$colors" },
+    //       sizes: { $addToSet: "$sizes" },
+    //       categoryStock: { $sum: "$totalStock" },
+    //       categoryProductCount: { $sum: "$productCount" },
+    //     },
+    //   },
+    //   // Flatten and deduplicate categories
+    //   {
+    //     $project: {
+    //       _id: 0,
+    //       category: {
+    //         $reduce: {
+    //           input: "$categoryDetails",
+    //           initialValue: [],
+    //           in: {
+    //             $setUnion: ["$$value", ["$$this"]],
+    //           },
+    //         },
+    //       },
+    //       subcategories: 1,
+    //       brands: 1,
+    //       colors: {
+    //         $reduce: {
+    //           input: "$colors",
+    //           initialValue: [],
+    //           in: { $setUnion: ["$$value", "$$this"] },
+    //         },
+    //       },
+    //       sizes: {
+    //         $reduce: {
+    //           input: "$sizes",
+    //           initialValue: [],
+    //           in: { $setUnion: ["$$value", "$$this"] },
+    //         },
+    //       },
+    //       totalStock: "$categoryStock",
+    //       productCount: "$categoryProductCount",
+    //     },
+    //   },
+    // ]);
+
+    // const result = await ProductModel.aggregate([
+    //   // Unwind colorAndSize array
+    //   {
+    //     $unwind: {
+    //       path: "$colorAndSize",
+    //       preserveNullAndEmptyArrays: true,
+    //     },
+    //   },
+    //   // Unwind sizes inside each colorAndSize
+    //   {
+    //     $unwind: {
+    //       path: "$colorAndSize.size",
+    //       preserveNullAndEmptyArrays: true,
+    //     },
+    //   },
+    //   // Group by category, subcategory, and brand to aggregate colors, sizes, stock, and product count
+    //   {
+    //     $group: {
+    //       _id: {
+    //         category: "$category",
+    //         subcategory: "$subcategory",
+    //         brand: "$brandValue",
+    //       },
+    //       category: { $first: "$category" },
+    //       subcategory: { $first: "$subcategory" },
+    //       brand: { $first: "$brandValue" },
+    //       colors: {
+    //         $addToSet: {
+    //           value: "$colorAndSize.color.value",
+    //           label: "$colorAndSize.color.label",
+    //         },
+    //       },
+    //       sizes: {
+    //         $addToSet: {
+    //           value: "$colorAndSize.size.value",
+    //           label: "$colorAndSize.size.label",
+    //         },
+    //       },
+    //       totalStock: { $sum: { $toInt: "$colorAndSize.quantity" } },
+    //       productCount: { $sum: 1 },
+    //     },
+    //   },
+    //   // Group by category to nest subcategories and brands
+    //   {
+    //     $group: {
+    //       _id: "$category",
+    //       categoryDetails: {
+    //         $addToSet: {
+    //           category: "$category",
+    //           stock: "$totalStock",
+    //           productCount: "$productCount",
+    //         },
+    //       },
+    //       subcategories: {
+    //         $addToSet: {
+    //           subcategory: "$subcategory",
+    //           stock: "$totalStock",
+    //           productCount: "$productCount",
+    //         },
+    //       },
+    //       brands: {
+    //         $addToSet: {
+    //           brand: "$brand",
+    //           stock: "$totalStock",
+    //           productCount: "$productCount",
+    //         },
+    //       },
+    //       colors: { $addToSet: "$colors" },
+    //       sizes: { $addToSet: "$sizes" },
+    //       categoryStock: { $sum: "$totalStock" },
+    //       categoryProductCount: { $sum: "$productCount" },
+    //     },
+    //   },
+    //   // Flatten and deduplicate categories
+    //   {
+    //     $project: {
+    //       _id: 0,
+    //       category: {
+    //         $reduce: {
+    //           input: "$categoryDetails",
+    //           initialValue: [],
+    //           in: {
+    //             $setUnion: ["$$value", ["$$this"]],
+    //           },
+    //         },
+    //       },
+    //       subcategories: 1,
+    //       brands: 1,
+    //       colors: {
+    //         $reduce: {
+    //           input: "$colors",
+    //           initialValue: [],
+    //           in: { $setUnion: ["$$value", "$$this"] },
+    //         },
+    //       },
+    //       sizes: {
+    //         $reduce: {
+    //           input: "$sizes",
+    //           initialValue: [],
+    //           in: { $setUnion: ["$$value", "$$this"] },
+    //         },
+    //       },
+    //       totalStock: "$categoryStock",
+    //       productCount: "$categoryProductCount",
+    //     },
+    //   },
+    // ]);
+
+    // const result = await ProductModel.aggregate([
+    //   // {
+    //   //   $unwind: {
+    //   //     path: "$colorAndSize",
+    //   //     preserveNullAndEmptyArrays: true,
+    //   //   },
+    //   // },
+    //   // {
+    //   //   $unwind: {
+    //   //     path: "$colorAndSize.size",
+    //   //     preserveNullAndEmptyArrays: true,
+    //   //   },
+    //   // },
+    //   {
+    //     $group: {
+    //       _id: {
+    //         value: "$colorAndSize",
+    //       },
+    //       // category: { $first: "$category" },
+    //       // subcategory: { $first: "$subcategory" },
+    //       // brand: { $first: "$brandValue" },
+    //       colors: {
+    //         value: "$colorAndSize.color.value",
+    //         label: "$colorAndSize.color.label",
+    //         totalStock: {
+    //           $sum: 1,
+    //         },
+    //         productCount: { $sum: 1 },
+    //       },
+    //       // sizes: {
+    //       //   value: "$colorAndSize.size.value",
+    //       //   label: "$colorAndSize.size.label",
+    //       //   totalStock: {
+    //       //     $sum: 1,
+    //       //   },
+    //       //   productCount: { $sum: 1 },
+    //       // },
+    //     },
+    //   },
+    //   // {
+    //   //   $group: {
+    //   //     _id: "$category",
+    //   //     categoryDetails: {
+    //   //       $addToSet: {
+    //   //         category: "$category",
+    //   //         stock: "$totalStock",
+    //   //         productCount: "$productCount",
+    //   //       },
+    //   //     },
+    //   //     subcategories: {
+    //   //       $addToSet: {
+    //   //         subcategory: "$subcategory",
+    //   //         stock: "$totalStock",
+    //   //         productCount: "$productCount",
+    //   //       },
+    //   //     },
+    //   //     brands: {
+    //   //       $addToSet: {
+    //   //         brand: "$brand",
+    //   //         stock: "$totalStock",
+    //   //         productCount: "$productCount",
+    //   //       },
+    //   //     },
+    //   //     colors: { $addToSet: "$colors" },
+    //   //     sizes: { $addToSet: "$sizes" },
+    //   //     categoryStock: { $sum: "$totalStock" },
+    //   //     categoryProductCount: { $sum: "$productCount" },
+    //   //   },
+    //   // },
+    //   {
+    //     $project: {
+    //       _id: 0,
+    //       // category: {
+    //       //   $reduce: {
+    //       //     input: "$categoryDetails",
+    //       //     initialValue: [],
+    //       //     in: {
+    //       //       $setUnion: ["$$value", ["$$this"]],
+    //       //     },
+    //       //   },
+    //       // },
+    //       // subcategories: 1,
+    //       // brands: 1,
+    //       colors: 1,
+    //       // sizes: "$sizes",
+    //       // totalStock: "$categoryStock",
+    //       // productCount: "$categoryProductCount",
+    //     },
+    //   },
+    // ]);
+
+    const colors = await ProductModel.aggregate([
       {
         $unwind: {
-          path: "$colorAndSize",
+          path: "$colorAndSize", // Unwind colorAndSize array
           preserveNullAndEmptyArrays: true,
         },
       },
-      // Unwind sizes inside each colorAndSize
-      {
-        $unwind: {
-          path: "$colorAndSize.size",
-          preserveNullAndEmptyArrays: true,
-        },
-      },
-      // Group by category, subcategory, and brand to aggregate colors, sizes, stock, and product count
       {
         $group: {
           _id: {
-            category: "$category",
-            subcategory: "$subcategory",
-            brand: "$brandValue",
+            value: "$colorAndSize.color.value", // Group by color value
+            label: "$colorAndSize.color.label", // Group by color label
           },
-          category: { $first: "$category" },
-          subcategory: { $first: "$subcategory" },
-          brand: { $first: "$brandValue" },
-          colors: {
-            $addToSet: {
-              value: "$colorAndSize.color.value",
-              label: "$colorAndSize.color.label",
-            },
-          },
-          sizes: {
-            $addToSet: {
-              value: "$colorAndSize.size.value",
-              label: "$colorAndSize.size.label",
-            },
-          },
-          totalStock: { $sum: { $toInt: "$colorAndSize.quantity" } },
-          productCount: { $sum: 1 },
+          totalStock: { $sum: { $toInt: "$colorAndSize.quantity" } }, // Sum total stock for each color
+          productCount: { $sum: 1 }, // Count products for each color
         },
       },
-      // Group by category to nest subcategories and brands
-      {
-        $group: {
-          _id: "$category",
-          category: { $first: "$category" },
-          subcategories: {
-            $addToSet: {
-              subcategory: "$subcategory",
-              stock: "$totalStock",
-              productCount: "$productCount",
-            },
-          },
-          brands: {
-            $addToSet: {
-              brand: "$brand",
-              stock: "$totalStock",
-              productCount: "$productCount",
-            },
-          },
-          colors: { $addToSet: "$colors" },
-          sizes: { $addToSet: "$sizes" },
-          categoryStock: { $sum: "$totalStock" },
-          categoryProductCount: { $sum: "$productCount" },
-        },
-      },
-      // Flatten the final structure
       {
         $project: {
-          _id: 0,
-          category: 1,
-          subcategories: 1,
-          brands: 1,
-          colors: {
-            $reduce: {
-              input: "$colors",
-              initialValue: [],
-              in: { $setUnion: ["$$value", "$$this"] },
-            },
+          _id: 0, // Exclude the _id field
+          colorValue: "$_id.value", // Map to colorValue
+          colorLabel: "$_id.label", // Map to colorLabel
+          totalStock: 1, // Include total stock
+          productCount: 1, // Include product count
+        },
+      },
+    ]);
+    const sizes = await ProductModel.aggregate([
+      {
+        $unwind: {
+          path: "$colorAndSize", // Unwind colorAndSize array
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $unwind: {
+          path: "$colorAndSize.size", // Unwind the size array
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $group: {
+          _id: {
+            sizeValue: "$colorAndSize.size.value", // Group by size value
+            sizeLabel: "$colorAndSize.size.label", // Group by size label
           },
-          sizes: {
-            $reduce: {
-              input: "$sizes",
-              initialValue: [],
-              in: { $setUnion: ["$$value", "$$this"] },
-            },
-          },
-          totalStock: "$categoryStock",
-          productCount: "$categoryProductCount",
+          totalStock: { $sum: { $toInt: "$colorAndSize.quantity" } }, // Sum total stock for each size
+          productCount: { $sum: 1 }, // Count products for each size
+        },
+      },
+      {
+        $project: {
+          _id: 0, // Exclude the _id field
+          sizeValue: "$_id.sizeValue", // Map to sizeValue
+          sizeLabel: "$_id.sizeLabel", // Map to sizeLabel
+          totalStock: 1, // Include total stock
+          productCount: 1, // Include product count
         },
       },
     ]);
 
-    console.log(JSON.stringify(result, null, 2));
+    const categories = await ProductModel.aggregate([
+      {
+        $group: {
+          _id: {
+            category: "$category",
+          },
+          category: { $first: "$category" },
+          totalStock: {
+            $sum: { $toInt: { $ifNull: ["$quantity", 0] } }, // Assuming quantity is the field for stock
+          },
+          productCount: { $sum: 1 }, // Count products
+        },
+      },
 
-    res.status(200).json(result);
+      {
+        $project: {
+          _id: 0,
+          category: "$category",
+          stock: "$totalStock",
+          productCount: "$productCount",
+        },
+      },
+    ]);
+
+    const subcategories = await ProductModel.aggregate([
+      {
+        $group: {
+          _id: {
+            subcategory: "$subcategory",
+          },
+          subcategory: { $first: "$subcategory" },
+          totalStock: {
+            $sum: { $toInt: { $ifNull: ["$quantity", 0] } }, // Assuming quantity is the field for stock
+          },
+          productCount: { $sum: 1 }, // Count products
+        },
+      },
+      // {
+      //   $group: {
+      //     _id: "$subcategory",
+      //     subcategory: "$subcategory",
+      //     stock: "$totalStock",
+      //     productCount: "$productCount",
+      //   },
+      // },
+      {
+        $project: {
+          _id: 0,
+          subcategory: "$subcategory",
+          stock: "$totalStock",
+          productCount: "$productCount",
+        },
+      },
+    ]);
+    const brands = await ProductModel.aggregate([
+      {
+        $group: {
+          _id: {
+            brand: "$brandValue",
+          },
+          brand: { $first: "$brandValue" },
+          totalStock: {
+            $sum: { $toInt: { $ifNull: ["$quantity", 0] } }, // Assuming quantity is the field for stock
+          },
+          productCount: { $sum: 1 }, // Count products
+        },
+      },
+
+      {
+        $project: {
+          _id: 0,
+          brand: "$brand",
+          stock: "$totalStock",
+          productCount: "$productCount",
+        },
+      },
+    ]);
+    const highestPrice = await ProductModel.aggregate([
+      {
+        $group: {
+          _id: null, // No grouping key; consider all products
+          highestPrice: { $max: "$price" }, // Find the maximum price
+        },
+      },
+      {
+        $project: {
+          _id: 0, // Exclude the _id field
+          highestPrice: 1, // Include the highest price in the result
+        },
+      },
+    ]);
+
+    res
+      .status(200)
+      .json({ categories, subcategories, brands, sizes, colors, highestPrice });
   } catch (error) {
     res.status(400).json({ success: false, error: error.message });
   }
 };
+
+// export const getProductQueries = async (req, res) => {
+//   try {
+//     const result = await ProductModel.aggregate([
+//       // Unwind colorAndSize array
+//       {
+//         $unwind: {
+//           path: "$colorAndSize",
+//           preserveNullAndEmptyArrays: true,
+//         },
+//       },
+//       // Unwind sizes inside each colorAndSize
+//       {
+//         $unwind: {
+//           path: "$colorAndSize.size",
+//           preserveNullAndEmptyArrays: true,
+//         },
+//       },
+//       // Group by category, subcategory, and brand to aggregate colors, sizes, stock, and product count
+//       {
+//         $group: {
+//           _id: {
+//             category: "$category",
+//             subcategory: "$subcategory",
+//             brand: "$brandValue",
+//           },
+//           category: { $first: "$category" },
+//           subcategory: { $first: "$subcategory" },
+//           brand: { $first: "$brandValue" },
+//           colors: {
+//             $addToSet: {
+//               value: "$colorAndSize.color.value",
+//               label: "$colorAndSize.color.label",
+//             },
+//           },
+//           sizes: {
+//             $addToSet: {
+//               value: "$colorAndSize.size.value",
+//               label: "$colorAndSize.size.label",
+//             },
+//           },
+//           totalStock: { $sum: { $toInt: "$colorAndSize.quantity" } },
+//           productCount: { $sum: 1 },
+//         },
+//       },
+//       // Group by category to nest subcategories and brands
+//       {
+//         $group: {
+//           _id: "$category",
+//           categoryDetails: {
+//             $addToSet: {
+//               category: "$category",
+//               stock: "$totalStock",
+//               productCount: "$productCount",
+//             },
+//           },
+//           subcategories: {
+//             $addToSet: {
+//               subcategory: "$subcategory",
+//               stock: "$totalStock",
+//               productCount: "$productCount",
+//             },
+//           },
+//           brands: {
+//             $addToSet: {
+//               brand: "$brand",
+//               stock: "$totalStock",
+//               productCount: "$productCount",
+//             },
+//           },
+//           colors: { $addToSet: "$colors" },
+//           sizes: { $addToSet: "$sizes" },
+//           categoryStock: { $sum: "$totalStock" },
+//           categoryProductCount: { $sum: "$productCount" },
+//         },
+//       },
+//       // Flatten and deduplicate categories
+//       {
+//         $project: {
+//           _id: 0,
+//           category: {
+//             $reduce: {
+//               input: "$categoryDetails",
+//               initialValue: [],
+//               in: {
+//                 $setUnion: ["$$value", ["$$this"]],
+//               },
+//             },
+//           },
+//           subcategories: 1,
+//           brands: 1,
+//           colors: {
+//             $reduce: {
+//               input: "$colors",
+//               initialValue: [],
+//               in: { $setUnion: ["$$value", "$$this"] },
+//             },
+//           },
+//           sizes: {
+//             $reduce: {
+//               input: "$sizes",
+//               initialValue: [],
+//               in: { $setUnion: ["$$value", "$$this"] },
+//             },
+//           },
+//           totalStock: "$categoryStock",
+//           productCount: "$categoryProductCount",
+//         },
+//       },
+//     ]);
+
+//     const result2 = await ProductModel.aggregate([
+//       {
+//         $group: {
+//           _id: {
+//             category: "$category",
+//             subcategory: "$subcategory",
+//             brand: "$brandValue",
+//           },
+//           category: { $first: "$category" },
+//           subcategory: { $first: "$subcategory" },
+//           brand: { $first: "$brandValue" },
+//           totalStock: { $sum: { $toInt: "$colorAndSize.quantity" } },
+//           productCount: { $sum: 1 },
+//         },
+//       },
+//       // Group by category to nest subcategories and brands
+//       {
+//         $group: {
+//           _id: "$category",
+//           categoryDetails: {
+//             $addToSet: {
+//               category: "$category",
+//               stock: "$totalStock",
+//               productCount: "$productCount",
+//             },
+//           },
+//           subcategories: {
+//             $addToSet: {
+//               subcategory: "$subcategory",
+//               stock: "$totalStock",
+//               productCount: "$productCount",
+//             },
+//           },
+//           brands: {
+//             $addToSet: {
+//               brand: "$brand",
+//               stock: "$totalStock",
+//               productCount: "$productCount",
+//             },
+//           },
+
+//           categoryStock: { $sum: "$totalStock" },
+//           categoryProductCount: { $sum: "$productCount" },
+//         },
+//       },
+//       // Flatten and deduplicate categories
+//       {
+//         $project: {
+//           _id: 0,
+//           category: { $first: "$category" },
+//           subcategories: 1,
+//           brands: 1,
+//           totalStock: "$categoryStock",
+//           productCount: "$categoryProductCount",
+//         },
+//       },
+//       // Sort by category name
+//       {
+//         $sort: {
+//           category: 1,
+//         },
+//       },
+//     ]);
+
+//     console.log(JSON.stringify(result, null, 2));
+
+//     res.status(200).json({ result, result2 });
+//   } catch (error) {
+//     res.status(400).json({ success: false, error: error.message });
+//   }
+// };
