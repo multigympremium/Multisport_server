@@ -598,7 +598,7 @@ export const getProductQueries = async (req, res) => {
       },
       {
         $unwind: {
-          path: "$colorAndSize.size", // Unwind the size array
+          path: "$colorAndSize.size", // Unwind the size array inside colorAndSize
           preserveNullAndEmptyArrays: true,
         },
       },
@@ -609,7 +609,7 @@ export const getProductQueries = async (req, res) => {
             sizeLabel: "$colorAndSize.size.label", // Group by size label
           },
           totalStock: { $sum: { $toInt: "$colorAndSize.quantity" } }, // Sum total stock for each size
-          productCount: { $sum: 1 }, // Count products for each size
+          productCount: { $addToSet: "$_id" }, // Collect unique product IDs
         },
       },
       {
@@ -618,7 +618,7 @@ export const getProductQueries = async (req, res) => {
           sizeValue: "$_id.sizeValue", // Map to sizeValue
           sizeLabel: "$_id.sizeLabel", // Map to sizeLabel
           totalStock: 1, // Include total stock
-          productCount: 1, // Include product count
+          productCount: { $size: "$productCount" }, // Count unique products
         },
       },
     ]);
