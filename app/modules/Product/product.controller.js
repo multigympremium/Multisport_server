@@ -221,6 +221,7 @@ export const getPublicProducts = async (req, res) => {
     isNew,
     isRecommended,
     isFeatured,
+    priceRange,
   } = req.query;
   const id = req.params.id;
 
@@ -286,6 +287,12 @@ export const getPublicProducts = async (req, res) => {
 
     if (isRecommended === "true") {
       filter.isRecommended = true;
+    }
+    if (priceRange) {
+      filter.price = {
+        $gte: 0,
+        $lte: priceRange,
+      };
     }
 
     console.log(filter, "filter");
