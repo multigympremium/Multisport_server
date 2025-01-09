@@ -1,4 +1,5 @@
 import { deleteFile, uploadFile } from "../../helpers/aws-s3.js";
+import ProductModel from "../Product/product.model.js";
 import CategoryModel from "./productCategory.model.js";
 
 // Get all categories or filter by query parameters
@@ -154,6 +155,110 @@ export const deleteCategoryById = async (req, res) => {
       .json({ success: true, message: "Category deleted successfully" });
   } catch (error) {
     console.log(error, "error");
+    res.status(400).json({ success: false, error: error.message });
+  }
+};
+
+export const getProductCategories = async (req, res) => {
+  try {
+    const result = await ProductModel.aggregate([
+      // Unwind colorAndSize array
+      {
+        $unwind: {
+          path: "$colorAndSize",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      // Unwind sizes inside each colorAndSize
+      {
+        $unwind: {
+          path: "$colorAndSize.size",
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      // Group by category, subcategory, and brand to aggregate colors, sizes, stock, and product count
+      {
+        $group: {
+          _id: {
+            category: "$category",
+            subcategory: "$subcategory",
+            brand: "$brandValue",
+          },
+          category: { $first: "$category" },
+          subcategory: { $first: "$subcategory" },
+          brand: { $first: "$brandValue" },
+          colors: {
+            $addToSet: {
+              value: "$colorAndSize.color.value",
+              label: "$colorAndSize.color.label",
+            },
+          },
+          sizes: {
+            $addToSet: {
+              value: "$colorAndSize.size.value",
+              label: "$colorAndSize.size.label",
+            },
+          },
+          totalStock: { $sum: { $toInt: "$colorAndSize.quantity" } },
+          productCount: { $sum: 1 },
+        },
+      },
+      // Group by category to nest subcategories and brands
+      {
+        $group: {
+          _id: "$category",
+          category: { $first: "$category" },
+          subcategories: {
+            $addToSet: {
+              subcategory: "$subcategory",
+              stock: "$totalStock",
+              productCount: "$productCount",
+            },
+          },
+          brands: {
+            $addToSet: {
+              brand: "$brand",
+              stock: "$totalStock",
+              productCount: "$productCount",
+            },
+          },
+          colors: { $addToSet: "$colors" },
+          sizes: { $addToSet: "$sizes" },
+          categoryStock: { $sum: "$totalStock" },
+          categoryProductCount: { $sum: "$productCount" },
+        },
+      },
+      // Flatten the final structure
+      {
+        $project: {
+          _id: 0,
+          category: 1,
+          subcategories: 1,
+          brands: 1,
+          colors: {
+            $reduce: {
+              input: "$colors",
+              initialValue: [],
+              in: { $setUnion: ["$$value", "$$this"] },
+            },
+          },
+          sizes: {
+            $reduce: {
+              input: "$sizes",
+              initialValue: [],
+              in: { $setUnion: ["$$value", "$$this"] },
+            },
+          },
+          totalStock: "$categoryStock",
+          productCount: "$categoryProductCount",
+        },
+      },
+    ]);
+
+    console.log(JSON.stringify(result, null, 2));
+
+    res.status(200).json(result);
+  } catch (error) {
     res.status(400).json({ success: false, error: error.message });
   }
 };
