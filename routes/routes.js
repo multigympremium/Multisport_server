@@ -51,6 +51,8 @@ import PromoBannerRoutes from "../app/modules/PromotionalBanner/PromotionalBanne
 import BackupRoutes from "../config/DownloadImages.js";
 import bagBannerRoutes from "../app/modules/BagBanner/bagBanner.routes.js";
 import TransactionRoutes from "../app/modules/Transaction/Transaction.routes.js";
+import BrandBannerRoutes from "../app/modules/BrandBanner/BrandBanner.routes.js";
+import NewArrivalBannerRoutes from "../app/modules/NewArrivalBanner/NewArrivalBanner.routes.js";
 
 const routes = Router();
 // routes.use("/branches", BranchRoutes);gggrRoutes);
@@ -67,6 +69,8 @@ routes.use("/custom-css-js", customJsCssRoutes);
 routes.use("/custom-pages", CustomPageRoutes);
 routes.use("/courier", courierRoutes);
 routes.use("/bag-banners", bagBannerRoutes);
+routes.use("/brand-banners", BrandBannerRoutes);
+routes.use("/new-arrival-banners", NewArrivalBannerRoutes);
 
 routes.use("/discount", discountRoutes);
 routes.use("/departments", DepartmentsRoutes);
