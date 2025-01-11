@@ -11,6 +11,17 @@ export const getBrands = async (req, res) => {
   }
 };
 
+// GET all brands
+export const getBrandBySlug = async (req, res) => {
+  const { slug } = req.params;
+  try {
+    const brands = await BrandModel.findOne({ slug });
+    res.status(200).json({ success: true, data: brands });
+  } catch (error) {
+    res.status(400).json({ success: false, error: error.message });
+  }
+};
+
 // POST a new brand
 export const createBrand = async (req, res) => {
   try {
@@ -64,6 +75,9 @@ export const createBrand = async (req, res) => {
 // GET a brand by ID
 export const getBrandById = async (req, res) => {
   const { id } = req.params;
+  if (id) {
+    return;
+  }
   try {
     const brand = await BrandModel.findById(id);
     if (!brand)
