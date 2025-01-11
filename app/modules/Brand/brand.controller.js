@@ -75,9 +75,7 @@ export const createBrand = async (req, res) => {
 // GET a brand by ID
 export const getBrandById = async (req, res) => {
   const { id } = req.params;
-  if (id) {
-    return;
-  }
+
   try {
     const brand = await BrandModel.findById(id);
     if (!brand)
