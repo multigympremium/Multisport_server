@@ -17,7 +17,7 @@ brandRoutes.get("/", getBrands);
 brandRoutes.post("/", createBrand);
 
 // GET a specific brand by ID
-brandRoutes.get("/:id", getBrandById);
+brandRoutes.get("/by_id/:id", getBrandById);
 brandRoutes.get("/single/:slug", getBrandBySlug);
 
 // PUT to update a brand by ID
