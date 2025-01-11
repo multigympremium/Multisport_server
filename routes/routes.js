@@ -51,8 +51,10 @@ import PromoBannerRoutes from "../app/modules/PromotionalBanner/PromotionalBanne
 import BackupRoutes from "../config/DownloadImages.js";
 import bagBannerRoutes from "../app/modules/BagBanner/bagBanner.routes.js";
 import TransactionRoutes from "../app/modules/Transaction/Transaction.routes.js";
-import BrandBannerRoutes from "../app/modules/BrandBanner/BrandBanner.routes.js";
 import NewArrivalBannerRoutes from "../app/modules/NewArrivalBanner/NewArrivalBanner.routes.js";
+import PopularBannerRoutes from "../app/modules/PopularBanner/PopularBanner.routes.js";
+import BestSellingBannerRoutes from "../app/modules/BestSellingBanner/BestSellingBanner.routes.js";
+import SpecialDiscountBannerRoutes from "../app/modules/SpecialDiscountBanner/SpecialDiscountBanner.routes.js";
 
 const routes = Router();
 // routes.use("/branches", BranchRoutes);gggrRoutes);
@@ -63,13 +65,14 @@ routes.use("/banners", bannerRoutes);
 routes.use("/backup", BackupRoutes);
 routes.use("/blog", blogRoutes);
 routes.use("/blog-category", blogCategoryRoutes);
+routes.use("/best-selling-banners", BestSellingBannerRoutes);
 routes.use("/categories", productCategoryRoutes);
 routes.use("/child-categories", childCategoryRoutes);
 routes.use("/custom-css-js", customJsCssRoutes);
 routes.use("/custom-pages", CustomPageRoutes);
 routes.use("/courier", courierRoutes);
 routes.use("/bag-banners", bagBannerRoutes);
-routes.use("/brand-banners", BrandBannerRoutes);
+routes.use("/popular-banners", PopularBannerRoutes);
 routes.use("/new-arrival-banners", NewArrivalBannerRoutes);
 
 routes.use("/discount", discountRoutes);
@@ -96,6 +99,7 @@ routes.use("/promo-banner", PromoBannerRoutes);
 routes.use("/shipping", shippingAddressRoutes);
 routes.use("/setup-config", SetupConfigRoutes);
 routes.use("/shipping_policy", shippingPolicy);
+routes.use("/special-discount-banners", SpecialDiscountBannerRoutes);
 routes.use("/return_policy", returnPolicy);
 routes.use("/return_policy", returnPolicy);
 routes.use("/shoes-banners", shoesBannerRoutes);

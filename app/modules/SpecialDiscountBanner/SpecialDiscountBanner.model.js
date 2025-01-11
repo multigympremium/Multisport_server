@@ -28,6 +28,9 @@ const BannerSchema = new mongoose.Schema(
   }
 );
 
-const BrandBannerModel = mongoose.model("brand_banners", BannerSchema);
+const SpecialDiscountBannerModel = mongoose.model(
+  "special_discount_banners",
+  BannerSchema
+);
 
-export default BrandBannerModel;
+export default SpecialDiscountBannerModel;

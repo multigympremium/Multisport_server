@@ -1,8 +1,8 @@
 import { deleteFile, uploadFile } from "../../helpers/aws-s3.js";
-import BrandBannerModel from "./BrandBanner.model.js";
+import PopularBannerModel from "./PopularBanner.model.js";
 
-// Function to handle GET request (get BrandBanner with optional search)
-export const getBrandBanners = async (req, res) => {
+// Function to handle GET request (get PopularBanner with optional search)
+export const getPopularBanners = async (req, res) => {
   const search = req.query.search;
 
   const filter = {};
@@ -14,15 +14,15 @@ export const getBrandBanners = async (req, res) => {
   }
 
   try {
-    const banners = await BrandBannerModel.find(filter);
+    const banners = await PopularBannerModel.find(filter);
     return res.status(200).json({ success: true, data: banners });
   } catch (error) {
     return res.status(400).json({ success: false, error: error.message });
   }
 };
 
-// Function to handle POST request (create new BrandBanner)
-export const createBrandBanner = async (req, res) => {
+// Function to handle POST request (create new PopularBanner)
+export const createPopularBanner = async (req, res) => {
   try {
     const { title, subtitle, shortDescription } = req.body;
     const image = req.files?.image; // assuming `multer` is used for file uploads
@@ -46,18 +46,18 @@ export const createBrandBanner = async (req, res) => {
       image: thumbnailUrl,
     };
 
-    const bannerResult = await BrandBannerModel.create(bannerData);
+    const bannerResult = await PopularBannerModel.create(bannerData);
     return res.status(200).json({ success: true, data: bannerResult });
   } catch (error) {
     return res.status(500).json({ success: false, error: error.message });
   }
 };
 
-// Get BrandBanner by ID
-export const getBrandBannerById = async (req, res) => {
+// Get PopularBanner by ID
+export const getPopularBannerById = async (req, res) => {
   const { id } = req.params;
   try {
-    const result = await BrandBannerModel.findById(id);
+    const result = await PopularBannerModel.findById(id);
     if (!result) {
       return res
         .status(404)
@@ -69,11 +69,11 @@ export const getBrandBannerById = async (req, res) => {
   }
 };
 
-// Update BrandBanner by ID
-export const updateBrandBanner = async (req, res) => {
+// Update PopularBanner by ID
+export const updatePopularBanner = async (req, res) => {
   const { id } = req.params;
   try {
-    const existingBanner = await BrandBannerModel.findById(id);
+    const existingBanner = await PopularBannerModel.findById(id);
     if (!existingBanner) {
       return res
         .status(404)
@@ -97,7 +97,7 @@ export const updateBrandBanner = async (req, res) => {
       bannerData.image = thumbnailUrl;
     }
 
-    const updatedBanner = await BrandBannerModel.findByIdAndUpdate(
+    const updatedBanner = await PopularBannerModel.findByIdAndUpdate(
       id,
       bannerData,
       { new: true }
@@ -108,18 +108,18 @@ export const updateBrandBanner = async (req, res) => {
   }
 };
 
-// Delete BrandBanner by ID
-export const deleteBrandBanner = async (req, res) => {
+// Delete PopularBanner by ID
+export const deletePopularBanner = async (req, res) => {
   const { id } = req.params;
   try {
-    const existingBanner = await BrandBannerModel.findById(id);
+    const existingBanner = await PopularBannerModel.findById(id);
     if (!existingBanner) {
       return res
         .status(404)
         .json({ success: false, message: "Banner not found" });
     }
 
-    await BrandBannerModel.findByIdAndDelete(id);
+    await PopularBannerModel.findByIdAndDelete(id);
     await deleteFile(existingBanner.image);
 
     return res.status(200).json({ success: true, message: "Banner deleted" });
