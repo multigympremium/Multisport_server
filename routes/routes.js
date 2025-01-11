@@ -55,6 +55,7 @@ import NewArrivalBannerRoutes from "../app/modules/NewArrivalBanner/NewArrivalBa
 import PopularBannerRoutes from "../app/modules/PopularBanner/PopularBanner.routes.js";
 import BestSellingBannerRoutes from "../app/modules/BestSellingBanner/BestSellingBanner.routes.js";
 import SpecialDiscountBannerRoutes from "../app/modules/SpecialDiscountBanner/SpecialDiscountBanner.routes.js";
+import customerRoutes from "../app/modules/ContactRequest/customer.routes.js";
 
 const routes = Router();
 // routes.use("/branches", BranchRoutes);gggrRoutes);
@@ -70,6 +71,7 @@ routes.use("/categories", productCategoryRoutes);
 routes.use("/child-categories", childCategoryRoutes);
 routes.use("/custom-css-js", customJsCssRoutes);
 routes.use("/custom-pages", CustomPageRoutes);
+routes.use("/contact-requests", customerRoutes);
 routes.use("/courier", courierRoutes);
 routes.use("/bag-banners", bagBannerRoutes);
 routes.use("/popular-banners", PopularBannerRoutes);
