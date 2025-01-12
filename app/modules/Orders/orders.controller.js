@@ -69,11 +69,12 @@ export const createOrder = async (req, res) => {
     color: data?.color,
     size: data?.size,
     deliveryCharge: data?.deliveryCharge,
-    itemPerDiscount: data?.itemPerDiscount,
+    itemPerDiscount: data?.itemPerDiscount,x
     discount: data?.discount,
     coupon: data?.coupon,
     userId: data?.userId,
     totalItems: data?.totalItems,
+    totalActualPrice: data?.totalActualPrice,
   };
 
   console.log(submitData, "submitData");
