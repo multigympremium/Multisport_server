@@ -631,7 +631,7 @@ export const getProductQueries = async (req, res) => {
           },
           category: { $first: "$category" },
           totalStock: {
-            $sum: { $toInt: { $ifNull: ["$quantity", 0] } }, // Assuming quantity is the field for stock
+            $sum: { $toInt: { $ifNull: ["$stock", 0] } }, // Assuming quantity is the field for stock
           },
           productCount: { $sum: 1 }, // Count products
         },
@@ -655,7 +655,7 @@ export const getProductQueries = async (req, res) => {
           },
           subcategory: { $first: "$subcategory" },
           totalStock: {
-            $sum: { $toInt: { $ifNull: ["$quantity", 0] } }, // Assuming quantity is the field for stock
+            $sum: { $toInt: { $ifNull: ["$stock", 0] } }, // Assuming quantity is the field for stock
           },
           productCount: { $sum: 1 }, // Count products
         },
@@ -685,7 +685,7 @@ export const getProductQueries = async (req, res) => {
           },
           brand: { $first: "$brandValue" },
           totalStock: {
-            $sum: { $toInt: { $ifNull: ["$quantity", 0] } }, // Assuming quantity is the field for stock
+            $sum: { $toInt: { $ifNull: ["$stock", 0] } }, // Assuming quantity is the field for stock
           },
           productCount: { $sum: 1 }, // Count products
         },

@@ -231,7 +231,7 @@ export const getPublicProducts = async (req, res) => {
   console.log(limitation, "limitation");
 
   try {
-    const filter = {};
+    const filter = { stock: { $ne: 0 } };
 
     // Filter by product ID
     if (product) {
@@ -259,10 +259,13 @@ export const getPublicProducts = async (req, res) => {
     }
 
     // Filter by brand
-    if (brand)
+    if (brand) {
       filter.brandValue = {
         $in: brand.includes(",") ? brand.split(",") : [brand],
       };
+
+      filter.stock = { $gte: 0 };
+    }
 
     // Filter by category and subcategory
     if (category)
@@ -331,7 +334,7 @@ export const getPublicProducts = async (req, res) => {
   }
 };
 
-// POST New Product
+// // POST New Product
 export const createProduct = async (req, res) => {
   const {
     productTitle,
@@ -495,6 +498,132 @@ export const createProduct = async (req, res) => {
     res.status(400).json({ success: false, error: error.message });
   }
 };
+
+// export const getPublicProducts = async (req, res) => {
+//   const {
+//     search,
+//     size,
+//     color,
+//     brand,
+//     newArrival,
+//     product,
+//     category,
+//     subcategory,
+//     currentPage,
+//     limit,
+//     isNew,
+//     isRecommended,
+//     isFeatured,
+//     priceRange,
+//   } = req.query;
+//   const id = req.params.id;
+
+//   const page = parseInt(currentPage) || 1;
+//   const limitation = parseInt(limit) || 15;
+
+//   try {
+//     const filter = { stock: { $gt: 0 } };
+
+//     // Filter by product ID
+//     if (product) {
+//       const productResult = await ProductModel.findById(product).populate(
+//         "gallery"
+//       );
+//       if (!productResult) {
+//         return res
+//           .status(404)
+//           .json({ success: false, message: "Product not found" });
+//       }
+//       return res.status(200).json({ success: true, data: [productResult] });
+//     }
+
+//     // Search filter
+//     if (search && search !== "all") {
+//       filter.$or = [
+//         { productTitle: { $regex: new RegExp(search, "i") } },
+//         { category: { $regex: new RegExp(search, "i") } },
+//         { subcategory: { $regex: new RegExp(search, "i") } },
+//         { childCategory: { $regex: new RegExp(search, "i") } },
+//         { productFlagValue: { $regex: new RegExp(search, "i") } },
+//       ];
+//     }
+
+//     // Filter by brand
+//     if (brand) {
+//       filter.brandValue = {
+//         $in: brand.includes(",") ? brand.split(",") : [brand],
+//       };
+//     }
+
+//     // Filter by category and subcategory
+//     if (category) {
+//       filter.category = {
+//         $in: category.includes(",") ? category.split(",") : [category],
+//       };
+//     }
+//     if (subcategory) {
+//       filter.subcategory = {
+//         $in: subcategory.includes(",") ? subcategory.split(",") : [subcategory],
+//       };
+//     }
+
+//     // Filter by color and size
+//     if (color || size) {
+//       filter.colorAndSize = {
+//         $elemMatch: {
+//           ...(color && { "color.label": { $in: color.split(",") } }),
+//           ...(size && { "size.label": { $in: size.split(",") } }),
+//         },
+//       };
+//     }
+
+//     // Filter for new arrivals
+//     if (newArrival === "true") {
+//       filter.createdAt = {
+//         $gte: new Date(Date.now() - 1000 * 60 * 60 * 24 * 30), // Last 30 days
+//       };
+//     }
+
+//     // Additional boolean filters
+//     if (isNew === "true") {
+//       filter.isNew = true;
+//     }
+//     if (isRecommended === "true") {
+//       filter.isRecommended = true;
+//     }
+//     if (isFeatured === "true") {
+//       filter.isFeatured = true;
+//     }
+
+//     // Filter by price range
+//     if (priceRange) {
+//       filter.price = {
+//         $gte: 0,
+//         $lte: parseFloat(priceRange),
+//       };
+//     }
+
+//     // Calculate total items and pages
+//     const totalItems = await ProductModel.countDocuments(filter);
+//     const totalPages = Math.ceil(totalItems / limitation);
+
+//     // Fetch products with pagination
+//     const products = await ProductModel.find(filter)
+//       .populate("gallery")
+//       .skip((page - 1) * limitation)
+//       .limit(limitation);
+
+//     res.status(200).json({
+//       success: true,
+//       data: products,
+//       totalItems,
+//       totalPages,
+//       currentPage: page,
+//     });
+//   } catch (error) {
+//     res.status(400).json({ success: false, error: error.message });
+//   }
+// };
 
 // GET Request: Get product by ID
 export const getProductById = async (req, res) => {
@@ -1010,8 +1139,11 @@ export const productBulkUpdate = async (req, res) => {
 
 export const getNewArrivals = async (req, res) => {
   try {
-    const newArrivals = await ProductModel.find({ isNew: true });
-    const newItems = await ProductModel.find({}).sort({
+    const newArrivals = await ProductModel.find({
+      isNew: true,
+      stock: { $gt: 0 },
+    });
+    const newItems = await ProductModel.find({ stock: { $gt: 0 } }).sort({
       createdAt: -1,
       updatedAt: -1,
     });
@@ -1030,8 +1162,11 @@ export const getNewArrivals = async (req, res) => {
 
 export const getNewFeaturedProducts = async (req, res) => {
   try {
-    const featuredProducts = await ProductModel.find({ isFeatured: true });
-    const newItems = await ProductModel.find({}).sort({
+    const featuredProducts = await ProductModel.find({
+      isFeatured: true,
+      stock: { $gt: 0 },
+    });
+    const newItems = await ProductModel.find({ stock: { $gt: 0 } }).sort({
       createdAt: -1,
       updatedAt: -1,
     });
@@ -1053,7 +1188,7 @@ export const getNewFeaturedProducts = async (req, res) => {
 
 export const getNewPopularProducts = async (req, res) => {
   try {
-    const foundItems = await ProductModel.find({}).sort({
+    const foundItems = await ProductModel.find({ stock: { $gt: 0 } }).sort({
       sellingCount: -1,
       wishCount: -1,
     });
@@ -1069,7 +1204,7 @@ export const getNewPopularProducts = async (req, res) => {
 
 export const getBestSellingProducts = async (req, res) => {
   try {
-    const foundItems = await ProductModel.find({}).sort({
+    const foundItems = await ProductModel.find({ stock: { $gt: 0 } }).sort({
       sellingCount: -1,
       createdAt: -1,
       updatedAt: -1,
@@ -1086,8 +1221,11 @@ export const getBestSellingProducts = async (req, res) => {
 
 export const getNewDiscountProducts = async (req, res) => {
   try {
-    const allItems = await ProductModel.find({});
-    const foundItems = await ProductModel.find({ specialOffer: true }).sort({
+    const allItems = await ProductModel.find({ stock: { $gt: 0 } });
+    const foundItems = await ProductModel.find({
+      specialOffer: true,
+      stock: { $gt: 0 },
+    }).sort({
       discount: -1,
       createdAt: -1,
       updatedAt: -1,
@@ -1109,8 +1247,11 @@ export const getNewDiscountProducts = async (req, res) => {
 export const getNewRelatedProducts = async (req, res) => {
   const category = req.params.category;
   try {
-    const allItems = await ProductModel.find({});
-    const foundItems = await ProductModel.find({ category: category }).sort({
+    const allItems = await ProductModel.find({ stock: { $gt: 0 } });
+    const foundItems = await ProductModel.find({
+      category: category,
+      stock: { $gt: 0 },
+    }).sort({
       discount: -1,
       wishCount: -1,
       sellingCount: -1,
