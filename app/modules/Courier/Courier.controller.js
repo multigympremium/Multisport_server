@@ -737,15 +737,15 @@ export const getCourierOrderInfo = async (order) => {
   const headers = {
     "Content-Type": "application/json",
     "Api-Key":
-      SteadFastData[0].apiKey || process.env.STEAD_FAST_COURIER_API_KEY,
+      SteadFastData[0]?.apiKey || process.env.STEAD_FAST_COURIER_API_KEY,
     "Secret-Key":
-      SteadFastData[0].secretKey || process.env.STEAD_FAST_COURIER_SECRET_KEY,
+      SteadFastData[0]?.secretKey || process.env.STEAD_FAST_COURIER_SECRET_KEY,
   };
 
   console.log(url, "url");
 
   try {
-    const response = await axios.get(`${url}/${order.tracking_code}`, {
+    const response = await axios.get(`${url}/${order?.tracking_code}`, {
       headers: headers,
     });
 
