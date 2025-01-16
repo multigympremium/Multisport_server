@@ -219,8 +219,6 @@ export const updateOrderById = async (req, res) => {
         reportData.success = true;
       }
 
-      console.log(reportData, "reportData");
-
       if (!reportData?.success) {
         return res.status(400).json({ success: false, error: reportData });
       }
@@ -229,8 +227,6 @@ export const updateOrderById = async (req, res) => {
         new: true,
         runValidators: true,
       });
-
-      console.log(updatedOrder, "updatedOrder");
 
       if (!updatedOrder)
         return res
@@ -276,6 +272,7 @@ export const reduceStockOfItem = async (order, res) => {
     console.log(order, "Order details");
 
     const updatedItems = [];
+    const isSizeAlreadyUsed = [];
 
     // Update stock and color/size quantities for each item in the order
     for (const item of items) {
@@ -296,30 +293,33 @@ export const reduceStockOfItem = async (order, res) => {
       );
 
       if (!colorAndSize) {
-        return res.status(400).json({
+        return {
           message: `Color and size combination not found for product ID ${item._id}.`,
           success: false,
-        });
+        };
       }
 
-      console.log(colorAndSize, "Matching color and size combination");
+      console.log(
+        JSON.stringify(colorAndSize),
+        "Matching color and size combination"
+      );
 
       // Ensure sufficient stock
       if (parseInt(colorAndSize.quantity) < item.quantity) {
-        return res.status(400).json({
+        return {
           message: `Insufficient stock for product ID ${item._id} with color ${item.color} and size ${item.size}.`,
           success: false,
-        });
+        };
       }
 
       // Deduct the stock for the specific color and size
-      colorAndSize.quantity = (
-        parseInt(colorAndSize.quantity) - item.quantity
-      ).toString();
+      // colorAndSize.quantity = (
+      //   parseInt(colorAndSize.quantity) - item.quantity
+      // ).toString();
 
-      console.log(
-        `Updated quantity for color: ${item.color}, size: ${item.size}, new quantity: ${colorAndSize.quantity}`
-      );
+      // console.log(
+      //   `Updated quantity for color: ${item.color}, size: ${item.size}, new quantity: ${colorAndSize.quantity}`
+      // );
 
       // Deduct overall stock
       product.stock -= item.quantity;
@@ -329,41 +329,87 @@ export const reduceStockOfItem = async (order, res) => {
       );
 
       // Update all matching color and size items
+
       const allItemsOfColorAndSize = product.colorAndSize.map(
         (sizeAndColorItem) => {
+          console.log(
+            !isSizeAlreadyUsed.some(
+              (usedSizeAndColor) =>
+                usedSizeAndColor.size === item.size &&
+                usedSizeAndColor.color === item.color
+            ),
+            "isSizeAlreadyUsed"
+          );
           if (
-            sizeAndColorItem.color.value === colorAndSize.color.value &&
-            sizeAndColorItem.size.some((size) => size.value === item.size)
+            sizeAndColorItem.color.value === item.color &&
+            sizeAndColorItem.size.some((size) => size.value === item.size) &&
+            !isSizeAlreadyUsed.some(
+              (usedSizeAndColor) =>
+                usedSizeAndColor.size === item.size &&
+                usedSizeAndColor.color === item.color
+            )
           ) {
-            sizeAndColorItem.quantity = (
-              parseInt(sizeAndColorItem.quantity) - item.quantity
-            ).toString();
-
             console.log(
-              `Updated quantity for color ${sizeAndColorItem.color.value} and size ${item.size}: ${sizeAndColorItem.quantity}`
+              `Updated quantity for color ${
+                sizeAndColorItem.color.value
+              } and size ${item.size}: ${
+                sizeAndColorItem.quantity
+              } before update : ${JSON.stringify(sizeAndColorItem)}`
             );
+            sizeAndColorItem.quantity -= item.quantity;
+            isSizeAlreadyUsed.push({ size: item.size, color: item.color });
+
+            sizeAndColorItem.size.map((childSize) => {
+              console.log(
+                childSize,
+                "childSize",
+                item.size,
+                "item.size",
+                childSize.value,
+                "item.size",
+                childSize.quantity,
+                "item.quantity"
+              );
+              if (childSize.value === item.size) {
+                childSize.quantity -= item.quantity;
+              }
+            });
+
+            // console.log(
+            //   `Updated quantity for color ${sizeAndColorItem.color.value} and size ${item.size}: ${sizeAndColorItem.quantity} : ${sizeAndColorItem} after update`
+            // );
           }
           return sizeAndColorItem;
         }
       );
 
-      console.log(allItemsOfColorAndSize, "allItemsOfColorAndSize");
+      // console.log(
+      //   JSON.stringify(allItemsOfColorAndSize),
+      //   "allItemsOfColorAndSize"
+      // );
 
       product.colorAndSize = allItemsOfColorAndSize;
 
       updatedItems.push(product);
 
       // Save the updated product
-      const updatedProductReport = await product.save();
-
-      console.log(
-        `Product ID ${product._id} updated successfully.`,
-        updatedProductReport,
-        "updatedProductReport"
+      const updatedProductReport = await ProductModel.findByIdAndUpdate(
+        item._id,
+        product,
+        {
+          new: true,
+          runValidators: true,
+        }
       );
+
+      // console.log(
+      //   `Product ID ${product._id} updated successfully.`,
+      //   updatedProductReport,
+      //   "updatedProductReport"
+      // );
     }
 
-    console.log(updatedItems, "Updated items after stock reduction");
+    // console.log(updatedItems, "Updated items after stock reduction");
 
     // Save the order if needed (commented out, assuming no additional changes to the order object)
     // await order.save();
