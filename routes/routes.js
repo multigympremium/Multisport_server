@@ -56,9 +56,12 @@ import PopularBannerRoutes from "../app/modules/PopularBanner/PopularBanner.rout
 import BestSellingBannerRoutes from "../app/modules/BestSellingBanner/BestSellingBanner.routes.js";
 import SpecialDiscountBannerRoutes from "../app/modules/SpecialDiscountBanner/SpecialDiscountBanner.routes.js";
 import customerRoutes from "../app/modules/ContactRequest/customer.routes.js";
+import ZoneRoutes from "../app/modules/Zones/zones.routes.js";
+import AreaRoutes from "../app/modules/Areas/areas.routes.js";
 
 const routes = Router();
 // routes.use("/branches", BranchRoutes);gggrRoutes);
+routes.use("/areas", AreaRoutes);
 routes.use("/about-us", aboutUsRoutes);
 routes.use("/about-mission", AboutMissionRoutes);
 routes.use("/about-vision", aboutVisionRoutes);
@@ -117,5 +120,6 @@ routes.use("/wishlist", wishlistRoutes);
 routes.use("/users", userRoutes);
 routes.use("/subcategories", subcategoryRoutes);
 routes.use("/transaction", TransactionRoutes);
+routes.use("/zones", ZoneRoutes);
 
 export default routes;
