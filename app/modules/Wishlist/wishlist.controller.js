@@ -3,7 +3,9 @@ import WishlistModel from "./wishlist.model.js";
 // Handle GET request to get all wishlists
 export async function getAllWishlists(req, res) {
   try {
-    const wishlists = await WishlistModel.find({});
+    const wishlists = await WishlistModel.find({ userId: req.params.id })
+      .populate("product_id")
+      .populate("userId");
     return res.status(200).json({ success: true, data: wishlists });
   } catch (error) {
     return res.status(400).json({ success: false, error: error.message });
@@ -12,9 +14,9 @@ export async function getAllWishlists(req, res) {
 
 // Handle POST request to create a wishlist
 export async function createWishlist(req, res) {
-  const { user_id, email, product_id } = req.body;
+  const { userId, email, product_id } = req.body;
 
-  if (!user_id || !email || !product_id) {
+  if (!userId || !email || !product_id) {
     return res.status(400).json({
       success: false,
       message: "Required fields missing",
@@ -22,7 +24,7 @@ export async function createWishlist(req, res) {
   }
 
   try {
-    const submitData = { user_id, email, product_id };
+    const submitData = { userId, email, product_id };
     const wishlistResult = await WishlistModel.create(submitData);
 
     if (wishlistResult) {
@@ -41,7 +43,9 @@ export async function getWishlistById(req, res) {
     const wishlist = await WishlistModel.findOne({ _id: id });
 
     if (!wishlist) {
-      return res.status(404).json({ success: false, message: "Wishlist not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Wishlist not found" });
     }
     return res.status(200).json({ success: true, data: wishlist });
   } catch (error) {
@@ -55,13 +59,19 @@ export async function updateWishlistById(req, res) {
   const requestData = req.body;
 
   try {
-    const updatedWishlist = await WishlistModel.findByIdAndUpdate(id, requestData, {
-      new: true,
-      runValidators: true,
-    });
+    const updatedWishlist = await WishlistModel.findByIdAndUpdate(
+      id,
+      requestData,
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
 
     if (!updatedWishlist) {
-      return res.status(404).json({ success: false, message: "Wishlist not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Wishlist not found" });
     }
 
     return res.status(200).json({ success: true, data: updatedWishlist });
@@ -74,15 +84,19 @@ export async function updateWishlistById(req, res) {
 export async function deleteWishlistById(req, res) {
   const id = req.params.id;
   try {
-    const wishlistItem = await WishlistModel.findOne({ _id: id });
+    const wishlistItem = await WishlistModel.findOne({ product_id: id });
 
     if (!wishlistItem) {
-      return res.status(404).json({ success: false, message: "Wishlist not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Wishlist not found" });
     }
 
-    await WishlistModel.deleteOne({ _id: id });
+    await WishlistModel.deleteOne({ product_id: id });
 
-    return res.status(200).json({ success: true, message: "Wishlist deleted successfully" });
+    return res
+      .status(200)
+      .json({ success: true, message: "Wishlist deleted successfully" });
   } catch (error) {
     return res.status(400).json({ success: false, error: error.message });
   }

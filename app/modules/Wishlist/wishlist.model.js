@@ -3,24 +3,22 @@ const { Schema, model } = mongoose;
 
 const WishlistSchema = Schema(
   {
-    user_id: {
-      type: String,
-      required: [true, "Please Add Name"],
-      unique: true,
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "users",
     },
     email: {
       type: String,
       required: [true, "Please Add email"],
     },
     product_id: {
-        type: String,
-        required: [true, "Please Add product id"],
-    }
-    
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "products",
+    },
   },
   { timestamps: true }
 );
 
-const WishlistModel =  mongoose.model("wishlists", WishlistSchema);
+const WishlistModel = mongoose.model("wishlists", WishlistSchema);
 
 export default WishlistModel;

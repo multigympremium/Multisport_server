@@ -28,22 +28,22 @@ export default async function courierAccessToken() {
 
     console.log("Access Token Response:", response.data);
 
-    // if (response.data.access_token) {
-    //   requestData.refresh_token = response.data.refresh_token;
-    //   requestData.grant_type = "refresh_token";
-    //   const response2 = await axios.post(url, requestData, {
-    //     headers: {
-    //       Accept: "application/json",
-    //       "Content-Type": "application/json",
-    //     },
-    //   });
+    if (response.data.access_token) {
+      requestData.refresh_token = response.data.refresh_token;
+      requestData.grant_type = "refresh_token";
+      const response2 = await axios.post(url, requestData, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
 
-    //   if (response2.data.access_token) {
-    //     console.log("refreshed access token:", response2.data);
-    //     return response2.data;
-    //   }
-    // }
-    return response.data;
+      if (response2.data.access_token) {
+        console.log("refreshed access token:", response2.data);
+        return response2.data;
+      }
+    }
+    // return response.data;
   } catch (error) {
     console.error("Error fetching access token:", error);
     return null;

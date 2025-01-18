@@ -158,15 +158,20 @@ export const updateOrderById = async (req, res) => {
   if (!existingOrder) {
     return res.status(404).json({ success: false, message: "Order not found" });
   }
+  console.log(
+    existingOrder.status === "Packaging",
+    requestData.status === "Packed",
+    "existingOrder.status"
+  );
 
   try {
     if (
-      existingOrder.status === "Pending" &&
-      requestData.status === "Accepted"
+      existingOrder.status === "Packaging" &&
+      requestData.status === "Packed"
     ) {
       existingOrder.courierMethod = requestData.courierMethod;
       const returnResponse = await createCourierOrder(existingOrder);
-      console.log(returnResponse, "returnResponse");
+      // console.log(returnResponse, "returnResponse");
 
       if (
         returnResponse.status === 200 ||
