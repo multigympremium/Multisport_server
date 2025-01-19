@@ -94,9 +94,8 @@ const OrderSchema = Schema(
       trim: true,
     },
     userId: {
-      type: String,
-      required: true,
-      trim: true,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "users",
     },
     totalItems: {
       type: Number,
@@ -104,6 +103,12 @@ const OrderSchema = Schema(
     },
     totalActualPrice: {
       type: Number,
+    },
+    totalWeight: {
+      type: Number,
+    },
+    order_date: {
+      type: String,
     },
   },
   { timestamps: true }

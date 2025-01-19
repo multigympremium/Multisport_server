@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import {
   createCourierOrder,
   getCourierOrderInfo,
@@ -6,37 +7,245 @@ import ProductModel from "../Product/product.model.js";
 import OrderModel from "./orders.model.js";
 
 // GET all orders with optional filters
+// export const getOrders = async (req, res) => {
+//   console.log(req.query, "req.query");
+//   const { status, start_date, end_date, currentPage, limit } = req.query;
+//   const filter = {};
+
+//   if (status) filter.status = status;
+//   let totalItems = await OrderModel.find(filter).countDocuments();
+//   if (start_date && end_date) {
+//     filter.createdAt = { $gte: new Date(start_date), $lte: new Date(end_date) };
+//   }
+
+//   const page = parseInt(currentPage) || 1;
+//   const limitation = parseInt(limit) || 15;
+
+//   // console.log("query", { ...filter, ...bodyData });
+//   // Calculate total items and total pages
+//   // const totalItems = await Users;
+//   const totalPages = Math.ceil(totalItems / limitation);
+
+//   try {
+//     const orders = await OrderModel.find(filter)
+//       .skip((page - 1) * limitation)
+//       .limit(limitation);
+
+//     const totalDeliveredOrderPrices = await OrderModel.aggregate([
+//       {
+//         $match: {
+//           status: "DeliveredToCourier",
+//         },
+//       },
+//       { $group: { _id: null, totalTk: { $sum: "$total" } } },
+//       {
+//         $project: {
+//           _id: 0,
+//           userId: "$_id",
+//           totalPrice: "$totalTk",
+//         },
+//       },
+//     ]);
+
+//     const totalPackagingOrderPrices = await OrderModel.aggregate([
+//       {
+//         $match: {
+//           status: "Packaging",
+//         },
+//       },
+//       { $group: { _id: null, totalTk: { $sum: "$total" } } },
+//       {
+//         $project: {
+//           _id: 0,
+//           userId: "$_id",
+//           totalPrice: "$totalTk",
+//         },
+//       },
+//     ]);
+
+//     const totalReadyToShipOrderPrices = await OrderModel.aggregate([
+//       {
+//         $match: {
+//           status: "Packed",
+//         },
+//       },
+//       { $group: { _id: null, totalTk: { $sum: "$total" } } },
+//       {
+//         $project: {
+//           _id: 0,
+//           userId: "$_id",
+//           totalPrice: "$totalTk",
+//         },
+//       },
+//     ]);
+
+//     const totalPendingOrderPrices = await OrderModel.aggregate([
+//       {
+//         $match: {
+//           status: "Pending",
+//         },
+//       },
+//       { $group: { _id: null, totalTk: { $sum: "$total" } } },
+//       {
+//         $project: {
+//           _id: 0,
+//           userId: "$_id",
+//           totalPrice: "$totalTk",
+//         },
+//       },
+//     ]);
+
+//     const totalCancelledOrderPrices = await OrderModel.aggregate([
+//       {
+//         $match: {
+//           status: "Cancelled",
+//         },
+//       },
+//       { $group: { _id: null, totalTk: { $sum: "$total" } } },
+//       {
+//         $project: {
+//           _id: 0,
+//           userId: "$_id",
+//           totalPrice: "$totalTk",
+//         },
+//       },
+//     ]);
+//     const totalCompletedOrderPrices = await OrderModel.aggregate([
+//       {
+//         $match: {
+//           status: "Completed",
+//         },
+//       },
+//       { $group: { _id: null, totalTk: { $sum: "$total" } } },
+//       {
+//         $project: {
+//           _id: 0,
+//           userId: "$_id",
+//           totalPrice: "$totalTk",
+//         },
+//       },
+//     ]);
+
+//     res.status(200).json({
+//       success: true,
+//       data: orders,
+//       totalPages,
+//       totalItems,
+//       currentPage,
+//       totalDeliveredOrderPrices,
+//       totalPackagingOrderPrices,
+//       totalReadyToShipOrderPrices,
+//       totalPendingOrderPrices,
+//       totalCancelledOrderPrices,
+//       totalCompletedOrderPrices,
+//     });
+//   } catch (error) {
+//     res.status(400).json({ success: false, error: error.message });
+//   }
+// };
+
+// Utility Function for Aggregation
+const getTotalPriceByStatus = async (status) => {
+  const [result] = await OrderModel.aggregate([
+    { $match: { status } },
+    { $group: { _id: null, totalTk: { $sum: { $toDouble: "$total" } } } },
+    { $project: { _id: 0, totalPrice: "$totalTk" } },
+  ]);
+  return result?.totalPrice || 0;
+};
+
+// Controller Function
 export const getOrders = async (req, res) => {
-  console.log(req.query, "req.query");
-  const { status, start_date, end_date, currentPage, limit } = req.query;
-  const filter = {};
-
-  if (status) filter.status = status;
-  let totalItems = await OrderModel.find(filter).countDocuments();
-  if (start_date && end_date) {
-    filter.createdAt = { $gte: new Date(start_date), $lte: new Date(end_date) };
-  }
-
-  const page = parseInt(currentPage) || 1;
-  const limitation = parseInt(limit) || 15;
-
-  // console.log("query", { ...filter, ...bodyData });
-  // Calculate total items and total pages
-  // const totalItems = await Users;
-  const totalPages = Math.ceil(totalItems / limitation);
-
   try {
+    const {
+      status,
+      start_date,
+      end_date,
+      currentPage = 1,
+      limit = 15,
+      search,
+      date,
+    } = req.query;
+
+    const filter = {};
+    if (status) filter.status = status;
+
+    if (start_date && end_date) {
+      filter.order_date = {
+        $gte: new Date(start_date),
+        $lte: new Date(end_date),
+      };
+    }
+    if (date) {
+      filter.order_date = {
+        $gte: date,
+        $lte: date,
+      };
+    }
+
+    if (search) {
+      const searchRegex = new RegExp(search, "i");
+
+      // Check if the search term is a valid ObjectId
+      const isObjectId = mongoose.Types.ObjectId.isValid(search);
+
+      filter.$or = [
+        { name: { $regex: searchRegex } },
+        { phone: { $regex: searchRegex } },
+      ];
+
+      // Add _id condition only if search is a valid ObjectId
+      if (isObjectId) {
+        filter.$or.push({ _id: search });
+      }
+    }
+
+    const page = parseInt(currentPage, 10);
+    const limitation = parseInt(limit, 10);
+
+    const totalItems = await OrderModel.countDocuments(filter);
+    const totalPages = Math.ceil(totalItems / limitation);
+
+    console.log(filter, "filter");
+
     const orders = await OrderModel.find(filter)
+      .populate("userId")
       .skip((page - 1) * limitation)
       .limit(limitation);
-    res.status(200).json({
+
+    // Calculate total prices by status
+    const statuses = [
+      "DeliveredToCourier",
+      "Packaging",
+      "Packed",
+      "Pending",
+      "Cancelled",
+      "Completed",
+    ];
+
+    const totalPricesByStatus = await Promise.all(
+      statuses.map((status) => getTotalPriceByStatus(status))
+    );
+
+    const response = {
       success: true,
       data: orders,
       totalPages,
       totalItems,
-      currentPage,
-    });
+      currentPage: page,
+      totalPricesByStatus: {
+        DeliveredToCourier: totalPricesByStatus[0],
+        Packaging: totalPricesByStatus[1],
+        Packed: totalPricesByStatus[2],
+        Pending: totalPricesByStatus[3],
+        Cancelled: totalPricesByStatus[4],
+        Completed: totalPricesByStatus[5],
+      },
+    };
+
+    res.status(200).json(response);
   } catch (error) {
+    console.error("Error fetching orders:", error.message);
     res.status(400).json({ success: false, error: error.message });
   }
 };
@@ -423,5 +632,34 @@ export const reduceStockOfItem = async (order, res) => {
   } catch (error) {
     console.error("Error reducing stock:", error);
     return { success: false, error: error.message || error };
+  }
+};
+
+// GET single order by ID
+export const addWeightToOrder = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    // if (ObjectId.isValid(id)) {
+    //   throw new Error("Invalid ObjectId");
+    // }
+    const order = await OrderModel.findById(id);
+
+    if (!order)
+      return res
+        .status(404)
+        .json({ success: false, message: "Order not found" });
+
+    order.totalWeight = req.body.totalWeight;
+    const updatedOrder = await order.save();
+
+    if (!updatedOrder)
+      return res
+        .status(404)
+        .json({ success: false, message: "Order not found" });
+
+    res.status(200).json({ success: true, data: updatedOrder });
+  } catch (error) {
+    res.status(400).json({ success: false, error: error.message });
   }
 };
