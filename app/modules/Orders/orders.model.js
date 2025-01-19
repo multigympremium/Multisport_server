@@ -94,7 +94,8 @@ const OrderSchema = Schema(
       trim: true,
     },
     userId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: String,
+      // type: mongoose.Schema.Types.ObjectId,
       ref: "users",
     },
     totalItems: {

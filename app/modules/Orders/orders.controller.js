@@ -209,7 +209,6 @@ export const getOrders = async (req, res) => {
     console.log(filter, "filter");
 
     const orders = await OrderModel.find(filter)
-      .populate("userId")
       .skip((page - 1) * limitation)
       .limit(limitation);
 
@@ -333,11 +332,18 @@ export const getOrderById = async (req, res) => {
 
 export const getOrderByUserId = async (req, res) => {
   const { id } = req.params;
+  const { status } = req.query;
   try {
     // if (ObjectId.isValid(id)) {
     //   throw new Error("Invalid ObjectId");
     // }
-    const orders = await OrderModel.find({ userId: id });
+
+    const filter = {};
+    if (id) {
+      filter.userId = id;
+    }
+    if (status) filter.status = status;
+    const orders = await OrderModel.find(filter);
 
     if (!orders && orders.length === 0)
       return res
