@@ -61,11 +61,16 @@ export const pathaoCourierOrderCreate = async (data) => {
     "single items"
   );
 
+  let storeId = 239581;
+
+  if (PathaoCourierData[0]?.storeId && !isNaN(PathaoCourierData[0]?.storeId)) {
+    storeId = Number(PathaoCourierData[0]?.storeId);
+  } else if (data.items[0]?.store_id && !isNaN(data.items[0]?.store_id)) {
+    storeId = Number(data.items[0]?.store_id);
+  }
+
   const submitData = {
-    store_id: 239581,
-    // store_id:
-    //   Number(PathaoCourierData[0]?.storeId) ||
-    //   Number(data.items[0].store_id),
+    store_id: storeId,
     merchant_order_id: generateInvoiceId(),
     recipient_name: data.name,
     recipient_phone: data.phone,
