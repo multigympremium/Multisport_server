@@ -30,13 +30,14 @@ export const createMultipleAreas = async (req, res) => {
         .json({ message: "Area and SubAreas are required" });
     }
     const isExist = await AreaModel.findOne({ zone_id });
+    console.log(isExist, "isExist");
     if (isExist) {
       return res.status(400).json({ message: "Area already exist" });
     }
     const submitData = items.map((item) => ({
       zone_id,
-      Area_id: item.Area_id,
-      Area_name: item.Area_name,
+      area_id: item.area_id,
+      area_name: item.area_name,
       home_delivery_available: item.home_delivery_available,
       pickup_available: item.pickup_available,
     }));
