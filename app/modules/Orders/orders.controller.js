@@ -311,18 +311,22 @@ export const getOrderById = async (req, res) => {
     if (
       order &&
       order?.status !== "Pending" &&
+      order?.status !== "Packaging" &&
       order?.courierMethod &&
       order?.courierMethod !== "Custom"
     ) {
       courierResponse = await getCourierOrderInfo(order);
     }
 
+    console.log("courierResponse", courierResponse);
+
     if (!order)
       return res
         .status(404)
         .json({ success: false, message: "Order not found" });
 
-    order.courier_status = courierResponse?.delivery_status;
+    order.courier_status =
+      courierResponse?.delivery_status || courierResponse?.data?.order_status;
 
     res.status(200).json({ success: true, data: order });
   } catch (error) {
@@ -373,11 +377,6 @@ export const updateOrderById = async (req, res) => {
   if (!existingOrder) {
     return res.status(404).json({ success: false, message: "Order not found" });
   }
-  console.log(
-    existingOrder.status === "Packaging",
-    requestData.status === "Packed",
-    "existingOrder.status"
-  );
 
   try {
     if (
@@ -386,7 +385,7 @@ export const updateOrderById = async (req, res) => {
     ) {
       existingOrder.courierMethod = requestData.courierMethod;
       const returnResponse = await createCourierOrder(existingOrder);
-      // console.log(returnResponse, "returnResponse");
+      console.log(returnResponse, "returnResponse");
 
       if (
         returnResponse.status === 200 ||
@@ -416,6 +415,8 @@ export const updateOrderById = async (req, res) => {
           returnResponse?.data?.consignment_id ||
           returnResponse?.consignment?.consignment_id ||
           "";
+
+        console.log("existingOrder", existingOrder);
 
         const updatedOrder = await existingOrder.save();
 

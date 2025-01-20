@@ -4,279 +4,336 @@ import generateInvoiceId from "../../helpers/generateInvoiceId.js";
 import PathaoModel from "./models/Pathao.model.js";
 import SteadFastModel from "./models/SteadFast.model.js";
 
+// export const pathaoCourierOrderCreate = async (data) => {
+//   const PathaoCourierData = await PathaoModel.find({});
+//   const url = `${
+//     PathaoCourierData[0]?.baseUrl || process.env.PATHAO_COURIER_URL
+//   }/aladdin/api/v1/orders`; // Replace with actual base URL
+//   // const accessToken = '<access_token>'; // Replace with your access token
+
+//   const accessToken = await courierAccessToken();
+
+//   //   {
+//   //     "store_id": 239581,
+//   //     "merchant_order_id": "asfdads",
+//   //     "recipient_name": "Anamul",
+//   //     "recipient_phone": "01987654321",
+//   //     "recipient_secondary_phone": "01987654323",
+//   //     "recipient_address": "B. Baria  Brahamanbaria Sadar  DAKSHIN MORAIL",
+//   //     "recipient_city": 32,
+//   //     "recipient_zone": 547,
+//   //     "recipient_area": 7846,
+//   //     "delivery_type": 48,
+//   //     "is_point_delivery": false,
+//   //     "item_type": 2,
+//   //     "special_instruction": "B. Baria  Brahamanbaria Sadar  DAKSHIN MORAIL",
+//   //     "item_quantity": 1,
+//   //     "item_weight": "0.5",
+//   //     "item_description": "asdasd",
+//   //     "amount_to_collect": "456",
+//   //     "suggested_address": {
+//   //         "hub_id": 47,
+//   //         "hub_name": "B.Baria",
+//   //         "area_id": 7846,
+//   //         "area_name": "DAKSHIN MORAIL",
+//   //         "zone_id": 547,
+//   //         "zone_name": "Brahamanbaria Sadar",
+//   //         "is_implicit": true,
+//   //         "district_id": 32,
+//   //         "district_name": "B. Baria",
+//   //         "score": 6.817621418169451,
+//   //         "debug_info": null
+//   //     }
+//   // }
+
+//   const headers = {
+//     Authorization: `Bearer ${accessToken?.access_token}`,
+//     "Content-Type": "application/json",
+//     // Accept: "application/json",
+//   };
+
+//   console.log(
+//     "data.items?.length > 1",
+//     PathaoCourierData[0]?.storeId,
+//     data.items[0]?.store_id,
+//     "single items"
+//   );
+
+//   let storeId = 239581;
+//   // let storeId = 252652;
+
+//   if (PathaoCourierData[0]?.storeId && !isNaN(PathaoCourierData[0]?.storeId)) {
+//     storeId = Number(PathaoCourierData[0]?.storeId);
+//   } else if (data.items[0]?.store_id && !isNaN(data.items[0]?.store_id)) {
+//     storeId = Number(data.items[0]?.store_id);
+//   }
+
+//   console.log(storeId, "storeId");
+
+//   // const submitData = {
+//   //   store_id: storeId,
+//   //   merchant_order_id: generateInvoiceId(),
+//   //   recipient_name: data.name,
+//   //   recipient_phone: data.phone,
+//   //   // recipient_secondary_phone: data.secondary_phone,
+//   //   recipient_address: "Uttara , Sector -24, Dhaka",
+//   //   // recipient_address: data.address,
+//   //   recipient_city: Number(data.city_id),
+//   //   recipient_zone: Number(data.zone_id),
+//   //   recipient_area: Number(data.area_id),
+//   //   delivery_type: 48,
+//   //   // is_point_delivery: false,
+//   //   item_type: 2,
+//   //   special_instruction: data.special_instruction || "",
+//   //   item_quantity: Number(data.items[0].quantity),
+//   //   item_weight: data.totalWeight,
+//   //   item_description: data.items[0].shortDescription,
+//   //   amount_to_collect: Number(data.total),
+//   //   // suggested_address: {
+//   //   //   hub_id: 47,
+//   //   //   hub_name: "B.Baria",
+//   //   //   area_id: 7846,
+//   //   //   area_name: "DAKSHIN MORAIL",
+//   //   //   zone_id: 547,
+//   //   //   zone_name: "Brahamanbaria Sadar",
+//   //   //   is_implicit: true,
+//   //   //   district_id: 32,
+//   //   //   district_name: "B. Baria",
+//   //   //   score: 6.817621418169451,
+//   //   //   debug_info: null,
+//   //   // },
+//   // };
+
+//   const submitData = {
+//     store_id: storeId,
+//     merchant_order_id: generateInvoiceId(),
+//     recipient_name: "Demo Recipient",
+//     recipient_phone: "01761515810",
+//     recipient_address: "Uttara , Sector -24, Dhaka",
+//     recipient_city: Number(data.city_id),
+//     recipient_zone: Number(data.zone_id),
+//     recipient_area: Number(data.area_id),
+//     delivery_type: 48,
+//     item_type: 2,
+//     special_instruction: "Need to Delivery before 5 PM",
+//     item_quantity: 1,
+//     item_weight: 0.5,
+//     item_description: "this is a Cloth item, price- 3000",
+//     amount_to_collect: 900,
+//   };
+
+//   const requestData = {
+//     store_id: 239581,
+//     merchant_order_id: "",
+//     recipient_name: "Anamul",
+//     recipient_phone: "01961394375",
+//     recipient_secondary_phone: "",
+//     recipient_address: "1600 Fake Street",
+//     recipient_city: 32,
+//     recipient_zone: 547,
+//     recipient_area: 7846,
+//     delivery_type: 48,
+//     is_point_delivery: false,
+//     item_type: 2,
+//     special_instruction: "",
+//     item_quantity: 1,
+//     item_weight: "0.5",
+//     item_description: "",
+//     amount_to_collect: "200",
+//   };
+//   console.log(submitData, "pathaoCourierOrderCreate", url, {
+//     headers: headers,
+//   });
+
+//   try {
+//     // if (data.items?.length > 1) {
+//     //   console.log(
+//     //     "data.items?.length > 1",
+//     //     data.items?.length,
+//     //     "multiple items"
+//     //   );
+
+//     //   console.log(
+//     //     {
+//     //       orders: data.items.map((item) => ({
+//     //         store_id:
+//     //           Number(PathaoCourierData[0]?.storeId) || Number(item.store_id),
+//     //         merchant_order_id: generateInvoiceId(),
+//     //         recipient_name: data.name,
+//     //         recipient_phone: data.phone,
+//     //         recipient_secondary_phone: data.secondary_phone,
+//     //         recipient_address: data.address,
+//     //         recipient_city: Number(data.city_id),
+//     //         recipient_zone: Number(data.zone_id),
+//     //         recipient_area: Number(data.area_id),
+//     //         delivery_type: 48,
+//     //         is_point_delivery: false,
+//     //         item_type: 2,
+//     //         special_instruction: data.special_instruction,
+//     //         item_quantity: Number(item?.quantity),
+//     //         item_weight: item?.weight,
+//     //         item_description: item?.shortDescription,
+//     //         amount_to_collect: `${data?.total}`,
+//     //       })),
+//     //     },
+//     //     "data 0986"
+//     //   );
+//     //   submitData = {
+//     //     orders: data.items.map((item) => ({
+//     //       store_id:
+//     //         Number(PathaoCourierData[0]?.storeId) || Number(item.store_id),
+//     //       merchant_order_id: generateInvoiceId(),
+//     //       recipient_name: data.name,
+//     //       recipient_phone: data.phone,
+//     //       recipient_secondary_phone: data.secondary_phone,
+//     //       recipient_address: data.address,
+//     //       recipient_city: Number(data.city_id),
+//     //       recipient_zone: Number(data.zone_id),
+//     //       recipient_area: Number(data.area_id),
+//     //       recipient_address: data.address,
+//     //       delivery_type: 48,
+//     //       is_point_delivery: false,
+//     //       item_type: 2,
+//     //       special_instruction: data.special_instruction,
+//     //       item_quantity: Number(item?.quantity),
+//     //       item_weight: item?.weight,
+//     //       item_description: item?.shortDescription,
+//     //       amount_to_collect: `${data?.total}`,
+//     //       // suggested_address: {
+//     //       //   hub_id: 47,
+//     //       //   hub_name: "B.Baria",
+//     //       //   area_id: 7846,
+//     //       //   area_name: "DAKSHIN MORAIL",
+//     //       //   zone_id: 547,
+//     //       //   zone_name: "Brahamanbaria Sadar",
+//     //       //   is_implicit: true,
+//     //       //   district_id: 32,
+//     //       //   district_name: "B. Baria",
+//     //       //   score: 6.817621418169451,
+//     //       //   debug_info: null,
+//     //       // },
+//     //     })),
+//     //     // orders: data.items.map((item) => ({
+//     //     //   store_id: PathaoCourierData[0]?.storeId,
+//     //     //   merchant_order_id: "asfdads",
+//     //     //   recipient_name: "Anamul",
+//     //     //   recipient_phone: "01987654321",
+//     //     //   recipient_secondary_phone: "01987654323",
+//     //     //   recipient_address: "B. Baria  Brahamanbaria Sadar  DAKSHIN MORAIL",
+//     //     //   recipient_city: 32,
+//     //     //   recipient_zone: 547,
+//     //     //   recipient_area: 7846,
+//     //     //   delivery_type: 48,
+//     //     //   // is_point_delivery: false,
+//     //     //   item_type: 2,
+//     //     //   special_instruction: "B. Baria  Brahamanbaria Sadar  DAKSHIN MORAIL",
+//     //     //   item_quantity: 1,
+//     //     //   item_weight: "0.5",
+//     //     //   item_description: "asdasd",
+//     //     //   amount_to_collect: "456",
+//     //     //   suggested_address: {
+//     //     //     hub_id: 47,
+//     //     //     hub_name: "B.Baria",
+//     //     //     area_id: 7846,
+//     //     //     area_name: "DAKSHIN MORAIL",
+//     //     //     zone_id: 547,
+//     //     //     zone_name: "Brahamanbaria Sadar",
+//     //     //     is_implicit: true,
+//     //     //     district_id: 32,
+//     //     //     district_name: "B. Baria",
+//     //     //     score: 6.817621418169451,
+//     //     //     debug_info: null,
+//     //     //   },
+//     //     // })),
+//     //   };
+
+//     //   console.log(submitData, "pathaoCourierOrderCreate", url);
+
+//     //   const response = await axios.post(url + "/bulk", submitData, {
+//     //     headers: headers,
+//     //   });
+
+//     //   return response.data;
+//     // } else {
+//     // }
+
+//     const response = await axios.post(url, submitData, {
+//       headers: headers,
+//     });
+
+//     return response.data;
+//   } catch (error) {
+//     // console.error("Error creating order:", error);
+
+//     error.success = false;
+//     return error;
+//   }
+// };
+
 export const pathaoCourierOrderCreate = async (data) => {
-  const PathaoCourierData = await PathaoModel.find({});
-  const url = `${
-    PathaoCourierData[0]?.baseUrl || process.env.PATHAO_COURIER_URL
-  }/aladdin/api/v1/orders`; // Replace with actual base URL
-  // const accessToken = '<access_token>'; // Replace with your access token
-
-  const accessToken = await courierAccessToken();
-
-  //   {
-  //     "store_id": 239581,
-  //     "merchant_order_id": "asfdads",
-  //     "recipient_name": "Anamul",
-  //     "recipient_phone": "01987654321",
-  //     "recipient_secondary_phone": "01987654323",
-  //     "recipient_address": "B. Baria  Brahamanbaria Sadar  DAKSHIN MORAIL",
-  //     "recipient_city": 32,
-  //     "recipient_zone": 547,
-  //     "recipient_area": 7846,
-  //     "delivery_type": 48,
-  //     "is_point_delivery": false,
-  //     "item_type": 2,
-  //     "special_instruction": "B. Baria  Brahamanbaria Sadar  DAKSHIN MORAIL",
-  //     "item_quantity": 1,
-  //     "item_weight": "0.5",
-  //     "item_description": "asdasd",
-  //     "amount_to_collect": "456",
-  //     "suggested_address": {
-  //         "hub_id": 47,
-  //         "hub_name": "B.Baria",
-  //         "area_id": 7846,
-  //         "area_name": "DAKSHIN MORAIL",
-  //         "zone_id": 547,
-  //         "zone_name": "Brahamanbaria Sadar",
-  //         "is_implicit": true,
-  //         "district_id": 32,
-  //         "district_name": "B. Baria",
-  //         "score": 6.817621418169451,
-  //         "debug_info": null
-  //     }
-  // }
-
-  const headers = {
-    Authorization: `Bearer ${accessToken?.access_token}`,
-    "Content-Type": "application/json",
-    Accept: "application/json",
-  };
-
-  console.log(headers, "headers", data.items?.length, "data.items?.length");
-
-  console.log(
-    "data.items?.length > 1",
-    PathaoCourierData[0]?.storeId,
-    data.items[0]?.store_id,
-    "single items"
-  );
-
-  let storeId = 239581;
-
-  if (PathaoCourierData[0]?.storeId && !isNaN(PathaoCourierData[0]?.storeId)) {
-    storeId = Number(PathaoCourierData[0]?.storeId);
-  } else if (data.items[0]?.store_id && !isNaN(data.items[0]?.store_id)) {
-    storeId = Number(data.items[0]?.store_id);
-  }
-
-  const submitData = {
-    store_id: storeId,
-    merchant_order_id: generateInvoiceId(),
-    recipient_name: data.name,
-    recipient_phone: data.phone,
-    // recipient_secondary_phone: data.secondary_phone,
-    recipient_address: data.address,
-    recipient_city: Number(data.city_id),
-    recipient_zone: Number(data.zone_id),
-    recipient_area: Number(data.area_id),
-    delivery_type: 48,
-    is_point_delivery: false,
-    item_type: 2,
-    special_instruction: data.special_instruction,
-    item_quantity: Number(data.items[0].quantity),
-    item_weight: "0.5",
-    item_description: data.items[0].shortDescription,
-    amount_to_collect: Number(data.total),
-    // suggested_address: {
-    //   hub_id: 47,
-    //   hub_name: "B.Baria",
-    //   area_id: 7846,
-    //   area_name: "DAKSHIN MORAIL",
-    //   zone_id: 547,
-    //   zone_name: "Brahamanbaria Sadar",
-    //   is_implicit: true,
-    //   district_id: 32,
-    //   district_name: "B. Baria",
-    //   score: 6.817621418169451,
-    //   debug_info: null,
-    // },
-  };
-  // submitData = {
-  //   store_id: 239581,
-  //   merchant_order_id: "asfdads",
-  //   recipient_name: "Anamul",
-  //   recipient_phone: "01987654321",
-  //   recipient_secondary_phone: "01987654323",
-  //   recipient_address: "B. Baria  Brahamanbaria Sadar  DAKSHIN MORAIL",
-  //   recipient_city: 32,
-  //   recipient_zone: 547,
-  //   recipient_area: 7846,
-  //   delivery_type: 48,
-  //   // is_point_delivery: false,
-  //   item_type: 2,
-  //   special_instruction: "B. Baria  Brahamanbaria Sadar  DAKSHIN MORAIL",
-  //   item_quantity: 1,
-  //   item_weight: "0.5",
-  //   item_description: "asdasd",
-  //   amount_to_collect: "456",
-  //   suggested_address: {
-  //     hub_id: 47,
-  //     hub_name: "B.Baria",
-  //     area_id: 7846,
-  //     area_name: "DAKSHIN MORAIL",
-  //     zone_id: 547,
-  //     zone_name: "Brahamanbaria Sadar",
-  //     is_implicit: true,
-  //     district_id: 32,
-  //     district_name: "B. Baria",
-  //     score: 6.817621418169451,
-  //     debug_info: null,
-  //   },
-  // };
-
-  const requestData = {
-    store_id: 239581,
-    merchant_order_id: "",
-    recipient_name: "Anamul",
-    recipient_phone: "01961394375",
-    recipient_secondary_phone: "",
-    recipient_address: "1600 Fake Street",
-    recipient_city: 32,
-    recipient_zone: 547,
-    recipient_area: 7846,
-    delivery_type: 48,
-    is_point_delivery: false,
-    item_type: 2,
-    special_instruction: "",
-    item_quantity: 1,
-    item_weight: "0.5",
-    item_description: "",
-    amount_to_collect: "200",
-  };
-  console.log(submitData, "pathaoCourierOrderCreate", url);
-
   try {
-    // if (data.items?.length > 1) {
-    //   console.log(
-    //     "data.items?.length > 1",
-    //     data.items?.length,
-    //     "multiple items"
-    //   );
+    // Retrieve Pathao configuration from the database or environment variables
+    const PathaoCourierData = await PathaoModel.find({});
+    const baseUrl =
+      PathaoCourierData[0]?.baseUrl || process.env.PATHAO_COURIER_URL;
 
-    //   console.log(
-    //     {
-    //       orders: data.items.map((item) => ({
-    //         store_id:
-    //           Number(PathaoCourierData[0]?.storeId) || Number(item.store_id),
-    //         merchant_order_id: generateInvoiceId(),
-    //         recipient_name: data.name,
-    //         recipient_phone: data.phone,
-    //         recipient_secondary_phone: data.secondary_phone,
-    //         recipient_address: data.address,
-    //         recipient_city: Number(data.city_id),
-    //         recipient_zone: Number(data.zone_id),
-    //         recipient_area: Number(data.area_id),
-    //         delivery_type: 48,
-    //         is_point_delivery: false,
-    //         item_type: 2,
-    //         special_instruction: data.special_instruction,
-    //         item_quantity: Number(item?.quantity),
-    //         item_weight: item?.weight,
-    //         item_description: item?.shortDescription,
-    //         amount_to_collect: `${data?.total}`,
-    //       })),
-    //     },
-    //     "data 0986"
-    //   );
-    //   submitData = {
-    //     orders: data.items.map((item) => ({
-    //       store_id:
-    //         Number(PathaoCourierData[0]?.storeId) || Number(item.store_id),
-    //       merchant_order_id: generateInvoiceId(),
-    //       recipient_name: data.name,
-    //       recipient_phone: data.phone,
-    //       recipient_secondary_phone: data.secondary_phone,
-    //       recipient_address: data.address,
-    //       recipient_city: Number(data.city_id),
-    //       recipient_zone: Number(data.zone_id),
-    //       recipient_area: Number(data.area_id),
-    //       recipient_address: data.address,
-    //       delivery_type: 48,
-    //       is_point_delivery: false,
-    //       item_type: 2,
-    //       special_instruction: data.special_instruction,
-    //       item_quantity: Number(item?.quantity),
-    //       item_weight: item?.weight,
-    //       item_description: item?.shortDescription,
-    //       amount_to_collect: `${data?.total}`,
-    //       // suggested_address: {
-    //       //   hub_id: 47,
-    //       //   hub_name: "B.Baria",
-    //       //   area_id: 7846,
-    //       //   area_name: "DAKSHIN MORAIL",
-    //       //   zone_id: 547,
-    //       //   zone_name: "Brahamanbaria Sadar",
-    //       //   is_implicit: true,
-    //       //   district_id: 32,
-    //       //   district_name: "B. Baria",
-    //       //   score: 6.817621418169451,
-    //       //   debug_info: null,
-    //       // },
-    //     })),
-    //     // orders: data.items.map((item) => ({
-    //     //   store_id: PathaoCourierData[0]?.storeId,
-    //     //   merchant_order_id: "asfdads",
-    //     //   recipient_name: "Anamul",
-    //     //   recipient_phone: "01987654321",
-    //     //   recipient_secondary_phone: "01987654323",
-    //     //   recipient_address: "B. Baria  Brahamanbaria Sadar  DAKSHIN MORAIL",
-    //     //   recipient_city: 32,
-    //     //   recipient_zone: 547,
-    //     //   recipient_area: 7846,
-    //     //   delivery_type: 48,
-    //     //   // is_point_delivery: false,
-    //     //   item_type: 2,
-    //     //   special_instruction: "B. Baria  Brahamanbaria Sadar  DAKSHIN MORAIL",
-    //     //   item_quantity: 1,
-    //     //   item_weight: "0.5",
-    //     //   item_description: "asdasd",
-    //     //   amount_to_collect: "456",
-    //     //   suggested_address: {
-    //     //     hub_id: 47,
-    //     //     hub_name: "B.Baria",
-    //     //     area_id: 7846,
-    //     //     area_name: "DAKSHIN MORAIL",
-    //     //     zone_id: 547,
-    //     //     zone_name: "Brahamanbaria Sadar",
-    //     //     is_implicit: true,
-    //     //     district_id: 32,
-    //     //     district_name: "B. Baria",
-    //     //     score: 6.817621418169451,
-    //     //     debug_info: null,
-    //     //   },
-    //     // })),
-    //   };
+    if (!baseUrl) {
+      throw new Error("Pathao base URL is not configured.");
+    }
 
-    //   console.log(submitData, "pathaoCourierOrderCreate", url);
+    const url = `${baseUrl}/aladdin/api/v1/orders`;
+    const accessToken = await courierAccessToken();
 
-    //   const response = await axios.post(url + "/bulk", submitData, {
-    //     headers: headers,
-    //   });
+    if (!accessToken?.access_token) {
+      throw new Error("Failed to retrieve access token for Pathao.");
+    }
 
-    //   return response.data;
-    // } else {
-    // }
+    const headers = {
+      Authorization: `Bearer ${accessToken.access_token}`,
+      "Content-Type": "application/json",
+    };
 
-    const response = await axios.post(url, requestData, {
-      headers: headers,
-    });
+    // Determine store ID
+    let storeId = 239581; // Default store ID
+    if (
+      PathaoCourierData[0]?.storeId &&
+      !isNaN(PathaoCourierData[0]?.storeId)
+    ) {
+      storeId = Number(PathaoCourierData[0]?.storeId);
+    } else if (data.items?.[0]?.store_id && !isNaN(data.items[0]?.store_id)) {
+      storeId = Number(data.items[0]?.store_id);
+    }
 
+    // Prepare the payload
+    const submitData = {
+      store_id: storeId,
+      merchant_order_id: generateInvoiceId(),
+      recipient_name: data.name,
+      recipient_phone: data.phone,
+      recipient_address: data.address,
+      recipient_city: Number(data.city_id),
+      recipient_zone: Number(data.zone_id),
+      recipient_area: Number(data.area_id),
+      delivery_type: 48, // Based on Pathao's documentation
+      item_type: 2, // Adjust item type based on actual product
+      special_instruction: data.special_instruction || "",
+      item_quantity: Number(data.items?.[0]?.quantity || 1),
+      item_weight: data.totalWeight || "0.5",
+      item_description: data.items?.[0]?.shortDescription || "",
+      amount_to_collect: Number(data.total || 0),
+    };
+
+    console.log("Request Payload:", submitData);
+
+    // Make the API request
+    const response = await axios.post(url, submitData, { headers });
+
+    // Log and return the response
+    console.log("Pathao API Response:", response.data);
     return response.data;
   } catch (error) {
-    // console.error("Error creating order:", error);
-
-    error.success = false;
-    return error;
+    console.error("Error creating Pathao order:", error.message);
+    throw new Error(`Pathao order creation failed: ${error.message}`);
   }
 };
 
@@ -537,10 +594,8 @@ export const createCourierOrder = async (data) => {
     console.log(data, "data courier");
 
     if (data?.courierMethod === "Pathao") {
-      console.log(data, "data pathao");
       response = await pathaoCourierOrderCreate(data);
     } else if (data?.courierMethod === "SteadFast") {
-      console.log(data, "data steadfast");
       response = await courierSteadFastOrderCreate(data);
     }
 
@@ -738,6 +793,48 @@ export const deleteSteadFastById = async (req, res) => {
 };
 
 export const getCourierOrderInfo = async (order) => {
+  if (!order?.courierMethod) {
+    throw new Error("Courier method is required");
+  }
+  if (order?.courierMethod === "Pathao") {
+    return await getPathaoCourierOrderInfo(order);
+  } else if (order?.courierMethod === "SteadFast") {
+    return await getSteadFastOrderInfo(order);
+  }
+};
+
+export const getPathaoCourierOrderInfo = async (order) => {
+  const PathaoCourierData = await PathaoModel.find({});
+  const url = `${
+    PathaoCourierData[0]?.baseUrl || process.env.PATHAO_COURIER_URL
+  }/aladdin/api/v1/orders/${order?.consignment_id}/info`;
+
+  const accessToken = await courierAccessToken();
+
+  try {
+    const response = await axios.get(url, {
+      headers: {
+        Authorization: `Bearer ${accessToken.access_token}`,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    });
+
+    console.log(response?.data, "response citeis", url, "url");
+
+    return response?.data;
+
+    // res.status(200).json({ success: true, data: order });
+  } catch (error) {
+    // console.error(
+    //   "Error fetching access token:",
+    //   error.response?.data || error.message
+    // );
+    throw new Error(error);
+  }
+};
+
+export const getSteadFastOrderInfo = async (order) => {
   const SteadFastData = await SteadFastModel.find({});
   const url = `${
     SteadFastData[0]?.baseUrl || process.env.STEAD_FAST_COURIER_URL
