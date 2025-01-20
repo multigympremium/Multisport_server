@@ -6,6 +6,7 @@ import {
   updateArea,
   deleteArea,
   createMultipleAreas,
+  getAllAreasByZoneId,
 } from "./areas.controller.js";
 
 const AreaRoutes = express.Router();
@@ -19,6 +20,9 @@ AreaRoutes.get("/", getAllAreas);
 
 // Route to get a single Area by ID
 AreaRoutes.get("/single/:id", getAreaById);
+
+// Route to get a single Area by ID
+AreaRoutes.get("/by_zone/:id", getAllAreasByZoneId);
 
 // Route to update a Area by ID
 AreaRoutes.put("/:id", updateArea);

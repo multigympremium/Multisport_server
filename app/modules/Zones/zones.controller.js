@@ -57,6 +57,17 @@ export const getAllZones = async (req, res) => {
   }
 };
 
+// Get all Zones
+export const getAllZonesCityId = async (req, res) => {
+  const city_id = req.params.id;
+  try {
+    const Zones = await ZonesModel.find({ city_id });
+    res.status(200).json(Zones);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 // Get a single Zone by ID
 export const getZoneById = async (req, res) => {
   try {

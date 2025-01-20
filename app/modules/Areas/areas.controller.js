@@ -58,6 +58,16 @@ export const getAllAreas = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+// Get all Areas
+export const getAllAreasByZoneId = async (req, res) => {
+  const zone_id = req.params.id;
+  try {
+    const Areas = await AreaModel.find({ zone_id });
+    res.status(200).json(Areas);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 // Get a single Area by ID
 export const getAreaById = async (req, res) => {

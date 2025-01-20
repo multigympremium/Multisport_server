@@ -6,6 +6,7 @@ import {
   updateZone,
   deleteZone,
   createMultipleZones,
+  getAllZonesCityId,
 } from "./zones.controller.js";
 
 const ZoneRoutes = express.Router();
@@ -16,6 +17,7 @@ ZoneRoutes.post("/multiple", createMultipleZones);
 
 // Route to get all Zones
 ZoneRoutes.get("/", getAllZones);
+ZoneRoutes.get("/by_city/:id", getAllZonesCityId);
 
 // Route to get a single Zone by ID
 ZoneRoutes.get("/single/:id", getZoneById);
