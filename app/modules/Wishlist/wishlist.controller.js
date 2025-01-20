@@ -83,8 +83,12 @@ export async function updateWishlistById(req, res) {
 // Handle DELETE request to delete a wishlist by ID
 export async function deleteWishlistById(req, res) {
   const id = req.params.id;
+  const userId = req.query.userId;
   try {
-    const wishlistItem = await WishlistModel.findOne({ product_id: id });
+    const wishlistItem = await WishlistModel.findOne({
+      product_id: id,
+      userId,
+    });
 
     if (!wishlistItem) {
       return res
