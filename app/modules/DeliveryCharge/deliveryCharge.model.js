@@ -7,7 +7,7 @@ const DeliveryChargeSchema = new mongoose.Schema(
       required: [true, "District is required"],
     },
     district_id: {
-      type: Array,
+      type: Number,
       required: [true, "district_id is required"],
     },
     charge: {
