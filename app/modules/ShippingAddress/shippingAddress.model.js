@@ -10,10 +10,7 @@ const ShippingAddressSchema = new mongoose.Schema(
       type: String,
       required: [true, "Contact Number is required"],
     },
-    secondaryContactNumber: {
-      type: String,
-      required: [true, "Contact Number is required"],
-    },
+
     city_id: {
       type: String,
       required: [true, "Area id is required"],
@@ -44,7 +41,7 @@ const ShippingAddressSchema = new mongoose.Schema(
     },
     special_instruction: {
       type: String,
-      required: [true, "Special Instruction  is required"],
+      // required: [true, "Special Instruction  is required"],
     },
     deliveryType: {
       type: String,

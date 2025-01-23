@@ -305,21 +305,39 @@ export const pathaoCourierOrderCreate = async (data) => {
     }
 
     // Prepare the payload
+    // const submitData = {
+    //   store_id: storeId,
+    //   merchant_order_id: generateInvoiceId(),
+    //   recipient_name: data.name,
+    //   recipient_phone: data.phone,
+    //   recipient_address: data.address,
+    //   recipient_city: Number(data.city_id),
+    //   recipient_zone: Number(data.zone_id),
+    //   recipient_area: Number(data.area_id),
+    //   delivery_type: 48, // Based on Pathao's documentation
+    //   item_type: 2, // Adjust item type based on actual product
+    //   special_instruction: data.special_instruction || "",
+    //   item_quantity: Number(data.items?.[0]?.quantity || 1),
+    //   item_weight: data.totalWeight || "0.5",
+    //   item_description: data.items?.[0]?.shortDescription || "",
+    //   amount_to_collect: Number(data.total || 0),
+    // };
+
     const submitData = {
       store_id: storeId,
       merchant_order_id: generateInvoiceId(),
-      recipient_name: data.name,
-      recipient_phone: data.phone,
-      recipient_address: data.address,
-      recipient_city: Number(data.city_id),
-      recipient_zone: Number(data.zone_id),
-      recipient_area: Number(data.area_id),
+      recipient_name: data?.name,
+      recipient_phone: data?.phone,
+      recipient_address: data?.address,
+      recipient_city: Number(data?.city_id),
+      recipient_zone: Number(data?.zone_id),
+      recipient_area: Number(data?.area_id),
       delivery_type: 48, // Based on Pathao's documentation
       item_type: 2, // Adjust item type based on actual product
-      special_instruction: data.special_instruction || "",
-      item_quantity: Number(data.items?.[0]?.quantity || 1),
-      item_weight: data.totalWeight || "0.5",
-      item_description: data.items?.[0]?.shortDescription || "",
+      special_instruction: data?.special_instruction || "",
+      item_quantity: Number(data?.totalItems || 1),
+      item_weight: data?.totalWeight || "0.5",
+      item_description: data?.orderOverview || "",
       amount_to_collect: Number(data.total || 0),
     };
 

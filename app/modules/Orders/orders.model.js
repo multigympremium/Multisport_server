@@ -111,6 +111,9 @@ const OrderSchema = Schema(
     order_date: {
       type: String,
     },
+    orderOverview: {
+      type: String,
+    },
   },
   { timestamps: true }
 );

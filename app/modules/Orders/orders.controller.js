@@ -284,6 +284,7 @@ export const createOrder = async (req, res) => {
     userId: data?.userId,
     totalItems: data?.totalItems,
     totalActualPrice: data?.totalActualPrice,
+    orderOverview: data?.orderOverview,
   };
 
   console.log(submitData, "submitData");
