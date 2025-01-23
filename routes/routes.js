@@ -76,6 +76,7 @@ routes.use("/custom-css-js", customJsCssRoutes);
 routes.use("/custom-pages", CustomPageRoutes);
 routes.use("/contact-requests", customerRoutes);
 routes.use("/courier", courierRoutes);
+routes.use("/crisp-live-chat", CrispRoutes);
 routes.use("/bag-banners", bagBannerRoutes);
 routes.use("/popular-banners", PopularBannerRoutes);
 routes.use("/new-arrival-banners", NewArrivalBannerRoutes);
