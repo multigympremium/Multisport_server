@@ -1,7 +1,5 @@
 import express from "express";
 import { getAllFiles, getFilesFromFolder } from "../app/helpers/aws-s3.js";
-import downloadAndZipImages from "../app/helpers/downloadAndZipImages.js";
-import downloadImages from "../app/helpers/downloadImage.js";
 import sendFileAsZip from "../app/helpers/sendFileAsZip.js";
 const BackupRoutes = express.Router();
 
@@ -73,6 +71,7 @@ BackupRoutes.get("/images/:folderName", async (req, res) => {
         break;
       case "banner":
         const visionFiles = await getFilesFromFolder(`multi-sports/banner`);
+        console.log(visionFiles, "banner");
         if (visionFiles?.length > 0) {
           res.data = visionFiles;
           await sendFileAsZip(res);
@@ -84,6 +83,7 @@ BackupRoutes.get("/images/:folderName", async (req, res) => {
         const categoryFiles = await getFilesFromFolder(
           `multi-sports/${folderName}`
         );
+        console.log(categoryFiles, "categoryFiles");
         if (categoryFiles?.length > 0) {
           res.data = categoryFiles;
           await sendFileAsZip(res);
