@@ -15,6 +15,7 @@ import {
   changePassword,
   updateUser,
   updateUserPhoto,
+  getCustomers,
 } from "./user.controller.js";
 
 const userRoutes = express.Router();
@@ -22,6 +23,7 @@ const userRoutes = express.Router();
 // GET all Website SEO data
 userRoutes.post("/login", loginUser);
 userRoutes.get("/is_user_exist/:id", isUserExist);
+userRoutes.get("/customers", getCustomers);
 
 // POST Website SEO data
 userRoutes.post("/forgot-password", updatePassword);

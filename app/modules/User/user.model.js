@@ -1,3 +1,4 @@
+import moment from "moment";
 import mongoose from "mongoose";
 const { Schema, model } = mongoose;
 
@@ -71,6 +72,10 @@ const UsersSchema = Schema(
     role: {
       type: String,
       default: "user",
+    },
+    register_date: {
+      type: Date,
+      default: moment().format("YYYY-MM-DD"),
     },
   },
   { timestamps: true }

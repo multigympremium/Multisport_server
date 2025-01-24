@@ -5,12 +5,14 @@ import {
   getWishlistById,
   updateWishlistById,
   deleteWishlistById,
+  getUserAllWishlists,
 } from "./wishlist.controller.js";
 
 const wishlistRoutes = express.Router();
 
 // GET all wishlists
-wishlistRoutes.get("/user/:id", getAllWishlists);
+wishlistRoutes.get("/", getAllWishlists);
+wishlistRoutes.get("/user/:id", getUserAllWishlists);
 
 // POST a new wishlist
 wishlistRoutes.post("/", createWishlist);

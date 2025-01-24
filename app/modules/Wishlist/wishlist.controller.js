@@ -1,7 +1,145 @@
 import WishlistModel from "./wishlist.model.js";
 
 // Handle GET request to get all wishlists
+// export async function getAllWishlists(req, res) {
+//   const { search, currentPage, limit } = req.query;
+//   const filter = {};
+//   if (search && search !== "all") {
+//     filter.$or = [
+//       { email: { $regex: new RegExp(search, "i") } },
+//       { "product_id.productTitle": { $regex: new RegExp(search, "i") } },
+//     ];
+//   }
+//   const page = parseInt(currentPage) || 1;
+//   const limitation = parseInt(limit) || 15;
+
+//   // Calculate total items and pages
+//   try {
+//     const totalItems = await WishlistModel.find(filter).countDocuments();
+//     const totalPages = Math.ceil(totalItems / limitation);
+//     const wishlists = await WishlistModel.find(filter)
+//       .populate("product_id")
+//       .populate("userId")
+//       .skip((page - 1) * limitation)
+//       .limit(limitation);
+
+//     res.status(200).json({
+//       success: true,
+//       data: wishlists,
+//       totalPages,
+//       totalItems,
+//       currentPage,
+//     });
+//   } catch (error) {
+//     return res.status(400).json({ success: false, error: error.message });
+//   }
+// }
+
+// export async function getAllWishlists(req, res) {
+//   const { search, currentPage, limit } = req.query;
+
+//   const page = parseInt(currentPage) || 1;
+//   const limitation = parseInt(limit) || 15;
+
+//   try {
+//     // Fetch all wishlists and populate related data
+//     const allWishlists = await WishlistModel.find()
+//       .populate("product_id")
+//       .populate("userId");
+
+//     // Filter wishlists based on search criteria
+//     let filteredWishlists = allWishlists;
+
+//     if (search && search !== "all") {
+//       const searchRegex = new RegExp(search, "i");
+
+//       filteredWishlists = allWishlists.filter(
+//         (wishlist) =>
+//           searchRegex.test(wishlist.email) ||
+//           (wishlist.product_id &&
+//             searchRegex.test(wishlist.product_id.productTitle)) ||
+//           (wishlist.product_id &&
+//             searchRegex.test(wishlist.product_id.category)) ||
+//           (wishlist.product_id &&
+//             searchRegex.test(wishlist.product_id.subcategory)) ||
+//           (wishlist.userId && searchRegex.test(wishlist.product_id.username))(
+//             wishlist.userId && searchRegex.test(wishlist.product_id.contact_no)
+//           )
+//       );
+//     }
+
+//     // Pagination
+//     const totalItems = filteredWishlists.length;
+//     const totalPages = Math.ceil(totalItems / limitation);
+//     const paginatedWishlists = filteredWishlists.slice(
+//       (page - 1) * limitation,
+//       page * limitation
+//     );
+
+//     res.status(200).json({
+//       success: true,
+//       data: paginatedWishlists,
+//       totalPages,
+//       totalItems,
+//       currentPage: page,
+//     });
+//   } catch (error) {
+//     return res.status(400).json({ success: false, error: error.message });
+//   }
+// }
+
 export async function getAllWishlists(req, res) {
+  const { search, currentPage, limit } = req.query;
+
+  const page = parseInt(currentPage) || 1;
+  const limitation = parseInt(limit) || 15;
+
+  try {
+    // Fetch all wishlists and populate related data
+    const allWishlists = await WishlistModel.find()
+      .populate("product_id")
+      .populate("userId");
+
+    // Filter wishlists based on search criteria
+    let filteredWishlists = allWishlists;
+
+    if (search && search !== "all") {
+      const searchRegex = new RegExp(search, "i");
+
+      filteredWishlists = allWishlists.filter(
+        (wishlist) =>
+          searchRegex.test(wishlist.email) ||
+          (wishlist.product_id &&
+            (searchRegex.test(wishlist.product_id.productTitle) ||
+              searchRegex.test(wishlist.product_id.category) ||
+              searchRegex.test(wishlist.product_id.subcategory))) ||
+          (wishlist.userId &&
+            (searchRegex.test(wishlist.userId.username) ||
+              searchRegex.test(wishlist.userId.contact_no)))
+      );
+    }
+
+    // Pagination
+    const totalItems = filteredWishlists.length;
+    const totalPages = Math.ceil(totalItems / limitation);
+    const paginatedWishlists = filteredWishlists.slice(
+      (page - 1) * limitation,
+      page * limitation
+    );
+
+    res.status(200).json({
+      success: true,
+      data: paginatedWishlists,
+      totalPages,
+      totalItems,
+      currentPage: page,
+    });
+  } catch (error) {
+    return res.status(400).json({ success: false, error: error.message });
+  }
+}
+
+export async function getUserAllWishlists(req, res) {
   try {
     const wishlists = await WishlistModel.find({ userId: req.params.id })
       .populate("product_id")

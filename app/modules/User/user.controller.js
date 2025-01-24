@@ -476,6 +476,61 @@ export async function createSystemUser(req, res) {
   }
 }
 
+export async function getCustomers(req, res) {
+  const {
+    currentPage = 1,
+    limit = 15,
+    search,
+    date,
+    start_date,
+    end_date,
+  } = req.query;
+  const page = parseInt(currentPage) || 1;
+  const limitation = parseInt(limit) || 15;
+  const filter = { role: "user" };
+
+  if (search && search !== "all") {
+    filter.$or = [
+      { username: { $regex: new RegExp(search, "i") } },
+      { email: { $regex: new RegExp(search, "i") } },
+      { contact_no: { $regex: new RegExp(search, "i") } },
+    ];
+  }
+
+  if (date) {
+    filter.createdAt = {
+      $gte: date,
+      $lte: date,
+    };
+  }
+
+  if (start_date && end_date) {
+    filter.register_date = {
+      $gte: start_date,
+      $lte: end_date,
+    };
+  }
+
+  console.log(filter, "filter");
+
+  try {
+    let totalItems = await Users.find(filter).countDocuments();
+    const totalPages = Math.ceil(totalItems / limitation);
+    const existingUser = await Users.find(filter)
+      .skip((page - 1) * limitation)
+      .limit(limitation);
+
+    if (!existingUser) {
+      return res.status(400).json({ error: "User not found" });
+    }
+
+    return res.status(200).json({ data: existingUser, totalPages, totalItems });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: error.message });
+  }
+}
+
 export async function getSystemUser(req, res) {
   try {
     const existingUser = await Users.find({ role: { $ne: "user" } });
