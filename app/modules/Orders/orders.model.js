@@ -114,6 +114,9 @@ const OrderSchema = Schema(
     orderOverview: {
       type: String,
     },
+    email: {
+      type: String,
+    },
   },
   { timestamps: true }
 );

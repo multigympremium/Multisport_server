@@ -47,7 +47,6 @@ const SchemaModel = new mongoose.Schema(
   { timestamps: true }
 );
 
-const GeneralInfoModel =
-  mongoose.model("general_info", SchemaModel);
+const GeneralInfoModel = mongoose.model("general_info", SchemaModel);
 
 export default GeneralInfoModel;

@@ -5,6 +5,7 @@ import {
 } from "../Courier/Courier.controller.js";
 import ProductModel from "../Product/product.model.js";
 import OrderModel from "./orders.model.js";
+import sendInvoiceEmail from "../../../config/email/sendInvoiceEmail.js";
 
 // GET all orders with optional filters
 // export const getOrders = async (req, res) => {
@@ -289,6 +290,16 @@ export const createOrder = async (req, res) => {
 
   console.log(submitData, "submitData");
 
+  if (data.email !== "" || data.email !== undefined || data.email !== null) {
+    submitData.email = data.email;
+    const emailResponse = await sendInvoiceEmail({
+      recipients: data.email,
+      data: submitData,
+    });
+
+    console.log(emailResponse, "emailResponse", data.deliveryCharge);
+  }
+
   try {
     const orderResult = await OrderModel.create(submitData);
     res.status(200).json({ success: true, data: orderResult });
@@ -328,6 +339,8 @@ export const getOrderById = async (req, res) => {
 
     order.courier_status =
       courierResponse?.delivery_status || courierResponse?.data?.order_status;
+
+    console.log(emailResponse, "emailResponse");
 
     res.status(200).json({ success: true, data: order });
   } catch (error) {
