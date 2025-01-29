@@ -25,7 +25,7 @@ export const getBanners = async (req, res) => {
 export const createBanner = async (req, res) => {
   try {
     const { title, subtitle, shortDescription } = req.body;
-    const image = req.files.image;
+    const image = req?.files?.image;
 
     if (!title || !subtitle || !shortDescription) {
       return res
@@ -81,7 +81,7 @@ export const updateBanner = async (req, res) => {
     }
 
     const { title, subtitle, shortDescription } = req.body;
-    const image = req.files.image; // Assuming `multer` is used for file handling
+    const image = req?.files?.image; // Assuming `multer` is used for file handling
     const bannerData = {};
 
     if (title) bannerData.title = title;

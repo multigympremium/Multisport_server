@@ -159,7 +159,7 @@ export async function updateUserPhoto(req, res) {
         .json({ message: "User not found with the provided email" });
     }
 
-    const image = req.files.image;
+    const image = req?.files?.image;
     let thumbnailUrl = "";
     if (image && image.size > 0) {
       thumbnailUrl = `user/${Date.now()}-${image.name.replace(/\s/g, "-")}`;

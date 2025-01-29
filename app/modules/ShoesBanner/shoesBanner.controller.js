@@ -28,10 +28,12 @@ export async function createBanner(req, res) {
     const { title, subtitle, shortDescription } = formData;
 
     if (!title || !subtitle || !shortDescription) {
-      return res.status(400).json({ success: false, message: "Required fields missing" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Required fields missing" });
     }
 
-    const image = req.files.image;
+    const image = req?.files?.image;
 
     let thumbnailUrl = "";
     if (image && image.size > 0) {
@@ -39,7 +41,12 @@ export async function createBanner(req, res) {
       await uploadFile(image, thumbnailUrl, image.type);
     }
 
-    const bannerData = { title, subtitle, shortDescription, image: thumbnailUrl };
+    const bannerData = {
+      title,
+      subtitle,
+      shortDescription,
+      image: thumbnailUrl,
+    };
     const bannerResult = await ShoesBannerModel.create(bannerData);
 
     res.status(200).json({ success: true, data: bannerResult });
@@ -55,7 +62,9 @@ export async function getBannerById(req, res) {
     const result = await ShoesBannerModel.findById(id);
 
     if (!result) {
-      return res.status(404).json({ success: false, message: "Data not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Data not found" });
     }
 
     res.status(200).json({ success: true, data: result });
@@ -70,7 +79,9 @@ export async function updateBanner(req, res) {
   try {
     const existingBanner = await ShoesBannerModel.findById(id);
     if (!existingBanner) {
-      return res.status(400).json({ success: false, message: "Item not found" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Item not found" });
     }
 
     const formData = req.body;
@@ -81,7 +92,7 @@ export async function updateBanner(req, res) {
     if (subtitle) bannerData.subtitle = subtitle;
     if (shortDescription) bannerData.shortDescription = shortDescription;
 
-    const image = req.files.image
+    const image = req?.files?.image;
 
     let thumbnailUrl = "";
     if (image && image.size > 0 && image !== existingBanner.image) {
@@ -91,10 +102,16 @@ export async function updateBanner(req, res) {
 
     if (thumbnailUrl) bannerData.image = thumbnailUrl;
 
-    const updatedBanner = await ShoesBannerModel.findByIdAndUpdate(id, bannerData, { new: true });
+    const updatedBanner = await ShoesBannerModel.findByIdAndUpdate(
+      id,
+      bannerData,
+      { new: true }
+    );
 
     if (!updatedBanner) {
-      return res.status(404).json({ success: false, message: "Data not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Data not found" });
     }
 
     res.status(200).json({ success: true, data: updatedBanner });
@@ -110,7 +127,9 @@ export async function deleteBanner(req, res) {
     const existingBanner = await ShoesBannerModel.findById(id);
 
     if (!existingBanner) {
-      return res.status(404).json({ success: false, message: "Data not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Data not found" });
     }
 
     await ShoesBannerModel.findByIdAndDelete(id);

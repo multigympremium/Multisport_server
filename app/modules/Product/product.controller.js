@@ -385,14 +385,14 @@ export const createProduct = async (req, res) => {
     // }
 
     // Checking required fields
-    if (!productTitle || !price || !colorAndSize) {
+    if (!productTitle || !price || !stock) {
       return res
         .status(400)
         .json({ success: false, message: "Required fields missing" });
     }
 
     // Uploading the thumbnail file
-    const thumbnailFile = req.files.thumbnail;
+    const thumbnailFile = req?.files?.thumbnail;
     let thumbnailUrl = "";
     if (thumbnailFile && thumbnailFile.size > 0) {
       thumbnailUrl = `product/${Date.now()}-${thumbnailFile.name.replace(

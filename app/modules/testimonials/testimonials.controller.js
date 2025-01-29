@@ -34,7 +34,7 @@ export async function postTestimonial(req, res) {
         .json({ success: false, message: "Required fields missing" });
     }
 
-    const image = req.files.image;
+    const image = req?.files?.image;
 
     let thumbnailUrl = "";
     if (image && image.size > 0) {
