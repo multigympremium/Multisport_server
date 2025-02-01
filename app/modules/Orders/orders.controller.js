@@ -340,8 +340,6 @@ export const getOrderById = async (req, res) => {
     order.courier_status =
       courierResponse?.delivery_status || courierResponse?.data?.order_status;
 
-    console.log(emailResponse, "emailResponse");
-
     res.status(200).json({ success: true, data: order });
   } catch (error) {
     res.status(400).json({ success: false, error: error.message });
