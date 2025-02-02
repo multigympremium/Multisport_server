@@ -17,7 +17,7 @@ export const createFlag = async (req, res) => {
     const formData = req.body; // Use req.body with multer for file upload if needed
 
     const { flagName } = formData;
-    const flagIcon = req.files?.image; // assuming `req.file` for file upload
+    const flagIcon = req.files?.flagIcon; // assuming `req.file` for file upload
 
     if (!flagName) {
       return res
@@ -28,15 +28,12 @@ export const createFlag = async (req, res) => {
     const submitData = { flagName };
 
     if (flagIcon) {
-      const iconName = `flag/${Date.now()}-${flagIcon.originalname.replace(
+      const iconName = `flag/${Date.now()}-${flagIcon.name.replace(
         /\s/g,
         "-"
       )}`;
-      const logoResult = await uploadFile(
-        flagIcon.buffer,
-        iconName,
-        flagIcon.mimetype
-      );
+
+      const logoResult = await uploadFile(flagIcon, iconName, flagIcon.type);
       submitData.flagIcon = iconName;
     }
 
@@ -67,7 +64,7 @@ export const getFlagById = async (req, res) => {
 export const updateFlag = async (req, res) => {
   const { id } = req.params;
   const formData = req.body;
-  const flagIcon = req.files?.image;
+  const flagIcon = req.files?.flagIcon;
 
   try {
     const existingFlag = await ProductFlagModel.findById(id);
@@ -87,12 +84,12 @@ export const updateFlag = async (req, res) => {
     const submitData = { flagName };
 
     if (flagIcon) {
-      const iconName = `flag/${Date.now()}-${flagIcon.originalname.replace(
+      const iconName = `flag/${Date.now()}-${flagIcon.name.replace(
         /\s/g,
         "-"
       )}`;
       await deleteFile(existingFlag.flagIcon); // delete old icon if exists
-      await uploadFile(flagIcon.buffer, iconName, flagIcon.mimetype);
+      await uploadFile(flagIcon, iconName, flagIcon.type);
       submitData.flagIcon = iconName;
     }
 

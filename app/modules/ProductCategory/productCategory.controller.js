@@ -28,30 +28,32 @@ export const createCategory = async (req, res) => {
     const categoryIcon = req.files?.categoryIcon;
     const categoryBanner = req.files?.categoryBanner;
 
-    if (
-      !categoryName ||
-      !featureCategory ||
-      !showOnNavbar ||
-      !slug ||
-      !categoryIcon ||
-      !categoryBanner
-    ) {
+    if (!categoryName || !featureCategory || !showOnNavbar || !slug) {
       return res
         .status(400)
         .json({ success: false, message: "Required fields missing" });
     }
 
-    const iconKey = `categoryIcon/${Date.now()}-${categoryIcon.name.replace(
-      /\s/g,
-      "-"
-    )}`;
-    const bannerKey = `categoryIcon/${Date.now()}-${categoryBanner.name.replace(
-      /\s/g,
-      "-"
-    )}`;
+    let iconKey = ``;
+    let bannerKey = ``;
 
-    await uploadFile(categoryIcon, iconKey, categoryIcon.type);
-    await uploadFile(categoryBanner, bannerKey, categoryBanner.type);
+    if (categoryIcon) {
+      iconKey = `categoryIcon/${Date.now()}-${categoryIcon.name.replace(
+        /\s/g,
+        "-"
+      )}`;
+
+      await uploadFile(categoryIcon, iconKey, categoryIcon.type);
+    }
+
+    if (categoryBanner) {
+      bannerKey = `categoryIcon/${Date.now()}-${categoryBanner.name.replace(
+        /\s/g,
+        "-"
+      )}`;
+
+      await uploadFile(categoryBanner, bannerKey, categoryBanner.type);
+    }
 
     const category = await CategoryModel.create({
       categoryName,

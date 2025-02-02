@@ -35,10 +35,20 @@ export async function createCategory(req, res) {
 
     const { category, subcategoryName, slug } = formData;
 
+    const subcategoriesData = await SubcategoryModel.find();
+
     if (!category || !subcategoryName || !slug) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Category or name missing" });
+      return res.status(400).json({
+        success: false,
+        message: "Please provide all required fields",
+      });
+    }
+
+    if (subcategoriesData.some((item) => item.slug === slug)) {
+      return res.status(400).json({
+        success: false,
+        message: "Slug already exists",
+      });
     }
 
     const subcategoryIcon = req.files?.subcategoryIcon;
@@ -160,7 +170,8 @@ export async function deleteCategory(req, res) {
     }
 
     if (categoryItem.subcategoryIcon) {
-      await deleteFile(categoryItem.subcategoryIcon);
+      const result = await deleteFile(categoryItem.subcategoryIcon);
+      console.log(result, "result delete icon");
     }
 
     if (categoryItem.subcategoryImage) {

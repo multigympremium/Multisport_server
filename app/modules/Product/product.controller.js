@@ -364,6 +364,7 @@ export const createProduct = async (req, res) => {
     modelOfBrandValue,
     galleryItemCount,
     colorAndSize,
+    discount,
   } = req.body;
 
   try {
@@ -484,6 +485,7 @@ export const createProduct = async (req, res) => {
       isRecommended: isRecommended === "true",
       modelOfBrandValue,
       colorAndSize: JSON.parse(colorAndSize),
+      discount,
     };
 
     console.log(submitData, "submitData");
@@ -889,6 +891,7 @@ export const updateProductById = async (req, res) => {
       modelOfBrandValue,
       deletedGalleryItemIds = "",
       colorAndSize,
+      discount,
     } = formData;
 
     if (!colorAndSize) {
@@ -978,6 +981,9 @@ export const updateProductById = async (req, res) => {
 
     if (modelOfBrandValue) {
       submitData.modelOfBrandValue = modelOfBrandValue;
+    }
+    if (discount) {
+      submitData.discount = discount;
     }
 
     // Update the product
