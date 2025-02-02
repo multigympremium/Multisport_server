@@ -1,5 +1,17 @@
+import moment from "moment";
 import mongoose from "mongoose";
 const { Schema, model } = mongoose;
+
+const generateInvoiceSerial = () => {
+  const now = new Date();
+  const year = now.getFullYear().toString().slice(-2);
+  const month = (now.getMonth() + 1).toString().padStart(2, "0");
+  const date = now.getDate().toString().padStart(2, "0");
+  const hours = now.getHours().toString().padStart(2, "0");
+  const minutes = now.getMinutes().toString().padStart(2, "0");
+  const seconds = now.getSeconds().toString().padStart(2, "0");
+  return `${year}${month}${date}${hours}${minutes}${seconds}`;
+};
 
 const OrderSchema = Schema(
   {
@@ -110,12 +122,20 @@ const OrderSchema = Schema(
     },
     order_date: {
       type: String,
+      default: moment().format("YYYY-MM-DD-HH:mm:ss"),
     },
     orderOverview: {
       type: String,
     },
     email: {
       type: String,
+    },
+    invoice_id: {
+      type: String,
+
+      unique: true,
+
+      default: generateInvoiceSerial(),
     },
   },
   { timestamps: true }
