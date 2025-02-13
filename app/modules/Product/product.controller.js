@@ -4,7 +4,6 @@ import BulkProductModel from "./bulkProduct.model.js";
 import ProductModel from "./product.model.js";
 import ProductGalleryModel from "./productGallery.model.js";
 
-// GET Products
 // export const getProducts = async (req, res) => {
 //   const {
 //     search,
@@ -19,6 +18,7 @@ import ProductGalleryModel from "./productGallery.model.js";
 //     limit,
 //     isNew,
 //     isRecommended,
+//     isFeatured,
 //   } = req.query;
 //   const id = req.params.id;
 
@@ -27,16 +27,10 @@ import ProductGalleryModel from "./productGallery.model.js";
 
 //   console.log(limitation, "limitation");
 
-//   let totalItems = await ProductModel.find().countDocuments();
-
-//   // console.log("query", { ...filter, ...bodyData });
-//   // Calculate total items and total pages
-//   // const totalItems = await Users;
-//   const totalPages = Math.ceil(totalItems / limitation);
-
 //   try {
 //     const filter = {};
 
+//     // Filter by product ID
 //     if (product) {
 //       console.log(id, "id", search, "search", product, "product");
 //       const productResult = await ProductModel.findById(product).populate(
@@ -49,35 +43,71 @@ import ProductGalleryModel from "./productGallery.model.js";
 //       }
 //       return res.status(200).json({ success: true, data: [productResult] });
 //     }
+
+//     // Search filter
 //     if (search && search !== "all") {
 //       filter.$or = [
-//         // { slug: { $regex: new RegExp(search, 'i') } },
 //         { productTitle: { $regex: new RegExp(search, "i") } },
 //         { category: { $regex: new RegExp(search, "i") } },
 //         { subcategory: { $regex: new RegExp(search, "i") } },
 //         { childCategory: { $regex: new RegExp(search, "i") } },
 //         { productFlagValue: { $regex: new RegExp(search, "i") } },
+//         { brandValue: { $regex: new RegExp(search, "i") } },
 //       ];
 //     }
 
-//     // if (size) filter.productSizeValue = { $in: size.split(",") };
-//     // if (color) filter.productColorValue = { $in: color.split(",") };
+//     // Filter by brand
 //     if (brand) filter.brandValue = { $in: brand.split(",") };
-//     if (category) filter.category = category;
-//     if (subcategory) filter.subcategory = subcategory;
 
+//     // Filter by category and subcategory
+//     if (category)
+//       filter.category = {
+//         $in: category.includes(",") ? category.split(",") : [category],
+//       };
+//     if (subcategory)
+//       filter.subcategory = {
+//         $in: subcategory.includes(",") ? subcategory.split(",") : [subcategory],
+//       };
+
+//     // Filter by color and size
+//     if (color || size) {
+//       filter.colorAndSize = {
+//         $elemMatch: {
+//           ...(color && { "color.label": { $in: color.split(",") } }),
+//           ...(size && { "size.label": { $in: size.split(",") } }),
+//         },
+//       };
+//     }
+
+//     // Filter for new arrivals
 //     if (newArrival === "true") {
 //       filter.createdAt = {
-//         $gte: new Date(Date.now() - 1000 * 60 * 60 * 24 * 30),
-//       }; // Last 30 days
+//         $gte: new Date(Date.now() - 1000 * 60 * 60 * 24 * 30), // Last 30 days
+//       };
+//     }
+//     if (isNew === "true") {
+//       filter.isNew = true;
+//     }
+
+//     if (isRecommended === "true") {
+//       filter.isRecommended = true;
 //     }
 
 //     console.log(filter, "filter");
 
+//     if (isFeatured === "true" || isFeatured === true) {
+//       filter.isFeatured = true;
+//     }
+
+//     let totalItems = await ProductModel.find(filter).countDocuments();
+//     const totalPages = Math.ceil(totalItems / limitation);
+
+//     // Fetch products
 //     const products = await ProductModel.find(filter)
 //       .populate("gallery")
 //       .skip((page - 1) * limitation)
 //       .limit(limitation);
+
 //     res.status(200).json({
 //       success: true,
 //       data: products,
@@ -89,7 +119,6 @@ import ProductGalleryModel from "./productGallery.model.js";
 //     res.status(400).json({ success: false, error: error.message });
 //   }
 // };
-
 export const getProducts = async (req, res) => {
   const {
     search,
@@ -105,20 +134,16 @@ export const getProducts = async (req, res) => {
     isNew,
     isRecommended,
     isFeatured,
+    sort,
   } = req.query;
-  const id = req.params.id;
 
   const page = parseInt(currentPage) || 1;
   const limitation = parseInt(limit) || 15;
 
-  console.log(limitation, "limitation");
-
   try {
     const filter = {};
 
-    // Filter by product ID
     if (product) {
-      console.log(id, "id", search, "search", product, "product");
       const productResult = await ProductModel.findById(product).populate(
         "gallery"
       );
@@ -130,7 +155,6 @@ export const getProducts = async (req, res) => {
       return res.status(200).json({ success: true, data: [productResult] });
     }
 
-    // Search filter
     if (search && search !== "all") {
       filter.$or = [
         { productTitle: { $regex: new RegExp(search, "i") } },
@@ -142,10 +166,7 @@ export const getProducts = async (req, res) => {
       ];
     }
 
-    // Filter by brand
     if (brand) filter.brandValue = { $in: brand.split(",") };
-
-    // Filter by category and subcategory
     if (category)
       filter.category = {
         $in: category.includes(",") ? category.split(",") : [category],
@@ -155,7 +176,6 @@ export const getProducts = async (req, res) => {
         $in: subcategory.includes(",") ? subcategory.split(",") : [subcategory],
       };
 
-    // Filter by color and size
     if (color || size) {
       filter.colorAndSize = {
         $elemMatch: {
@@ -165,41 +185,39 @@ export const getProducts = async (req, res) => {
       };
     }
 
-    // Filter for new arrivals
     if (newArrival === "true") {
       filter.createdAt = {
-        $gte: new Date(Date.now() - 1000 * 60 * 60 * 24 * 30), // Last 30 days
+        $gte: new Date(Date.now() - 1000 * 60 * 60 * 24 * 30),
       };
     }
-    if (isNew === "true") {
-      filter.isNew = true;
-    }
-
-    if (isRecommended === "true") {
-      filter.isRecommended = true;
-    }
+    if (isNew === "true") filter.isNew = true;
+    if (isRecommended === "true") filter.isRecommended = true;
+    if (isFeatured === "true") filter.isFeatured = true;
 
     console.log(filter, "filter");
 
-    if (isFeatured === "true" || isFeatured === true) {
-      filter.isFeatured = true;
-    }
-
-    let totalItems = await ProductModel.find(filter).countDocuments();
+    let totalItems = await ProductModel.countDocuments(filter);
     const totalPages = Math.ceil(totalItems / limitation);
 
-    // Fetch products
-    const products = await ProductModel.find(filter)
+    let sortOption = { createdAt: -1, _id: -1 }; // Ensure stable sorting
+    if (sort) {
+      const [field, order] = sort.split(":");
+      sortOption = { [field]: order === "asc" ? 1 : -1, _id: -1 };
+    }
+
+    let products = await ProductModel.find(filter)
       .populate("gallery")
+      .sort(sortOption) // Always sort to prevent duplicate items across pages
       .skip((page - 1) * limitation)
-      .limit(limitation);
+      .limit(limitation)
+      .lean();
 
     res.status(200).json({
       success: true,
       data: products,
       totalItems,
       totalPages,
-      currentPage,
+      currentPage: page,
     });
   } catch (error) {
     res.status(400).json({ success: false, error: error.message });
